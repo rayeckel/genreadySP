@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <setParameter name="IIS Web Application Name" value="genreadytestapp1" />
-  <setParameter name="ClientId" value="972d6c20-9724-4ec1-a7dd-f5fd9244b270" />
-  <setParameter name="ClientSecret" value="20mZXZaGwT58DVOZZcptFDurYbTmRxmFBLPB2HOkjUU=" />
-</parameters>

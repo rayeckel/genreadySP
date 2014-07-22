@@ -16,36 +16,22 @@ namespace SystemLogs.Pages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //How come this doesnt work??
-            this.Button1.CommandArgument = accessToken;
-            Response.Write(accessToken);
-
-            //this.getAccessToken();
+            setAccessToken();
         }
 
         protected void Button1_Click(object sender, EventArgs e)
         {
             Button1_ClickHandler();
         }
-/*
-        private void getAccessToken()
-        {
-            string contextTokenString = TokenHelper.GetContextTokenFromRequest(Request);
 
-            if (contextTokenString != null)
+        private void setAccessToken()
+        {
+            if (base.accessToken != "")
             {
-                SharePointContextToken contextToken = TokenHelper.ReadAndValidateContextToken(contextTokenString, Request.Url.Authority);
-                var sharepointUrl = new Uri(Request.QueryString["SPHostUrl"]);
-                string accessToken = TokenHelper.GetAccessToken(contextToken, sharepointUrl.Authority).AccessToken;
-                Button1.CommandArgument = accessToken;
-            }
-            else if (!IsPostBack)
-            {
-                Response.Write("Could not find a context token.");
-                return;
+                this.Button1.CommandArgument = base.accessToken;
             }
         }
-*/
+
         private void Button1_ClickHandler()
         {
             string fName = TextBox1.Text;
@@ -56,12 +42,16 @@ namespace SystemLogs.Pages
             string title = "User input Log";
             string Description = fName + " " + lname + " Favorite Color: " + favColor + "  Lucky Number: " + luckyNum;
 
-            //string accessToken = Button1.CommandArgument;
+            this.writeToLog(title, Description);
 
-            //var logWriter = new LogWriter(accessToken);
-            //logWriter.WriteLog(title, Description);
+            Label1.Text = Description;
+        }
 
-            Label1.Text = this.Button1.CommandArgument;
+        private void writeToLog(string Title, string Description)
+        {
+            string accessToken = this.Button1.CommandArgument;
+            var logWriter = new LogWriter(accessToken);
+            logWriter.WriteLog(Title, Description);
         }
     }
 }

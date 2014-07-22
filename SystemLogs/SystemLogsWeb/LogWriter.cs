@@ -13,10 +13,10 @@ namespace SystemLogs.Log
 
         public void WriteLog(string Title, string Description)
         {
-            var clientContext = GetClientAccessContextWithToken();
+            var clientContext = base.GetClientAccessContextWithToken();
             using (clientContext)
             {
-                ListItem SystemLogListItem = GenerateSystemLogListItem(clientContext);
+                ListItem SystemLogListItem = this.GenerateSystemLogListItem(clientContext);
 
                 SystemLogListItem["Title"] = Title;
                 SystemLogListItem["Description"] = Description;
@@ -29,10 +29,10 @@ namespace SystemLogs.Log
 
         public void WriteLog(string Title, string Description, string Detail)
         {
-            var clientContext = GetClientAccessContextWithToken();
+            var clientContext = base.GetClientAccessContextWithToken();
             using (clientContext)
             {
-                ListItem SystemLogListItem = GenerateSystemLogListItem(clientContext);
+                ListItem SystemLogListItem = this.GenerateSystemLogListItem(clientContext);
 
                 SystemLogListItem["Title"] = Title;
                 SystemLogListItem["Description"] = Description;
