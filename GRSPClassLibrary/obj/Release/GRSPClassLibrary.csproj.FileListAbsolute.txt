@@ -1,0 +1,4 @@
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\GRSPClassLibrary\bin\Release\GRSPClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\GRSPClassLibrary\bin\Release\GRSPClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\GRSPClassLibrary\obj\Release\GRSPClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\GRSPClassLibrary\obj\Release\GRSPClassLibrary.pdb
