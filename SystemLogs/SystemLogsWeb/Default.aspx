@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="SharePointApp3Web.Pages.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="SystemLogs.Pages.Default" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -15,7 +15,7 @@
     <div>
     
         <br />
-        <asp:Image ID="Image1" runat="server" ImageUrl="~/images/securedownload.png" />
+        <asp:Image ID="Image1" runat="server" ImageUrl="~/images/GR_logo.png" />
         <br />
         <br />
         <center><h1><span class="auto-style1">Ray&#39;s first SP submit form.</span></h1></center>

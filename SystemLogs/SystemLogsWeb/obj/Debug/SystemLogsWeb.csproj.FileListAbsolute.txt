@@ -27,3 +27,5 @@ C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\en\Microsoft.Identi
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.dll
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.pdb
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.csprojResolveAssemblyReference.cache
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\GRSPClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\GRSPClassLibrary.pdb
