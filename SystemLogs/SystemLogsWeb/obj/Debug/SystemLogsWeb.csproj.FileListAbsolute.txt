@@ -24,6 +24,5 @@ C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\Microsoft.IdentityM
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\Microsoft.SharePoint.Client.dll
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\Microsoft.SharePoint.Client.Runtime.dll
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\en\Microsoft.IdentityModel.resources.dll
-C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.csprojResolveAssemblyReference.cache
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.dll
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.pdb
