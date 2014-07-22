@@ -1,0 +1,3 @@
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3\bin\Debug\SharePointApp3.pdb
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3\obj\Debug\SharePointApp3.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3\obj\Debug\SharePointApp3.pdb

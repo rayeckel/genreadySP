@@ -1,0 +1,10 @@
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\SharePointApp3Web.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\SharePointApp3Web.pdb
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\Microsoft.IdentityModel.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\Microsoft.IdentityModel.Extensions.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\Microsoft.SharePoint.Client.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\Microsoft.SharePoint.Client.Runtime.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\bin\en\Microsoft.IdentityModel.resources.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\obj\Release\SharePointApp3Web.dll
+C:\Users\Ray.EDITUREPD\Documents\Visual Studio 2012\Projects\SharePointApp3\SharePointApp3Web\obj\Release\SharePointApp3Web.pdb
+C:\Users\Ray.EDITUREPD\documents\visual studio 2012\Projects\SharePointApp3\SharePointApp3Web\obj\Release\SharePointApp3Web.csprojResolveAssemblyReference.cache

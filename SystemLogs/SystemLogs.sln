@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemLogs", "SystemLogs\SystemLogs.csproj", "{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemLogsWeb", "SystemLogsWeb\SystemLogsWeb.csproj", "{52D3F1DC-0833-4361-97F7-5076F958021C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E1512E4-1A05-440F-BEE6-4663FF5C3E95}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{52D3F1DC-0833-4361-97F7-5076F958021C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D3F1DC-0833-4361-97F7-5076F958021C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D3F1DC-0833-4361-97F7-5076F958021C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D3F1DC-0833-4361-97F7-5076F958021C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
