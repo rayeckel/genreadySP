@@ -26,3 +26,4 @@ C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\Microsoft.SharePoin
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\en\Microsoft.IdentityModel.resources.dll
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.dll
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.pdb
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Debug\SystemLogsWeb.csprojResolveAssemblyReference.cache
