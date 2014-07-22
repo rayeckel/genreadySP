@@ -1,3 +1,6 @@
 C:\Users\Ray.EDITUREPD\documents\visual studio 2012\Projects\SharePointApp3\SharePointApp3\bin\Debug\SystemLogs.pdb
 C:\Users\Ray.EDITUREPD\documents\visual studio 2012\Projects\SharePointApp3\SharePointApp3\obj\Debug\SystemLogs.dll
 C:\Users\Ray.EDITUREPD\documents\visual studio 2012\Projects\SharePointApp3\SharePointApp3\obj\Debug\SystemLogs.pdb
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogs\bin\Debug\SystemLogs.pdb
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogs\obj\Debug\SystemLogs.dll
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogs\obj\Debug\SystemLogs.pdb

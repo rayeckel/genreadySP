@@ -20,7 +20,7 @@
     <WorkflowPartId>{0096a964-f9e5-486b-95bb-82780a7cb64f}</WorkflowPartId>
     <CspkgPartId>{18548e38-fbf3-452d-b6eb-cc140823ccc5}</CspkgPartId>
     <SqlPackagePartId>{ac2944fd-6438-4d91-bc6e-3ac2e7da32ac}</SqlPackagePartId>
-    <ActivePublishProfile />
+    <ActivePublishProfile>genreadytestapp1 - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
