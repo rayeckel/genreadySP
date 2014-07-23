@@ -8,6 +8,8 @@
       <FlavorProperties GUID="{C1CDDADD-2546-481F-9697-4EA41081F2FC}">
         <ProjectStore>
           <OpenFolderAfterPackaging>false</OpenFolderAfterPackaging>
+          <AppInstancePackageModifiedTime>2014-07-23T19:40:10.4368856Z</AppInstancePackageModifiedTime>
+          <AppInstanceId>dba85d7b-0dad-432b-8469-a4b44e923417</AppInstanceId>
         </ProjectStore>
       </FlavorProperties>
     </VisualStudio>
