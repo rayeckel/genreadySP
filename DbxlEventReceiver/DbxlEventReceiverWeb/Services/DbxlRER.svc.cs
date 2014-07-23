@@ -30,12 +30,12 @@ namespace DbxlEventReceiverWeb.Services
                 {
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
-                    Diagnostics.WriteLog(clientContext.Web, "RER fired", "ProcessEvent");
+                    GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "ProcessEvent");
                     clientContext.ExecuteQuery();
 
                     //check and execute if RER is enabled on list
                     string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + "_DbxlRerEnabled";
-                    Boolean RerEnabled = Convert.ToBoolean(GenerationReady.Dbxl.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
+                    Boolean RerEnabled = Convert.ToBoolean(GenerationReady.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
                     
                     if(RerEnabled)
                     { 
@@ -43,7 +43,7 @@ namespace DbxlEventReceiverWeb.Services
                         {
                             try
                             {
-                                Diagnostics.WriteLog(clientContext.Web, "RER fired", "Item deleting");
+                                GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item deleting");
 
                                 System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM DELETING");
 
@@ -164,24 +164,24 @@ namespace DbxlEventReceiverWeb.Services
                 {
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
-                    Diagnostics.WriteLog(clientContext.Web, "RER fired", "ProcessOneWayEvent");
+                    GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "ProcessOneWayEvent");
                     clientContext.ExecuteQuery();
                     
                     //check and execute if RER is enabled on list
                     string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + "_DbxlRerEnabled";
-                    Boolean RerEnabled = Convert.ToBoolean(GenerationReady.Dbxl.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
+                    Boolean RerEnabled = Convert.ToBoolean(GenerationReady.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
 
                     if (RerEnabled)
                     {
                         //get Dbxl document type for list
                         string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + "_DbxlDocType";
-                        string DbxlDocType = GenerationReady.Dbxl.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
+                        string DbxlDocType = GenerationReady.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
 
                         if (properties.EventType == SPRemoteEventType.ItemAdded)
                         {
                             try
                             {
-                                Diagnostics.WriteLog(clientContext.Web, "RER fired", "Item added");
+                                GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item added");
 
                                 System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM ADDED");
 
@@ -254,7 +254,7 @@ namespace DbxlEventReceiverWeb.Services
                         {
                             try
                             {
-                                Diagnostics.WriteLog(clientContext.Web, "RER fired", "Item updated");
+                                GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item updated");
 
                                 System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM UDPATED");
 

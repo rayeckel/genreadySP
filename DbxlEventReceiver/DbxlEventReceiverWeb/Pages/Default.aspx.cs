@@ -60,8 +60,8 @@ namespace DbxlEventReceiverWeb
                     string DbxlPropertyDocType = ListGuid.ToString() + "_DbxlDocType";
                     if (!Page.IsPostBack)
                     {
-                        TxtDocType.Text = GenerationReady.Dbxl.GetDbxlProperty(DbxlPropertyDocType, clientContext);
-                        CbxRerEnabled.Checked = Convert.ToBoolean(GenerationReady.Dbxl.GetDbxlProperty(DbxlPropertyRerEnabled, clientContext));
+                        TxtDocType.Text = GenerationReady.Dbxl.Properties.GetDbxlProperty(DbxlPropertyDocType, clientContext);
+                        CbxRerEnabled.Checked = Convert.ToBoolean(GenerationReady.Dbxl.Properties.GetDbxlProperty(DbxlPropertyRerEnabled, clientContext));
                     }
                     else if (Page.IsPostBack)
                     {
@@ -80,8 +80,8 @@ namespace DbxlEventReceiverWeb
             {
                 string DbxlPropertyRerEnabled = LblListGuid.Text.ToString() + "_DbxlRerEnabled";
                 string DbxlPropertyDocType = LblListGuid.Text.ToString() + "_DbxlDocType";
-                GenerationReady.Dbxl.SetDbxlProperty(DbxlPropertyDocType, TxtDocType.Text, clientContext);
-                GenerationReady.Dbxl.SetDbxlProperty(DbxlPropertyRerEnabled, CbxRerEnabled.Checked.ToString(), clientContext);
+                GenerationReady.Dbxl.Properties.SetDbxlProperty(DbxlPropertyDocType, TxtDocType.Text, clientContext);
+                GenerationReady.Dbxl.Properties.SetDbxlProperty(DbxlPropertyRerEnabled, CbxRerEnabled.Checked.ToString(), clientContext);
             }
         }
     }

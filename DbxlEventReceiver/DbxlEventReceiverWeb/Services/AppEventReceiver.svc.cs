@@ -30,7 +30,7 @@ namespace DbxlEventReceiverWeb.Services
                     if (properties.EventType == SPRemoteEventType.AppInstalled)
                     { 
                         System.Diagnostics.Trace.WriteLine(OperationContext.Current.Channel.LocalAddress.Uri.ToString());
-                        Diagnostics.WriteLog(clientContext.Web, "RER installing", System.DateTime.Now.ToString());
+                        GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER installing", System.DateTime.Now.ToString());
                         //clientContext.Load(clientContext.Web, web => web.Title);
                         clientContext.ExecuteQuery();
                         //Response.Write(clientContext.Web.Title);
@@ -79,13 +79,13 @@ namespace DbxlEventReceiverWeb.Services
                         }
                         catch (Exception ex)
                         {
-                            Diagnostics.WriteLog(clientContext.Web, "RER installing error", ex.Message);
+                            GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER installing error", ex.Message);
                             clientContext.ExecuteQuery();
                         }
                     }
                     else if (properties.EventType == SPRemoteEventType.AppUninstalling)
                     {
-                        Diagnostics.WriteLog(clientContext.Web, "RER un-installing", System.DateTime.Now.ToString());
+                        GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER un-installing", System.DateTime.Now.ToString());
                         //clientContext.Load(clientContext.Web, web => web.Title);
                         clientContext.ExecuteQuery();
                         //Response.Write(clientContext.Web.Title);
@@ -118,7 +118,7 @@ namespace DbxlEventReceiverWeb.Services
                         }
                         catch (Exception ex)
                         {
-                            Diagnostics.WriteLog(clientContext.Web, "RER un-installing error", ex.Message);
+                            GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER un-installing error", ex.Message);
                             clientContext.ExecuteQuery();
                         }
                     }
