@@ -103,22 +103,6 @@
         </ViewFields>
         <RowLimit>3</RowLimit>
       </View>
-      <View BaseViewID="2"
-      Name="8d2719f3-c3c3-415b-989d-33840d8e2ddb"
-      DisplayName="Overridable"
-      Type="HTML"
-      WebPartZoneID="Main"
-      SetupPath="pages\viewpage.aspx"
-      Url="Overridable.aspx"
-      DefaultView="TRUE">
-        <ViewFields>
-          <FieldRef Name="Title" />
-        </ViewFields>
-        <Query />
-        <Toolbar Type="Standard" />
-        <XslLink>main.xsl</XslLink>
-        <JSLink Default="TRUE">~site/Scripts/CSRListView.js</JSLink>
-      </View>
     </Views>
     <Forms>
       <Form Type="DisplayForm" Url="DispForm.aspx" SetupPath="pages\form.aspx" WebPartZoneID="Main" />

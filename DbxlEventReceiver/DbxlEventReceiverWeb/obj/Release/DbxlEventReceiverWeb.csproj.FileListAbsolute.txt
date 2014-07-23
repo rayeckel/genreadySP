@@ -1,0 +1,14 @@
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\GenerationReady.cs
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\DbxlEventReceiverWeb.dll.config
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\DbxlEventReceiverWeb.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\DbxlEventReceiverWeb.XmlSerializers.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\DbxlEventReceiverWeb.pdb
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\Microsoft.IdentityModel.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\Microsoft.IdentityModel.Extensions.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\Microsoft.SharePoint.Client.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\Microsoft.SharePoint.Client.Runtime.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\bin\en\Microsoft.IdentityModel.resources.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\obj\Release\DbxlEventReceiverWeb.csprojResolveAssemblyReference.cache
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\obj\Release\DbxlEventReceiverWeb.dll
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\obj\Release\DbxlEventReceiverWeb.pdb
+C:\Development\DbxlEventReceiver\DbxlEventReceiverWeb\obj\Release\DbxlEventReceiverWeb.XmlSerializers.dll

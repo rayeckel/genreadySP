@@ -1,0 +1,1 @@
+C:\Development\DbxlEventReceiver\DbxlEventReceiver\bin\Debug\DbxlEventReceiver.debugapp
