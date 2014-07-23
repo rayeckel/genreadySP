@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="6539a983-89db-40bf-88fe-a2ead8b511f4" SharePointProductVersion="16.0">
+  <FeatureManifests>
+    <FeatureManifest Location="DbxlEventReceiver_Feature1\Feature.xml" />
+  </FeatureManifests>
+</Solution>
