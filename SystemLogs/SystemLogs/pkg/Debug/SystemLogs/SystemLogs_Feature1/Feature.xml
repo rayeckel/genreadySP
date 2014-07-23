@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="5681db85-edc3-4156-9329-cb49e7d22828" Scope="Web" Title="SystemLogs Feature1" Version="1.0.0.0">
+  <ElementManifests>
+    <ElementManifest Location="List1Instance\Elements.xml" />
+    <ElementManifest Location="List1\Elements.xml" />
+    <ElementFile Location="List1\Schema.xml" />
+    <ElementManifest Location="Pages\Elements.xml" />
+    <ElementManifest Location="Content\Elements.xml" />
+    <ElementManifest Location="Images\Elements.xml" />
+    <ElementManifest Location="Scripts\Elements.xml" />
+  </ElementManifests>
+  <UpgradeActions>
+    <VersionRange>
+      <ApplyElementManifests>
+        <ElementManifest Location="List1Instance\Elements.xml" />
+        <ElementManifest Location="List1\Elements.xml" />
+        <ElementManifest Location="Pages\Elements.xml" />
+        <ElementManifest Location="Content\Elements.xml" />
+        <ElementManifest Location="Images\Elements.xml" />
+        <ElementManifest Location="Scripts\Elements.xml" />
+      </ApplyElementManifests>
+    </VersionRange>
+  </UpgradeActions>
+</Feature>

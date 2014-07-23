@@ -8,7 +8,7 @@
 >
   <Properties>
     <Title>System Logs</Title>
-    <StartPage>~remoteAppUrl/Default.aspx?{StandardTokens}</StartPage>
+    <StartPage>~remoteAppUrl/?{StandardTokens}</StartPage>
   </Properties>
 
   <AppPrincipal>

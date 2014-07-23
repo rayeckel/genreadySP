@@ -45,11 +45,50 @@
     <Content Include="AppIcon.png">
       <OpcRelationship>manifest-icon</OpcRelationship>
     </Content>
+    <Content Include="Content\Elements.xml" />
+    <Content Include="Features\Feature1\Feature1.Template.xml">
+      <DependentUpon>Feature1.feature</DependentUpon>
+    </Content>
+    <Content Include="Images\Elements.xml" />
+    <Content Include="List1\Elements.xml" />
+    <Content Include="List1\List1Instance\Elements.xml" />
+    <Content Include="List1\Schema.xml" />
+    <Content Include="Package\Package.Template.xml">
+      <DependentUpon>Package.package</DependentUpon>
+    </Content>
+    <Content Include="Pages\Elements.xml" />
+    <Content Include="Scripts\Elements.xml" />
   </ItemGroup>
   <ItemGroup>
     <AppManifestFile Include="AppManifest.xml">
       <SubType>Designer</SubType>
     </AppManifestFile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{d89fceec-0748-4a3d-9d83-7704490e2347}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\Feature1\Feature1.feature">
+      <FeatureId>{8bc8e89d-6b3d-40f5-bfcd-501b329a0fa5}</FeatureId>
+    </None>
+    <None Include="Images\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{75588580-53cc-4cc7-a279-6d116fc8b4a8}</SharePointProjectItemId>
+    </None>
+    <None Include="List1\List1Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{05763d6b-9b8f-4250-b689-17a33310569b}</SharePointProjectItemId>
+    </None>
+    <None Include="List1\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{77832313-ff44-438c-a559-756d62e90978}</SharePointProjectItemId>
+    </None>
+    <None Include="Package\Package.package">
+      <PackageId>{d2b02e3c-0ff5-43c0-9388-71c0876c2516}</PackageId>
+    </None>
+    <None Include="Pages\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{408e05f1-3af7-491e-8117-68baeb3a4180}</SharePointProjectItemId>
+    </None>
+    <None Include="Scripts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e717e665-1b5e-4a21-b73b-c18e50d9af27}</SharePointProjectItemId>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SystemLogsWeb\SystemLogsWeb.csproj">
@@ -58,7 +97,7 @@
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <OutputItemType>SharePointWebProjectOutput</OutputItemType>
-      <RoleName>SharePointApp3Web</RoleName>
+      <RoleName>SystemLogsWeb</RoleName>
       <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
