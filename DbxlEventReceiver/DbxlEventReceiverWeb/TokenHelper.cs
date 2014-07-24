@@ -24,7 +24,7 @@ using AudienceUriValidationFailedException = Microsoft.IdentityModel.Tokens.Audi
 using SecurityTokenHandlerConfiguration = Microsoft.IdentityModel.Tokens.SecurityTokenHandlerConfiguration;
 using X509SigningCredentials = Microsoft.IdentityModel.SecurityTokenService.X509SigningCredentials;
 
-namespace DbxlEventReceiverWeb
+namespace DBXLEventReceiverWeb
 {
     public static class TokenHelper
     {

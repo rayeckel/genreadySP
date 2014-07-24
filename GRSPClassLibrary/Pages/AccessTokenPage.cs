@@ -18,7 +18,7 @@ namespace GRSPClassLibrary.Pages
 
         private void getSessionAccessToken()
         {
-            string contextTokenString = TokenHelper.GetContextTokenFromRequest(Request);
+            string contextTokenString = TokenHelper.GetContextTokenFromRequest(Page.Request);
 
             if (contextTokenString != null)
             {

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{80647CC9-039B-426A-9611-09419992B49A}</ProjectGuid>
+    <ProjectGuid>{C17D3B2E-D251-4A7C-9740-0905FF0BD8E7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DbxlEventReceiver</RootNamespace>
-    <AssemblyName>DbxlEventReceiver</AssemblyName>
+    <RootNamespace>DBXLEventReceiver</RootNamespace>
+    <AssemblyName>DBXLEventReceiver</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetOfficeVersion>16.0</TargetOfficeVersion>
     <FileAlignment>512</FileAlignment>
@@ -17,11 +17,11 @@
     <MinimumOfficeToolsVersion>12.1</MinimumOfficeToolsVersion>
     <IncludeAssemblyInPackage>False</IncludeAssemblyInPackage>
     <ProjectMode>SharePointApp</ProjectMode>
-    <AppFeaturePartId>{ac8b3d7f-c2c9-4408-a970-2c367d364c90}</AppFeaturePartId>
-    <WspPartId>{f4bdf406-1070-44c8-9218-ff804c9ec0da}</WspPartId>
-    <WorkflowPartId>{9881c1e3-b764-448a-9439-0dbfeda73818}</WorkflowPartId>
-    <CspkgPartId>{31b94021-aedf-4456-ba2f-880f8a707a3b}</CspkgPartId>
-    <SqlPackagePartId>{a6622abe-d604-45df-81fb-1884c3dd3173}</SqlPackagePartId>
+    <AppFeaturePartId>{6eb6b5b3-2bab-4329-932c-72cca48bcc9d}</AppFeaturePartId>
+    <WspPartId>{4e742183-e22d-49aa-83e2-518107f71375}</WspPartId>
+    <WorkflowPartId>{b8e2c736-81dc-4a3f-914f-8edc9e2c7bc1}</WorkflowPartId>
+    <CspkgPartId>{4bef250e-c67c-4f1e-b46b-77de9fe1682d}</CspkgPartId>
+    <SqlPackagePartId>{433f67a8-95ea-4778-8d43-0062e8f05c86}</SqlPackagePartId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,23 +63,29 @@
     </AppManifestFile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DbxlRER\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{ef7809fe-f19b-44c0-b7e3-559e646df300}</SharePointProjectItemId>
-    </None>
-    <None Include="DbxlRibbonAction\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{3f022e3d-b698-45a1-b77b-7b0f8c9d8007}</SharePointProjectItemId>
-    </None>
-    <None Include="Features\Feature1\Feature1.feature">
-      <FeatureId>{27083dbd-fc00-4e0b-a8c9-e40c47922839}</FeatureId>
-    </None>
-    <None Include="Package\Package.package">
-      <PackageId>{1b32434a-ef1f-4f62-9040-595326a15a39}</PackageId>
-    </None>
+    <ProjectReference Include="..\DBXLEventReceiverWeb\DBXLEventReceiverWeb.csproj">
+      <Project>{08F1537D-37D0-4F82-B62B-94819DB07395}</Project>
+      <Name>DBXLEventReceiverWeb</Name>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <OutputItemType>SharePointWebProjectOutput</OutputItemType>
+      <RoleName>DBXLEventReceiverWeb</RoleName>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Qdabra.Dbxl.Client">
-      <HintPath>\\ballastoneone\NetStore\work\bridgit\customers\NewCo\SharePointOnline\Dbxl\Qdabra.Dbxl.Client.dll</HintPath>
-    </Reference>
+    <None Include="DbxlRER\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{79ee074f-46d9-4250-8ce9-aac9a6c8428a}</SharePointProjectItemId>
+    </None>
+    <None Include="DbxlRibbonAction\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{c8083c92-b544-4fa3-bd62-72f32f1d1441}</SharePointProjectItemId>
+    </None>
+    <None Include="Features\Feature1\Feature1.feature">
+      <FeatureId>{7c24451c-040b-44ad-9641-5f94dae73335}</FeatureId>
+    </None>
+    <None Include="Package\Package.package">
+      <PackageId>{1215358c-edc8-41c3-a135-75bf9c431d4d}</PackageId>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

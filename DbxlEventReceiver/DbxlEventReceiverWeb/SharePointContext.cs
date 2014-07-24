@@ -7,7 +7,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Configuration;
 
-namespace DbxlEventReceiverWeb
+namespace DBXLEventReceiverWeb
 {
     /// <summary>
     /// Encapsulates all the information from SharePoint.

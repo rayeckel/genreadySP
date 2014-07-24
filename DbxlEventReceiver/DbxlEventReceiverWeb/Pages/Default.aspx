@@ -30,7 +30,7 @@
             DBXL Document Type: <asp:TextBox ID="TxtDocType" runat="server"></asp:TextBox>
         </p>
         <p>
-            <asp:Button ID="SaveSettings" runat="server" Text="Save Settings" OnClick="SaveDbxlSettings" />
+            <asp:Button ID="btn_SaveSettings" runat="server" Text="Save Settings" OnClick="SaveDbxlSettings" />
         </p>
     </div>
     </form>

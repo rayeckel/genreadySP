@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="DbxlEventReceiverWeb.Services.DbxlRER" CodeBehind="DbxlRER.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="DBXLEventReceiverWeb.Services.DbxlRER" CodeBehind="DbxlRER.svc.cs" %>

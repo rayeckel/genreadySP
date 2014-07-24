@@ -1,8 +1,0 @@
-C:\Development\DbxlEventReceiver\DbxlEventReceiver\bin\Debug\DbxlEventReceiver.pdb
-C:\Development\DbxlEventReceiver\DbxlEventReceiver\obj\Debug\DbxlEventReceiver.dll
-C:\Development\DbxlEventReceiver\DbxlEventReceiver\obj\Debug\DbxlEventReceiver.pdb
-C:\Development\DbxlEventReceiver\DbxlEventReceiver\obj\Debug\DbxlEventReceiver.csprojResolveAssemblyReference.cache
-C:\Users\Ray.EDITUREPD\Projects\DbxlEventReceiver\DbxlEventReceiver\bin\Debug\DbxlEventReceiver.pdb
-C:\Users\Ray.EDITUREPD\Projects\DbxlEventReceiver\DbxlEventReceiver\obj\Debug\DbxlEventReceiver.csprojResolveAssemblyReference.cache
-C:\Users\Ray.EDITUREPD\Projects\DbxlEventReceiver\DbxlEventReceiver\obj\Debug\DbxlEventReceiver.dll
-C:\Users\Ray.EDITUREPD\Projects\DbxlEventReceiver\DbxlEventReceiver\obj\Debug\DbxlEventReceiver.pdb

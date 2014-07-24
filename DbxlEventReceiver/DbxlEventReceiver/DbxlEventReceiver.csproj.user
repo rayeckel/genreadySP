@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SharePointSiteUrl>https://generationready.sharepoint.com/sites/dev/</SharePointSiteUrl>
+    <SharePointSiteUrl>https://generationreadydev.sharepoint.com/sites/re_/</SharePointSiteUrl>
   </PropertyGroup>
-  <ProjectExtensions />
 </Project>
