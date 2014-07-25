@@ -57,8 +57,10 @@ namespace DBXLEventReceiverWeb.Pages
             };
 
             string accessToken = this.btn_SaveSettings.CommandArgument;
+            
+            Debug.Write("inside click event password: " + formVariables[Constants.DBXL_PASSWORD]);
 
-            var dBXLEventReceiverVM= new DBXLEventReceiverVM(accessToken);
+            var dBXLEventReceiverVM = new DBXLEventReceiverVM(accessToken);
             dBXLEventReceiverVM.setDBXLProperties(formVariables);
         }
 
@@ -91,8 +93,8 @@ namespace DBXLEventReceiverWeb.Pages
                 }
 
                 //get current dbxl property values
-                string DbxlPropertyDocType = ListGuid.ToString() + "_DbxlDocType";
-                string DbxlPropertyRerEnabled = ListGuid.ToString() + "_DbxlRerEnabled";
+                string DbxlPropertyDocType = ListGuid.ToString() + Constants.KEY_DBXL_PROPERTY_DOCTYPE;
+                string DbxlPropertyRerEnabled = ListGuid.ToString() + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
 
                 var dbxlPropertyDocType = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlPropertyDocType, clientContext);
                 TxtDocType.Text = dbxlPropertyDocType;

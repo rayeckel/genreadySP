@@ -9,7 +9,7 @@ using System.Xml.XPath;
 using System.IO;
 using System.Net;
 using System.Resources;
-using GRSPClassLibrary;
+using GRSPClassLibrary.Web.Log;
 using DBXLClassLibrary;
 using DBXLClassLibrary.DbxlDocumentService;
 using DBXLEventReceiverWeb.Base;
@@ -26,7 +26,11 @@ namespace DBXLEventReceiverWeb.Services
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
             SPRemoteEventResult result = new SPRemoteEventResult();
-            ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties);
+            //ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties);
+            ClientContext clientContext = getClientContext(properties);
+
+            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
+            logWriter.WriteLog("RER fired", "Process Event : Position 1");
 
             if (clientContext != null)
             {
@@ -52,7 +56,11 @@ namespace DBXLEventReceiverWeb.Services
         /// <param name="properties">Holds information about the remote event.</param>
         public void ProcessOneWayEvent(SPRemoteEventProperties properties)
         {
-            ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties);
+            ClientContext clientContext = getClientContext(properties);
+
+            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
+            logWriter.WriteLog("RER fired", "ProcessOneWayEvent : Position 1");
+
             if (clientContext != null)
             {
                 using (clientContext)
@@ -69,18 +77,32 @@ namespace DBXLEventReceiverWeb.Services
             }
         }
 
+        private ClientContext getClientContext(SPRemoteEventProperties properties)
+        {
+            string webUrl = properties.ItemEventProperties.WebUrl;
+            var webUri = new Uri(webUrl);
+
+            string realm = TokenHelper.GetRealmFromTargetUrl(webUri);
+            string accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, webUri.Authority, realm).AccessToken;
+            ClientContext clientContext = TokenHelper.GetClientContextWithAccessToken(webUrl, accessToken);
+            return clientContext;
+        }
+
         private Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             //check and execute if RER is enabled on list
-            string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + "_DbxlRerEnabled";
+            string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
             Boolean RerEnabled = Convert.ToBoolean(GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
             return RerEnabled;
         }
 
         private void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
+            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
+            logWriter.WriteLog("RER fired", "Item adding");
+
             //get Dbxl document type for list
-            string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + "_DbxlDocType";
+            string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_DOCTYPE;
             string DbxlDocType = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
 
             Guid listId = properties.ItemEventProperties.ListId;
@@ -253,14 +275,14 @@ namespace DBXLEventReceiverWeb.Services
 
             var DocService = new IDbxlDocumentService()
             {
-                Url = BuildServiceUrl(),
+                Url = serviceUrl,
                 UseDefaultCredentials = false,
                 Credentials = credentials,
                 Timeout = 60000
             };
 
             //string DbxlRootUrl = DocService.Url;
-            //System.Diagnostics.Trace.WriteLine("DBXL ROOT URL: " + DbxlRootUrl);
+            System.Diagnostics.Trace.WriteLine("DBXL ROOT URL: " + credentials.Password);
 
             return DocService;
         }
@@ -283,9 +305,9 @@ namespace DBXLEventReceiverWeb.Services
         {
             string username = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_USERNAME, clientContext);
             string encryptedPassword = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_PASSWORD, clientContext);
-            string decryptedPassword = GRSPClassLibrary.Web.Crypt.Decrypt(encryptedPassword);
+            //string decryptedPassword = GRSPClassLibrary.Web.Crypt.Decrypt(encryptedPassword);
 
-            var credentials = new NetworkCredential(username, decryptedPassword);
+            var credentials = new NetworkCredential(username, encryptedPassword);
             //var credentials = new NetworkCredential("johnnie.margerison", "sdW&*fnIdf32");
 
             return credentials;

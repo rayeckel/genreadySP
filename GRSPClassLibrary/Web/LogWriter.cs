@@ -6,10 +6,18 @@ namespace GRSPClassLibrary.Web.Log
     public class LogWriter : ClientAccess
     {
         #region Contructors
+        public LogWriter(string logTitle, ClientContext clientContext)
+            : base(null)
+        {
+            this.logTitle = logTitle;
+            this.clientContext = clientContext;
+        }
+
         public LogWriter(string logTitle, string sessionAccessToken)
             : base(sessionAccessToken)
         {
             this.logTitle = logTitle;
+            this.clientContext = base.GetClientAccessContextWithToken();
         }
 
         #endregion
@@ -32,12 +40,13 @@ namespace GRSPClassLibrary.Web.Log
             }
         }
 
+        private ClientContext clientContext { get; set; }
+
         #endregion
 
         #region Methods
         public void WriteLog(string Title, string Description)
         {
-            var clientContext = base.GetClientAccessContextWithToken();
             using (clientContext)
             {
                 ListItem SystemLogListItem = this.GenerateSystemLogListItem(clientContext);
@@ -53,7 +62,6 @@ namespace GRSPClassLibrary.Web.Log
 
         public void WriteLog(string Title, string Description, string Detail)
         {
-            var clientContext = base.GetClientAccessContextWithToken();
             using (clientContext)
             {
                 ListItem SystemLogListItem = this.GenerateSystemLogListItem(clientContext);

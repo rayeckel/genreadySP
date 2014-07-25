@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="DBXLEventReceiverWeb.Pages.Default" %>
+﻿<%@ Page Trace="false" Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="DBXLEventReceiverWeb.Pages.Default" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -37,7 +37,7 @@
             DBXL Password: <asp:TextBox ID="TxtPassword" runat="server"></asp:TextBox>
         </p>
         <p>
-            <asp:Button ID="btn_SaveSettings" runat="server" Text="Save Settings" />
+            <asp:Button ID="btn_SaveSettings" runat="server" Text="Save Settings" OnClick="btn_SaveSettings_Click" />
         </p>
 
         <asp:RequiredFieldValidator id="RequiredFieldValidator1" runat="server"
