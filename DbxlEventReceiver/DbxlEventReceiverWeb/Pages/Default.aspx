@@ -39,22 +39,23 @@
         <p>
             <asp:Button ID="btn_SaveSettings" runat="server" Text="Save Settings" />
         </p>
+
+        <asp:RequiredFieldValidator id="RequiredFieldValidator1" runat="server"
+            ControlToValidate="TxtDocType"
+            ErrorMessage="DBXL Document Type is a required field."
+            ForeColor="Red">
+        </asp:RequiredFieldValidator>
+        <asp:RequiredFieldValidator id="RequiredFieldValidator2" runat="server"
+            ControlToValidate="TxtUsername"
+            ErrorMessage="DBXL User Name is a required field."
+            ForeColor="Red">
+        </asp:RequiredFieldValidator>
+        <asp:RequiredFieldValidator id="RequiredFieldValidator3" runat="server"
+            ControlToValidate="TxtPassword"
+            ErrorMessage="DBXL Password is a required field."
+            ForeColor="Red">
+        </asp:RequiredFieldValidator>
     </div>
     </form>
-    <asp:RequiredFieldValidator id="RequiredFieldValidator1" runat="server"
-        ControlToValidate="TxtDocType"
-        ErrorMessage="DBXL Document Type is a required field."
-        ForeColor="Red">
-    </asp:RequiredFieldValidator>
-    <asp:RequiredFieldValidator id="RequiredFieldValidator2" runat="server"
-        ControlToValidate="TxtUsername"
-        ErrorMessage="DBXL User Name is a required field."
-        ForeColor="Red">
-    </asp:RequiredFieldValidator>
-    <asp:RequiredFieldValidator id="RequiredFieldValidator3" runat="server"
-        ControlToValidate="TxtPassword"
-        ErrorMessage="DBXL Password is a required field."
-        ForeColor="Red">
-    </asp:RequiredFieldValidator>
 </body>
 </html>

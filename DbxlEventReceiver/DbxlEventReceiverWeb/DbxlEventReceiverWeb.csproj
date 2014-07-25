@@ -101,7 +101,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Base\Constants.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -124,8 +124,8 @@
     <Compile Include="Services\DbxlRER.svc.cs">
       <DependentUpon>DbxlRER.svc</DependentUpon>
     </Compile>
-    <Compile Include="SharePointContext.cs" />
-    <Compile Include="TokenHelper.cs" />
+    <Compile Include="Base\SharePointContext.cs" />
+    <Compile Include="Base\TokenHelper.cs" />
     <Compile Include="ViewModels\DBXLEventReceiverVM.cs" />
   </ItemGroup>
   <ItemGroup>

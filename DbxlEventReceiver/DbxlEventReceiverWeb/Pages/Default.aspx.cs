@@ -9,6 +9,7 @@ using Microsoft.SharePoint.Client;
 using System.Diagnostics;
 using GRSPClassLibrary.Pages;
 using GRSPClassLibrary.Web;
+using DBXLEventReceiverWeb.Base;
 using DBXLEventReceiverWeb.ViewModels;
 
 namespace DBXLEventReceiverWeb.Pages

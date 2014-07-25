@@ -5,6 +5,7 @@ using System.Web;
 using Microsoft.SharePoint.Client;
 using GRSPClassLibrary.Web;
 using GRSPClassLibrary.Web.Log;
+using DBXLEventReceiverWeb.Base;
 
 namespace DBXLEventReceiverWeb.ViewModels
 {
