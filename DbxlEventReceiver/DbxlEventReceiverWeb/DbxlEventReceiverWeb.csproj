@@ -79,19 +79,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\DbxlDocumentService\DbxlDocumentService.wsdl" />
-    <Content Include="Web References\DbxlDocumentService\DocumentInfo1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\DocumentKeyDetails1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\DocumentStringInfo1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\DocumentSummaryInfo1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\DocumentTypeInfo1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\DocumentTypePermissionInfo1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\DocumentTypeSummaryInfo1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\GetListItemsResponse1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\GetMyListItemsResponse1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\Reference.map" />
-    <Content Include="Web References\DbxlDocumentService\SearchExResponse1.datasource" />
-    <Content Include="Web References\DbxlDocumentService\StatusInfo1.datasource" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -109,7 +96,6 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Services\AppEventReceiver.svc" />
     <Content Include="Services\DbxlRER.svc" />
-    <None Include="Web References\DbxlDocumentService\DbxlDocumentService.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -139,14 +125,17 @@
     </Compile>
     <Compile Include="SharePointContext.cs" />
     <Compile Include="TokenHelper.cs" />
-    <Compile Include="ViewModels\DBXLEventReceiverData.cs" />
-    <Compile Include="Web References\DbxlDocumentService\Reference.cs" />
+    <Compile Include="ViewModels\DBXLEventReceiverVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DbxlClassLibrary\DBXLClassLibrary.csproj">
+      <Project>{4e72e7dd-5f99-435c-98c0-28faf58ab514}</Project>
+      <Name>DBXLClassLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GRSPClassLibrary\GRSPClassLibrary.csproj">
       <Project>{ce4ec8f5-6021-4511-a352-4edb5fcf0615}</Project>
       <Name>GRSPClassLibrary</Name>

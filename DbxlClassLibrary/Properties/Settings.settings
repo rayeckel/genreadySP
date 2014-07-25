@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DbxlClassLibrary.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DBXLClassLibrary_DbxlNet_DbxlDocumentService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

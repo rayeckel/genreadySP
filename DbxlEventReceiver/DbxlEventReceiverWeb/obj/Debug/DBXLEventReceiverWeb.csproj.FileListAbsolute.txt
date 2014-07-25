@@ -11,3 +11,5 @@ C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\GRSPC
 C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\en\Microsoft.IdentityModel.resources.dll
 C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Debug\DBXLEventReceiverWeb.dll
 C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Debug\DBXLEventReceiverWeb.pdb
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLClassLibrary.pdb

@@ -1,0 +1,6 @@
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.dll.config
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DbxlClassLibrary.csprojResolveAssemblyReference.cache

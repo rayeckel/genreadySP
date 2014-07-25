@@ -1,0 +1,5 @@
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Release\DBXLClassLibrary.dll.config
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Release\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Release\DBXLClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DBXLClassLibrary.pdb

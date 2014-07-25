@@ -11,3 +11,5 @@ C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\en\Mi
 C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Release\DBXLEventReceiverWeb.csprojResolveAssemblyReference.cache
 C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Release\DBXLEventReceiverWeb.dll
 C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Release\DBXLEventReceiverWeb.pdb
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLClassLibrary.pdb
