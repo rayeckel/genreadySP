@@ -1,0 +1,13 @@
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLEventReceiverWeb.dll.config
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLEventReceiverWeb.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\DBXLEventReceiverWeb.pdb
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\GRSPClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\Microsoft.IdentityModel.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\Microsoft.IdentityModel.Extensions.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\Microsoft.SharePoint.Client.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\Microsoft.SharePoint.Client.Runtime.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\GRSPClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\bin\en\Microsoft.IdentityModel.resources.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Release\DBXLEventReceiverWeb.csprojResolveAssemblyReference.cache
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Release\DBXLEventReceiverWeb.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiverWeb\obj\Release\DBXLEventReceiverWeb.pdb

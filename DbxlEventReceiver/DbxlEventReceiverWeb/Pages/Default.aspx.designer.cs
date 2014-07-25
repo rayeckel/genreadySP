@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DbxlEventReceiverWeb {
+namespace DBXLEventReceiverWeb.Pages {
     
     
     public partial class Default {

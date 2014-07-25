@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx?wsdl" docRef="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" xmlns:q1="http://qdabra.com/webservices/" binding="q1:IDbxlDocumentService" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" xmlns:q2="http://qdabra.com/webservices/" binding="q2:DbxlDocumentServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" xmlns:q3="http://qdabra.com/webservices/" binding="q3:IDbxlDocumentService1" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" xmlns:q4="http://qdabra.com/webservices/" binding="q4:DbxlDocumentServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

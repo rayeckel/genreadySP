@@ -1,0 +1,3 @@
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiver\bin\Debug\DBXLEventReceiver.pdb
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiver\obj\Debug\DBXLEventReceiver.dll
+C:\Users\Ray.EDITUREPD\Projects\DBXLEventReceiver\DBXLEventReceiver\obj\Debug\DBXLEventReceiver.pdb

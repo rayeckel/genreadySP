@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
+using GRSPClassLibrary;
+using DbxlEventReceiverWeb.DbxlDocumentService;
+using System.Xml;
+using System.Xml.XPath;
+using System.IO;
+using System.Net;
 
 namespace DBXLEventReceiverWeb.Services
 {

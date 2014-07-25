@@ -6,3 +6,4 @@ C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\GRSPClassLibrary.dl
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\GRSPClassLibrary.pdb
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Release\GRSPClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Release\GRSPClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Release\GRSPClassLibrary.csprojResolveAssemblyReference.cache

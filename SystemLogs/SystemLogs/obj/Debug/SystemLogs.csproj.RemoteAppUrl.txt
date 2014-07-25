@@ -1,1 +1,1 @@
-https://localhost:44302/
+https://genreadytestapp1.azurewebsites.net

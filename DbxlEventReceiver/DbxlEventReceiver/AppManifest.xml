@@ -8,10 +8,15 @@
 >
   <Properties>
     <Title>DBXLEventReceiver</Title>
-    <StartPage>~remoteAppUrl/Pages/Default.aspx?{StandardTokens}</StartPage>
+    <StartPage>http://genreadytestapp1.azurewebsites.net/Pages/?{StandardTokens}</StartPage>
+    <InstalledEventEndpoint>http://genreadytestapp1.azurewebsites.net/Services/AppEventReceiver.svc</InstalledEventEndpoint>
+    <UninstallingEventEndpoint>http://genreadytestapp1.azurewebsites.net/Services/AppEventReceiver.svc</UninstallingEventEndpoint>
   </Properties>
 
   <AppPrincipal>
-    <RemoteWebApplication ClientId="*" />
+    <RemoteWebApplication ClientId="972d6c20-9724-4ec1-a7dd-f5fd9244b270" />
   </AppPrincipal>
+  <AppPermissionRequests>
+    <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />
+  </AppPermissionRequests>
 </App>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="1425a9d7-0037-4084-b4fd-7d276e4d906e" Scope="Web" Title="DBXLEventReceiver Feature1" Version="1.0.0.0">
+  <ElementManifests>
+    <ElementManifest Location="DbxlRER\Elements.xml" />
+  </ElementManifests>
+  <UpgradeActions>
+    <VersionRange>
+      <ApplyElementManifests>
+        <ElementManifest Location="DbxlRER\Elements.xml" />
+      </ApplyElementManifests>
+    </VersionRange>
+  </UpgradeActions>
+</Feature>

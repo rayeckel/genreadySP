@@ -1,0 +1,2268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://qdabra.com/webservices/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s1="http://schemas.microsoft.com/sharepoint/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://qdabra.com/webservices/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://qdabra.com/webservices/">
+      <s:import namespace="http://schemas.microsoft.com/sharepoint/soap/" />
+      <s:element name="GetDocumentHistory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentHistoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentHistoryResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:ArrayOfDocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="StatusInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Errors" type="tns:ArrayOfErrorInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExecutionTime" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfErrorInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ErrorInfo" nillable="true" type="tns:ErrorInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ErrorInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentInfo" nillable="true" type="tns:DocumentInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DocID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VersionNo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RefID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsLocked" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LockExpires" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockComments" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Content">
+            <s:complexType mixed="true">
+              <s:sequence>
+                <s:any />
+              </s:sequence>
+            </s:complexType>
+          </s:element>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Author" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Properties" type="tns:ArrayOfDocumentPropertyInfo" />
+        </s:sequence>
+        <s:attribute name="SubmitKey" type="s:string" />
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentPropertyInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentPropertyInfo" nillable="true" type="tns:DocumentPropertyInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentPropertyInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ColumnName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:DocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentString">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentStringResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentStringResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:DocumentStringInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DocumentStringInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DocID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VersionNo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RefID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsLocked" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LockExpires" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockComments" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Content" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Author" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Properties" type="tns:ArrayOfDocumentPropertyInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetDocumentVersion">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="version" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentVersionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentVersionResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:DocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentFromRefId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="refId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="version" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentFromRefIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentFromRefIdResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:DocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LockDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="lockComments" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LockDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LockDocumentResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:DocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnlockDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UnlockDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UnlockDocumentResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfo" type="tns:DocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentAsUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="submitAsUser" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="author" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="allowOverwrite" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentAsUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SubmitDocumentAsUserResult" type="tns:StatusInfo" />
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="refId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="author" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="allowOverwrite" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SubmitDocumentResult" type="tns:StatusInfo" />
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="refId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RemoveDocumentResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveDocuments">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docIds" type="tns:ArrayOfInt" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="RemoveDocumentsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RemoveDocumentsResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveAllDocumentsForType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveAllDocumentsForTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RemoveAllDocumentsForTypeResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnumerateDocumentTypeNames">
+        <s:complexType />
+      </s:element>
+      <s:element name="EnumerateDocumentTypeNamesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EnumerateDocumentTypeNamesResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeNames" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="EnumerateDocumentTypes">
+        <s:complexType />
+      </s:element>
+      <s:element name="EnumerateDocumentTypesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="EnumerateDocumentTypesResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docTypes" type="tns:ArrayOfDocumentTypeInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDocumentTypeInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentTypeInfo" nillable="true" type="tns:DocumentTypeInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentTypeInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HistoryFlg" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="RefIdFormat" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BaseRefNo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RefIdXpath" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DataSource" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nodes" type="tns:ArrayOfNodeMapInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Namespaces" type="tns:ArrayOfNamespaceInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Indexes" type="tns:ArrayOfDocumentIndexInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Properties" type="tns:ArrayOfDocumentTypePropertyInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Permissions" type="tns:ArrayOfDocumentTypePermissionInfo" />
+          <s:element minOccurs="1" maxOccurs="1" name="CheckAccessPermissions" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="FailInsertOnShredError" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="FailInsertOnPromotedPropertyError" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Template" type="s:base64Binary" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsSignedTemplate" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Account" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SolutionGroup" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PI" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SharePointLists" type="tns:ArrayOfSharePointListMapInfo" />
+          <s:element minOccurs="1" maxOccurs="1" name="ID" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FriendlyName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DomainId" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="IconId" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="DisableHrefInject" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsSystemDocumentType" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="EnableXmlIndex" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfNodeMapInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NodeMapInfo" nillable="true" type="tns:NodeMapInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="NodeMapInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IsKey" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="NodeMapID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="NodePath" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Type" type="tns:NodeMapType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ValueType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ObjectName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Promoted" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="ColumnType" type="tns:ColumnType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Nodes" type="tns:ArrayOfNodeMapInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="ForeignKeys" type="tns:ArrayOfForeignKeyInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="NodeMapType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Table" />
+          <s:enumeration value="Column" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ColumnType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Undefined" />
+          <s:enumeration value="integer" />
+          <s:enumeration value="float" />
+          <s:enumeration value="date" />
+          <s:enumeration value="time" />
+          <s:enumeration value="dateTime" />
+          <s:enumeration value="decimal" />
+          <s:enumeration value="string" />
+          <s:enumeration value="boolean" />
+          <s:enumeration value="byte" />
+          <s:enumeration value="long" />
+          <s:enumeration value="short" />
+          <s:enumeration value="double" />
+          <s:enumeration value="hexBinary" />
+          <s:enumeration value="base64binary" />
+          <s:enumeration value="duration" />
+          <s:enumeration value="nonNegativeInteger" />
+          <s:enumeration value="positiveInteger" />
+          <s:enumeration value="nonPositiveInteger" />
+          <s:enumeration value="negativeInteger" />
+          <s:enumeration value="unsignedByte" />
+          <s:enumeration value="unsignedInt" />
+          <s:enumeration value="unsignedLong" />
+          <s:enumeration value="unsignedShort" />
+          <s:enumeration value="gYearMonth" />
+          <s:enumeration value="gMonthDay" />
+          <s:enumeration value="gDay" />
+          <s:enumeration value="gMonth" />
+          <s:enumeration value="anyURI" />
+          <s:enumeration value="Object" />
+          <s:enumeration value="Int" />
+          <s:enumeration value="Float" />
+          <s:enumeration value="Date" />
+          <s:enumeration value="Time" />
+          <s:enumeration value="DateTime" />
+          <s:enumeration value="Currency" />
+          <s:enumeration value="String" />
+          <s:enumeration value="Boolean" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfForeignKeyInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ForeignKeyInfo" nillable="true" type="tns:ForeignKeyInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ForeignKeyInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="KeyID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ObjectName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="KeyType" type="tns:ForeignKeyType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ForeignObjectName" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ForeignKeyType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Column" />
+          <s:enumeration value="Identity" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfNamespaceInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="NamespaceInfo" nillable="true" type="tns:NamespaceInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="NamespaceInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="NamespaceID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Uri" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Prefix" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentIndexInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentIndexInfo" nillable="true" type="tns:DocumentIndexInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentIndexInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="IndexID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="XPath" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentTypePropertyInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentTypePropertyInfo" nillable="true" type="tns:DocumentTypePropertyInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentTypePropertyInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PropertyID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ColumnName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="XPath" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ColumnType" type="tns:ColumnType" />
+          <s:element minOccurs="0" maxOccurs="1" name="Aggregation" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentTypePermissionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentTypePermissionInfo" nillable="true" type="tns:DocumentTypePermissionInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentTypePermissionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MembershipXPath" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoleName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanRead" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanWrite" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanLockForRead" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanLockForWrite" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanAdminister" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanAdd" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanDelete" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="PermissionLevel" nillable="true" type="tns:PermissionLevels" />
+          <s:element minOccurs="1" maxOccurs="1" name="CanBrowse" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="PermissionLevels">
+        <s:restriction base="s:string">
+          <s:enumeration value="Type" />
+          <s:enumeration value="Document" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfSharePointListMapInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SharePointListMapInfo" nillable="true" type="tns:SharePointListMapInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SharePointListMapInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SequenceNumber" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SharePointListUrl" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Method" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Timeframe" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AuthType" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SSOAppName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Conjunction" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Conditions" type="tns:ArrayOfSharePointListMapConditionInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Options" type="tns:ListOptions" />
+          <s:element minOccurs="0" maxOccurs="1" name="ContentTypeUrl" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ListType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FileXPath" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSharePointListMapConditionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SharePointListMapConditionInfo" nillable="true" type="tns:SharePointListMapConditionInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SharePointListMapConditionInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Expression" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ListOptions">
+        <s:attribute name="VerifyFormLibraryUrl" type="s:boolean" use="required" />
+        <s:attribute name="EnsureFormLibrary" type="s:boolean" use="required" />
+        <s:attribute name="EnableForIPFS" type="s:boolean" use="required" />
+        <s:attribute name="EnableDeletePropagation" type="s:boolean" use="required" />
+        <s:attribute name="IsContentType" type="s:boolean" use="required" />
+      </s:complexType>
+      <s:element name="GetDocumentType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentTypeResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docType" type="tns:DocumentTypeInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypeSummary">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypeSummaryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentTypeSummaryResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docType" type="tns:DocumentTypeSummaryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DocumentTypeSummaryInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DocumentCount" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxDocumentCount" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="MaxDocumentTypeCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Link" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TemplateModifiedDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="TemplateFormVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastModifiedBy" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SolutionGroup" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HistoryFlg" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Namespaces" type="tns:ArrayOfNamespaceInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Indexes" type="tns:ArrayOfDocumentIndexInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Properties" type="tns:ArrayOfDocumentTypePropertyInfo" />
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="IconId" nillable="true" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FriendlyName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DomainId" nillable="true" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsSystemDocumentType" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAllDocumentTypeSummaries">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAllDocumentTypeSummariesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllDocumentTypeSummariesResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeSummaryInfo" type="tns:ArrayOfDocumentTypeSummaryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDocumentTypeSummaryInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentTypeSummaryInfo" nillable="true" type="tns:DocumentTypeSummaryInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetDocumentTypeSummariesByGroup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="groupName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypeSummariesByGroupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentTypeSummariesByGroupResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeSummaryInfo" type="tns:ArrayOfDocumentTypeSummaryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDocumentType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docType" type="tns:DocumentTypeInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="overrideDbConnectionString" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="overrideEnumDbDatabase" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDocumentTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetDocumentTypeResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PrepareTemplateForSigning">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="overrideEnumDbDatabase" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="template" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PrepareTemplateForSigningResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PrepareTemplateForSigningResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="template" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDocumentTypeMapping">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mappingInfo" type="tns:NodeMapInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetDocumentTypeMappingResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SetDocumentTypeMappingResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveDocumentType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveDocumentTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RemoveDocumentTypeResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentsByType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentsByTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentsByTypeResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMyDocumentsByType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMyDocumentsByTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMyDocumentsByTypeResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentSummaryByType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="docIds" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="xpathFilter" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentSummaryByTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentSummaryByTypeResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentSummaryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfDocumentSummaryInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentSummaryInfo" nillable="true" type="tns:DocumentSummaryInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentSummaryInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DocID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VersionNo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RefID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsLocked" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LockExpires" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockComments" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Author" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Properties" type="tns:ArrayOfDocumentPropertyInfo" />
+          <s:element minOccurs="0" maxOccurs="1" name="Link" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CreatedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Created" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="ModifiedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Modified" type="s:dateTime" />
+        </s:sequence>
+        <s:attribute name="SubmitKey" type="s:string" />
+      </s:complexType>
+      <s:element name="GetMyDocumentSummaryByType">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMyDocumentSummaryByTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMyDocumentSummaryByTypeResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentSummaryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListItems">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="viewName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="query">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="viewFields">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="rowLimit" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="queryOptions">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetListItemsResponse" nillable="true" type="tns:GetListItemsResponse" />
+      <s:complexType name="GetListItemsResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:listitems" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetMyListItems">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="viewName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="query">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="viewFields">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element minOccurs="0" maxOccurs="1" name="rowLimit" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="queryOptions">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMyListItemsResponse" nillable="true" type="tns:GetMyListItemsResponse" />
+      <s:complexType name="GetMyListItemsResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:listitems" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="QueryDocuments">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xpath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="queryInfo" type="tns:IndexQueryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="IndexQueryInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="CompareList" type="tns:ArrayOfIndexCompareInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfIndexCompareInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IndexCompareInfo" nillable="true" type="tns:IndexCompareInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndexCompareInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="IndexName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Operand" nillable="true" type="tns:Operand" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="Operand">
+        <s:restriction base="s:string">
+          <s:enumeration value="LT" />
+          <s:enumeration value="LTE" />
+          <s:enumeration value="EQ" />
+          <s:enumeration value="GTE" />
+          <s:enumeration value="GT" />
+          <s:enumeration value="NE" />
+          <s:enumeration value="Like" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="QueryDocumentsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryDocumentsResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentsHistory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="docTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xpath" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentsHistoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryDocumentsHistoryResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Search">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchPhrase" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="searchType" type="tns:SearchType" />
+            <s:element minOccurs="0" maxOccurs="1" name="docType" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="SearchType">
+        <s:restriction base="s:string">
+          <s:enumeration value="All" />
+          <s:enumeration value="Metadata" />
+          <s:enumeration value="Data" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SearchResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SearchResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="docInfos" type="tns:ArrayOfDocumentSummaryInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SearchEx">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="searchPhrase" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="searchMethod" type="tns:SearchMethod" />
+            <s:element minOccurs="1" maxOccurs="1" name="searchType" type="tns:SearchType" />
+            <s:element minOccurs="0" maxOccurs="1" name="docType" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="getProperties" type="s:boolean" />
+            <s:element minOccurs="1" maxOccurs="1" name="start" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="count" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:simpleType name="SearchMethod">
+        <s:restriction base="s:string">
+          <s:enumeration value="Basic" />
+          <s:enumeration value="Contains" />
+          <s:enumeration value="Freetext" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SearchExResponse" nillable="true" type="tns:SearchExResponse" />
+      <s:complexType name="SearchExResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" ref="s1:listitems" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ChangeDocumentTypeOfDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="oldDocType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="newDocType" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChangeDocumentTypeOfDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ChangeDocumentTypeOfDocumentResult" type="tns:StatusInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypeId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="documentTypeName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="domain" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypeIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentTypeIdResult" type="tns:StatusInfo" />
+            <s:element minOccurs="1" maxOccurs="1" name="documentTypeId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypePermissionInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="documentType" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetDocumentTypePermissionInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetDocumentTypePermissionInfoResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="permissionInfo" type="tns:ArrayOfDocumentTypePermissionInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentWithKey">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documentType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="clientDateTime" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="author" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentWithKeyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SubmitDocumentWithKeyResult" type="tns:StatusInfo" />
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="refId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentWithKeyAsUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="submitAsUser" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="xml" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="documentType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="clientDateTime" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="author" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SubmitDocumentWithKeyAsUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SubmitDocumentWithKeyAsUserResult" type="tns:StatusInfo" />
+            <s:element minOccurs="1" maxOccurs="1" name="docId" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="refId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentWithKey">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="key" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentWithKeyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryDocumentWithKeyResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="details" type="tns:DocumentKeyDetails" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DocumentKeyDetails">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DocId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ClientDateTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastModifiedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastModified" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Locked" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="LockedBy" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Version" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="QueryDocumentsNodeSet">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="query" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryDocumentsNodeSetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryDocumentsNodeSetResult" type="tns:StatusInfo" />
+            <s:element minOccurs="0" maxOccurs="1" name="result">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/sharepoint/soap/">
+      <s:element name="listitems" nillable="true">
+        <s:complexType mixed="true">
+          <s:sequence>
+            <s:any />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetDocumentHistorySoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentHistory" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentHistorySoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocument" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentStringSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentString" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentStringSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentStringResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentVersionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentVersion" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentVersionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentVersionResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentFromRefIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentFromRefId" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentFromRefIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentFromRefIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="LockDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:LockDocument" />
+  </wsdl:message>
+  <wsdl:message name="LockDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:LockDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="UnlockDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:UnlockDocument" />
+  </wsdl:message>
+  <wsdl:message name="UnlockDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:UnlockDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentAsUserSoapIn">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentAsUser" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentAsUserSoapOut">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentAsUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:SubmitDocument" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveDocument" />
+  </wsdl:message>
+  <wsdl:message name="RemoveDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveDocumentsSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveDocuments" />
+  </wsdl:message>
+  <wsdl:message name="RemoveDocumentsSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveAllDocumentsForTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveAllDocumentsForType" />
+  </wsdl:message>
+  <wsdl:message name="RemoveAllDocumentsForTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveAllDocumentsForTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnumerateDocumentTypeNamesSoapIn">
+    <wsdl:part name="parameters" element="tns:EnumerateDocumentTypeNames" />
+  </wsdl:message>
+  <wsdl:message name="EnumerateDocumentTypeNamesSoapOut">
+    <wsdl:part name="parameters" element="tns:EnumerateDocumentTypeNamesResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnumerateDocumentTypesSoapIn">
+    <wsdl:part name="parameters" element="tns:EnumerateDocumentTypes" />
+  </wsdl:message>
+  <wsdl:message name="EnumerateDocumentTypesSoapOut">
+    <wsdl:part name="parameters" element="tns:EnumerateDocumentTypesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentType" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeSummarySoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeSummary" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeSummarySoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeSummaryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllDocumentTypeSummariesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllDocumentTypeSummaries" />
+  </wsdl:message>
+  <wsdl:message name="GetAllDocumentTypeSummariesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllDocumentTypeSummariesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeSummariesByGroupSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeSummariesByGroup" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeSummariesByGroupSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeSummariesByGroupResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetDocumentTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:SetDocumentType" />
+  </wsdl:message>
+  <wsdl:message name="SetDocumentTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:SetDocumentTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="PrepareTemplateForSigningSoapIn">
+    <wsdl:part name="parameters" element="tns:PrepareTemplateForSigning" />
+  </wsdl:message>
+  <wsdl:message name="PrepareTemplateForSigningSoapOut">
+    <wsdl:part name="parameters" element="tns:PrepareTemplateForSigningResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetDocumentTypeMappingSoapIn">
+    <wsdl:part name="parameters" element="tns:SetDocumentTypeMapping" />
+  </wsdl:message>
+  <wsdl:message name="SetDocumentTypeMappingSoapOut">
+    <wsdl:part name="parameters" element="tns:SetDocumentTypeMappingResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveDocumentTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveDocumentType" />
+  </wsdl:message>
+  <wsdl:message name="RemoveDocumentTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveDocumentTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentsByTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentsByType" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentsByTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentsByTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMyDocumentsByTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMyDocumentsByType" />
+  </wsdl:message>
+  <wsdl:message name="GetMyDocumentsByTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMyDocumentsByTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentSummaryByTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentSummaryByType" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentSummaryByTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentSummaryByTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMyDocumentSummaryByTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMyDocumentSummaryByType" />
+  </wsdl:message>
+  <wsdl:message name="GetMyDocumentSummaryByTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMyDocumentSummaryByTypeResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetListItemsSoapIn">
+    <wsdl:part name="request" element="tns:GetListItems" />
+  </wsdl:message>
+  <wsdl:message name="GetListItemsSoapOut">
+    <wsdl:part name="GetListItemsResult" element="tns:GetListItemsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMyListItemsSoapIn">
+    <wsdl:part name="request" element="tns:GetMyListItems" />
+  </wsdl:message>
+  <wsdl:message name="GetMyListItemsSoapOut">
+    <wsdl:part name="GetMyListItemsResult" element="tns:GetMyListItemsResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentsSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryDocuments" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentsSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryDocumentsResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentsHistorySoapIn">
+    <wsdl:part name="parameters" element="tns:QueryDocumentsHistory" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentsHistorySoapOut">
+    <wsdl:part name="parameters" element="tns:QueryDocumentsHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchSoapIn">
+    <wsdl:part name="parameters" element="tns:Search" />
+  </wsdl:message>
+  <wsdl:message name="SearchSoapOut">
+    <wsdl:part name="parameters" element="tns:SearchResponse" />
+  </wsdl:message>
+  <wsdl:message name="SearchExSoapIn">
+    <wsdl:part name="request" element="tns:SearchEx" />
+  </wsdl:message>
+  <wsdl:message name="SearchExSoapOut">
+    <wsdl:part name="SearchExResult" element="tns:SearchExResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChangeDocumentTypeOfDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:ChangeDocumentTypeOfDocument" />
+  </wsdl:message>
+  <wsdl:message name="ChangeDocumentTypeOfDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:ChangeDocumentTypeOfDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeId" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypeIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypeIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypePermissionInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypePermissionInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetDocumentTypePermissionInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetDocumentTypePermissionInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentWithKeySoapIn">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentWithKey" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentWithKeySoapOut">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentWithKeyResponse" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentWithKeyAsUserSoapIn">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentWithKeyAsUser" />
+  </wsdl:message>
+  <wsdl:message name="SubmitDocumentWithKeyAsUserSoapOut">
+    <wsdl:part name="parameters" element="tns:SubmitDocumentWithKeyAsUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentWithKeySoapIn">
+    <wsdl:part name="parameters" element="tns:QueryDocumentWithKey" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentWithKeySoapOut">
+    <wsdl:part name="parameters" element="tns:QueryDocumentWithKeyResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentsNodeSetSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryDocumentsNodeSet" />
+  </wsdl:message>
+  <wsdl:message name="QueryDocumentsNodeSetSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryDocumentsNodeSetResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IDbxlDocumentService">
+    <wsdl:operation name="GetDocumentHistory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns an array of Documents which correspond to the history of the DocID specified.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentHistorySoapIn" />
+      <wsdl:output message="tns:GetDocumentHistorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the Document specified by the DocID.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentSoapIn" />
+      <wsdl:output message="tns:GetDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentString">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the Document specified by the DocID as a string of escaped XML.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentStringSoapIn" />
+      <wsdl:output message="tns:GetDocumentStringSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentVersion">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the Document specified by the DocID and version number.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentVersionSoapIn" />
+      <wsdl:output message="tns:GetDocumentVersionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentFromRefId">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the Document specified by the RefId.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentFromRefIdSoapIn" />
+      <wsdl:output message="tns:GetDocumentFromRefIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LockDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Lock the Document specified by the DocID; optionally add comments that tell why the Document was locked.</wsdl:documentation>
+      <wsdl:input message="tns:LockDocumentSoapIn" />
+      <wsdl:output message="tns:LockDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UnlockDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Unlocks the Document specified by the DocID.</wsdl:documentation>
+      <wsdl:input message="tns:UnlockDocumentSoapIn" />
+      <wsdl:output message="tns:UnlockDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentAsUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add or Update the Document designated by the DocID in the Processing Instruction (PI) of the XML being submitted.  If the XML being submitted does not have a QdabraDBXL PI, then this method will add the Document to DBXL, therefore create a new DocID.  This new DocID will be injected into the submitted XML upon retrieving the XML from DBXL via Document Linking and Loading.  Once the PI has been injected into the XML, this method will update the Document according to the DocID stored in the PI.  Returns: int docId and string refId.</wsdl:documentation>
+      <wsdl:input message="tns:SubmitDocumentAsUserSoapIn" />
+      <wsdl:output message="tns:SubmitDocumentAsUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add or Update the Document designated by the DocID in the Processing Instruction (PI) of the XML being submitted.  If the XML being submitted does not have a QdabraDBXL PI, then this method will add the Document to DBXL, therefore create a new DocID.  This new DocID will be injected into the submitted XML upon retrieving the XML from DBXL via Document Linking and Loading.  Once the PI has been injected into the XML, this method will update the Document according to the DocID stored in the PI.  Returns: int docId and string refId.</wsdl:documentation>
+      <wsdl:input message="tns:SubmitDocumentSoapIn" />
+      <wsdl:output message="tns:SubmitDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes the Document specified by the DocID.  This will permanently and irretrievably remove the XML from DBXL’s database as well as all rows that have been shredded into the target database.</wsdl:documentation>
+      <wsdl:input message="tns:RemoveDocumentSoapIn" />
+      <wsdl:output message="tns:RemoveDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocuments">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes all Documents specified by the DocIDs.  This will permanently and irretrievably remove the XML from DBXL’s database as well as all rows that have been shredded into the target database for each of the DocIDs specified.</wsdl:documentation>
+      <wsdl:input message="tns:RemoveDocumentsSoapIn" />
+      <wsdl:output message="tns:RemoveDocumentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAllDocumentsForType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes all Documents associated with a certain DocumentType.  Like RemoveDocument, this will remove the XML from DBXL’s database as well as all rows that have been shredded into the target database.</wsdl:documentation>
+      <wsdl:input message="tns:RemoveAllDocumentsForTypeSoapIn" />
+      <wsdl:output message="tns:RemoveAllDocumentsForTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnumerateDocumentTypeNames">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Enumerate all DocumentTypes, returning only their names.</wsdl:documentation>
+      <wsdl:input message="tns:EnumerateDocumentTypeNamesSoapIn" />
+      <wsdl:output message="tns:EnumerateDocumentTypeNamesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnumerateDocumentTypes">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Enumerate all DocumentTypes.</wsdl:documentation>
+      <wsdl:input message="tns:EnumerateDocumentTypesSoapIn" />
+      <wsdl:output message="tns:EnumerateDocumentTypesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the DocumentType specified by the DocumentType name.  This method is used by DAT to administrate the DocumentType and their associated mappings.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentTypeSoapIn" />
+      <wsdl:output message="tns:GetDocumentTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeSummary">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the summary information of the DocumentType specified by the DocumentType name.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentTypeSummarySoapIn" />
+      <wsdl:output message="tns:GetDocumentTypeSummarySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDocumentTypeSummaries">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the summary information of all DocumentTypes in DBXL.</wsdl:documentation>
+      <wsdl:input message="tns:GetAllDocumentTypeSummariesSoapIn" />
+      <wsdl:output message="tns:GetAllDocumentTypeSummariesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeSummariesByGroup">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the summary information of all DocumentTypes in a particular solution group.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentTypeSummariesByGroupSoapIn" />
+      <wsdl:output message="tns:GetDocumentTypeSummariesByGroupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Either creates or edits a DocumentType in DBXL.  If DBXL already contains a DocumentType specified by the name then it is edited, if not a new one is created.</wsdl:documentation>
+      <wsdl:input message="tns:SetDocumentTypeSoapIn" />
+      <wsdl:output message="tns:SetDocumentTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PrepareTemplateForSigning">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Prepares a template for signing by fixing up dataconnections as would be done during a normal publish to DBXL.</wsdl:documentation>
+      <wsdl:input message="tns:PrepareTemplateForSigningSoapIn" />
+      <wsdl:output message="tns:PrepareTemplateForSigningSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentTypeMapping">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Updates mapping for a DocumentType</wsdl:documentation>
+      <wsdl:input message="tns:SetDocumentTypeMappingSoapIn" />
+      <wsdl:output message="tns:SetDocumentTypeMappingSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocumentType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Removes the DocumentType specified by the name.  This method will only successfully complete if the specified DocumentType has no Documents associated with it.  To remove Documents, call RemoveDocument.</wsdl:documentation>
+      <wsdl:input message="tns:RemoveDocumentTypeSoapIn" />
+      <wsdl:output message="tns:RemoveDocumentTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentsByType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns all Documents for specifed DocumentType.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentsByTypeSoapIn" />
+      <wsdl:output message="tns:GetDocumentsByTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMyDocumentsByType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns all Documents for a specified Document Type that match the permission set of the current user calling the web service method.</wsdl:documentation>
+      <wsdl:input message="tns:GetMyDocumentsByTypeSoapIn" />
+      <wsdl:output message="tns:GetMyDocumentsByTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentSummaryByType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns a truncated version of each Document for the specified DocumentType.  This method should be used when querying a large number of Documents. The summary returned includes a Link property that may be used for Document Linking and Loading, the promoted properties of the Document, and several other metadata nodes.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentSummaryByTypeSoapIn" />
+      <wsdl:output message="tns:GetDocumentSummaryByTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMyDocumentSummaryByType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Same as GetDocumentSummaryByType, except it limits the Documents returned to those specified by the permission set of the computer that is currently calling the DBXL web method.</wsdl:documentation>
+      <wsdl:input message="tns:GetMyDocumentSummaryByTypeSoapIn" />
+      <wsdl:output message="tns:GetMyDocumentSummaryByTypeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListItems">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Replicates the Microsoft SharePoint GetListItems web method.</wsdl:documentation>
+      <wsdl:input message="tns:GetListItemsSoapIn" />
+      <wsdl:output message="tns:GetListItemsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMyListItems">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Replicates the Microsoft SharePoint GetListItems web method.</wsdl:documentation>
+      <wsdl:input message="tns:GetMyListItemsSoapIn" />
+      <wsdl:output message="tns:GetMyListItemsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocuments">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Query all XML Documents for the specified Document Type. Filter values using index query info or XPath query to return those that match. </wsdl:documentation>
+      <wsdl:input message="tns:QueryDocumentsSoapIn" />
+      <wsdl:output message="tns:QueryDocumentsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentsHistory">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Query all old versions of XML Documents for specified Document Type, applying the XPath query and returning those that match. If the XPath query is blank, all Documents are returned.</wsdl:documentation>
+      <wsdl:input message="tns:QueryDocumentsHistorySoapIn" />
+      <wsdl:output message="tns:QueryDocumentsHistorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Search">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches all documents matching the specified document type for the search phrase. SearchType controls what data is searched.</wsdl:documentation>
+      <wsdl:input message="tns:SearchSoapIn" />
+      <wsdl:output message="tns:SearchSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SearchEx">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Searches all documents matching the specified document type for the search phrase. SearchMethod controls what type of matching is performed. SearchType controls what data is searched. GetProperties, start and count control how the result set is returned.</wsdl:documentation>
+      <wsdl:input message="tns:SearchExSoapIn" />
+      <wsdl:output message="tns:SearchExSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeDocumentTypeOfDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Moves a document from one document type to another leaving docid unchanged.</wsdl:documentation>
+      <wsdl:input message="tns:ChangeDocumentTypeOfDocumentSoapIn" />
+      <wsdl:output message="tns:ChangeDocumentTypeOfDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeId">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Retrieves the ID of the document type with the specified ID and domain.  Domain can either be a domain, a domain ID preceded by two pound signs (e.g. ##567), or null for types not in a domain. Returns -1 if the type is not found.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentTypeIdSoapIn" />
+      <wsdl:output message="tns:GetDocumentTypeIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypePermissionInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns the set of permissions currently defined for the specified document type.</wsdl:documentation>
+      <wsdl:input message="tns:GetDocumentTypePermissionInfoSoapIn" />
+      <wsdl:output message="tns:GetDocumentTypePermissionInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentWithKey">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Allows specifying a Document ID when updating an existing document.</wsdl:documentation>
+      <wsdl:input message="tns:SubmitDocumentWithKeySoapIn" />
+      <wsdl:output message="tns:SubmitDocumentWithKeySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentWithKeyAsUser">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Add or Update the document designated by the identifying key</wsdl:documentation>
+      <wsdl:input message="tns:SubmitDocumentWithKeyAsUserSoapIn" />
+      <wsdl:output message="tns:SubmitDocumentWithKeyAsUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentWithKey">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Allows querying details about a document using its unique key.</wsdl:documentation>
+      <wsdl:input message="tns:QueryDocumentWithKeySoapIn" />
+      <wsdl:output message="tns:QueryDocumentWithKeySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentsNodeSet">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Queries content from documents' XML</wsdl:documentation>
+      <wsdl:input message="tns:QueryDocumentsNodeSetSoapIn" />
+      <wsdl:output message="tns:QueryDocumentsNodeSetSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="DbxlDocumentServiceSoap" />
+  <wsdl:portType name="DbxlDocumentServiceSoap12" />
+  <wsdl:binding name="IDbxlDocumentService" type="tns:IDbxlDocumentService">
+    <wsdl:documentation>
+      <wsi:Claim conformsTo="http://ws-i.org/profiles/basic/1.1" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" />
+    </wsdl:documentation>
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetDocumentHistory">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocument">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentString">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentString" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentVersion">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentVersion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentFromRefId">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentFromRefId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LockDocument">
+      <soap:operation soapAction="http://qdabra.com/webservices/LockDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnlockDocument">
+      <soap:operation soapAction="http://qdabra.com/webservices/UnlockDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentAsUser">
+      <soap:operation soapAction="http://qdabra.com/webservices/SubmitDocumentAsUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocument">
+      <soap:operation soapAction="http://qdabra.com/webservices/SubmitDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocument">
+      <soap:operation soapAction="http://qdabra.com/webservices/RemoveDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocuments">
+      <soap:operation soapAction="http://qdabra.com/webservices/RemoveDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAllDocumentsForType">
+      <soap:operation soapAction="http://qdabra.com/webservices/RemoveAllDocumentsForType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumerateDocumentTypeNames">
+      <soap:operation soapAction="http://qdabra.com/webservices/EnumerateDocumentTypeNames" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumerateDocumentTypes">
+      <soap:operation soapAction="http://qdabra.com/webservices/EnumerateDocumentTypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentType">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeSummary">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentTypeSummary" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDocumentTypeSummaries">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetAllDocumentTypeSummaries" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeSummariesByGroup">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentTypeSummariesByGroup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentType">
+      <soap:operation soapAction="http://qdabra.com/webservices/SetDocumentType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PrepareTemplateForSigning">
+      <soap:operation soapAction="http://qdabra.com/webservices/PrepareTemplateForSigning" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentTypeMapping">
+      <soap:operation soapAction="http://qdabra.com/webservices/SetDocumentTypeMapping" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocumentType">
+      <soap:operation soapAction="http://qdabra.com/webservices/RemoveDocumentType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentsByType">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentsByType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMyDocumentsByType">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetMyDocumentsByType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentSummaryByType">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentSummaryByType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMyDocumentSummaryByType">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetMyDocumentSummaryByType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListItems">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetListItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMyListItems">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetMyListItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocuments">
+      <soap:operation soapAction="http://qdabra.com/webservices/QueryDocuments" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentsHistory">
+      <soap:operation soapAction="http://qdabra.com/webservices/QueryDocumentsHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Search">
+      <soap:operation soapAction="http://qdabra.com/webservices/Search" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchEx">
+      <soap:operation soapAction="http://qdabra.com/webservices/SearchEx" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeDocumentTypeOfDocument">
+      <soap:operation soapAction="http://qdabra.com/webservices/ChangeDocumentTypeOfDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeId">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentTypeId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypePermissionInfo">
+      <soap:operation soapAction="http://qdabra.com/webservices/GetDocumentTypePermissionInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentWithKey">
+      <soap:operation soapAction="http://qdabra.com/webservices/SubmitDocumentWithKey" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentWithKeyAsUser">
+      <soap:operation soapAction="http://qdabra.com/webservices/SubmitDocumentWithKeyAsUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentWithKey">
+      <soap:operation soapAction="http://qdabra.com/webservices/QueryDocumentWithKey" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentsNodeSet">
+      <soap:operation soapAction="http://qdabra.com/webservices/QueryDocumentsNodeSet" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DbxlDocumentServiceSoap" type="tns:DbxlDocumentServiceSoap">
+    <wsdl:documentation>
+      <wsi:Claim conformsTo="http://ws-i.org/profiles/basic/1.1" xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" />
+    </wsdl:documentation>
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+  </wsdl:binding>
+  <wsdl:binding name="IDbxlDocumentService1" type="tns:IDbxlDocumentService">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetDocumentHistory">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocument">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentString">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentString" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentVersion">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentVersion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentFromRefId">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentFromRefId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LockDocument">
+      <soap12:operation soapAction="http://qdabra.com/webservices/LockDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnlockDocument">
+      <soap12:operation soapAction="http://qdabra.com/webservices/UnlockDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentAsUser">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SubmitDocumentAsUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocument">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SubmitDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocument">
+      <soap12:operation soapAction="http://qdabra.com/webservices/RemoveDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocuments">
+      <soap12:operation soapAction="http://qdabra.com/webservices/RemoveDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveAllDocumentsForType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/RemoveAllDocumentsForType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumerateDocumentTypeNames">
+      <soap12:operation soapAction="http://qdabra.com/webservices/EnumerateDocumentTypeNames" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnumerateDocumentTypes">
+      <soap12:operation soapAction="http://qdabra.com/webservices/EnumerateDocumentTypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeSummary">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentTypeSummary" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDocumentTypeSummaries">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetAllDocumentTypeSummaries" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeSummariesByGroup">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentTypeSummariesByGroup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SetDocumentType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PrepareTemplateForSigning">
+      <soap12:operation soapAction="http://qdabra.com/webservices/PrepareTemplateForSigning" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentTypeMapping">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SetDocumentTypeMapping" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveDocumentType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/RemoveDocumentType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentsByType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentsByType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMyDocumentsByType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetMyDocumentsByType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentSummaryByType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentSummaryByType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMyDocumentSummaryByType">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetMyDocumentSummaryByType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetListItems">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetListItems" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMyListItems">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetMyListItems" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocuments">
+      <soap12:operation soapAction="http://qdabra.com/webservices/QueryDocuments" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentsHistory">
+      <soap12:operation soapAction="http://qdabra.com/webservices/QueryDocumentsHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Search">
+      <soap12:operation soapAction="http://qdabra.com/webservices/Search" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SearchEx">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SearchEx" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeDocumentTypeOfDocument">
+      <soap12:operation soapAction="http://qdabra.com/webservices/ChangeDocumentTypeOfDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypeId">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentTypeId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDocumentTypePermissionInfo">
+      <soap12:operation soapAction="http://qdabra.com/webservices/GetDocumentTypePermissionInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentWithKey">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SubmitDocumentWithKey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SubmitDocumentWithKeyAsUser">
+      <soap12:operation soapAction="http://qdabra.com/webservices/SubmitDocumentWithKeyAsUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentWithKey">
+      <soap12:operation soapAction="http://qdabra.com/webservices/QueryDocumentWithKey" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryDocumentsNodeSet">
+      <soap12:operation soapAction="http://qdabra.com/webservices/QueryDocumentsNodeSet" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="DbxlDocumentServiceSoap12" type="tns:DbxlDocumentServiceSoap12">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+  </wsdl:binding>
+  <wsdl:service name="DbxlDocumentService">
+    <wsdl:port name="IDbxlDocumentService" binding="tns:IDbxlDocumentService">
+      <soap:address location="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DbxlDocumentServiceSoap" binding="tns:DbxlDocumentServiceSoap">
+      <soap:address location="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="IDbxlDocumentService1" binding="tns:IDbxlDocumentService1">
+      <soap12:address location="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="DbxlDocumentServiceSoap12" binding="tns:DbxlDocumentServiceSoap12">
+      <soap12:address location="http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

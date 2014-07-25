@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Published:70EDFC97-B41D-43C5-B751-7C00AD999804-->
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest" Name="SystemLogs" ProductID="{87708596-77e4-458a-99b9-9499b450b38f}" Version="1.0.0.0" SharePointMinVersion="15.0.0.0">
   <Properties>
     <Title>System Logs</Title>
-    <StartPage>https://localhost:44302/?{StandardTokens}</StartPage>
+    <StartPage>https://genreadytestapp1.azurewebsites.net/?{StandardTokens}</StartPage>
   </Properties>
   <AppPrincipal>
-    <AutoDeployedWebApplication>
-      <DebugInfo ClientSecret="uQC1DCF6CCUMsAxwZFDCFvNI7Pghae4TRk3ju/Xh1Fk=" AppUrl="https://localhost:44302/" />
-    </AutoDeployedWebApplication>
+    <RemoteWebApplication ClientId="972d6c20-9724-4ec1-a7dd-f5fd9244b270" />
   </AppPrincipal>
   <AppPermissionRequests>
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection" Right="FullControl" />
