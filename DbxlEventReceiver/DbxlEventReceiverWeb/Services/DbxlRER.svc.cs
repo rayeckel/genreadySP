@@ -31,7 +31,11 @@ namespace DBXLEventReceiverWeb.Services
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
 
-                    ExecuteRER(properties, clientContext);
+                    Boolean RerEnabled = RERIsEnabled(properties, clientContext);
+                    if (RerEnabled)
+                    {
+                        ExecuteRER(properties, clientContext);
+                    }
                 }
             }
 
@@ -50,30 +54,114 @@ namespace DBXLEventReceiverWeb.Services
                 {
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
+
+                    Boolean RerEnabled = RERIsEnabled(properties, clientContext);
+                    if (RerEnabled)
+                    {
+                        ExecuteRER(properties, clientContext);
+                    }
                 }
             }
         }
 
-        private void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
+        private Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             //check and execute if RER is enabled on list
             string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + "_DbxlRerEnabled";
             Boolean RerEnabled = Convert.ToBoolean(GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
+            return RerEnabled;
+        }
 
-            if (RerEnabled)
+        private void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
+        {
+            //get Dbxl document type for list
+            string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + "_DbxlDocType";
+            string DbxlDocType = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
+
+            Guid listId = properties.ItemEventProperties.ListId;
+            int Id = properties.ItemEventProperties.ListItemId;
+            ListItem listItem = ClientContextListItem(clientContext, listId, Id);
+            XmlDocument Doc = LoadClientFile(clientContext, listItem);
+            IDbxlDocumentService DocService = CredentialDocumentService();
+
+            switch (properties.EventType)
             {
-                if (properties.EventType == SPRemoteEventType.ItemDeleting)
-                {
+                case SPRemoteEventType.ItemAdded:
+                    try
+                    {
+                        //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item added");
+                        //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM ADDED");
+
+                        //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+                        int DbxlId;
+                        string RefId;
+                        StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+
+                        //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
+                        if (SubmitResult.Success)
+                        {
+                            //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
+                            listItem["DbxlId"] = DbxlId.ToString();
+                            listItem.Update();
+                            clientContext.ExecuteQuery();
+                        }
+                        else if (!SubmitResult.Success)
+                        {
+                            //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + SubmitResult.Errors[0].Code);
+                            //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
+                        //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);listId
+                        //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
+                        //Diagnostics.WriteLog(clientContext.Web, "RER item adding error", ex.Message);
+                        //clientContext.ExecuteQuery();
+                    }
+                    break;
+
+                case SPRemoteEventType.ItemUpdated:
+                    try
+                    {
+                        //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item updated");
+                        //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM UDPATED");
+
+                        //add qdabra processing instruction
+                        int DbxlId = Convert.ToInt32(listItem["DbxlId"].ToString());
+                        DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
+
+                        //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+                        string RefId;
+                        StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+
+                        //System.Diagnostics.Trace.WriteLine("REFID: " + RefId.ToString());
+                        //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
+
+                        if (SubmitResult.Success)
+                        {
+                            //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
+                        }
+                        else if (!SubmitResult.Success)
+                        {
+                            //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + SubmitResult.Errors[0].Code);
+                            //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
+                        //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);
+                        //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
+                    }
+                    break;
+
+                case SPRemoteEventType.ItemDeleting:
                     try
                     {
                         //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item deleting");
                         //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM DELETING");
-
-                        IDbxlDocumentService DocService = CredentialDocumentService();
-
-                        Guid listId = properties.ItemEventProperties.ListId;
-                        int Id = properties.ItemEventProperties.ListItemId;
-                        ListItem listItem = ClientContextListItem(clientContext, listId, Id);
 
                         int DbxlId = Convert.ToInt32(listItem["DbxlId"].ToString());
                         StatusInfo info = DocService.RemoveDocument(DbxlId);
@@ -95,58 +183,58 @@ namespace DBXLEventReceiverWeb.Services
                         //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);
                         //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
                     }
-                }
-            }
-            /*
-            if (properties.EventType == SPRemoteEventType.ItemAdding)
-            {
-                try
+                    break;
+                /*
+                if (properties.EventType == SPRemoteEventType.ItemAdding)
                 {
-                    Diagnostics.WriteLog(clientContext.Web, "RER fired", "Item adding");
-
-                    System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT");
-
-                    DbxlClient client = new DbxlClient("http://db001az.cloudapp.net/qdabrawebservice/");
-                    string DbxlRootUrl = client.DbxlDocumentService.DbxlRootUrl;
-                    string DbxlVersion = client.DbxlAdmin.GetDbxlVersion();
-                    //Diagnostics.WriteLog(clientContext.Web, "DBXL event", DbxlVersion);
-                    System.Diagnostics.Trace.WriteLine("DBXL ROOT URL: " + DbxlRootUrl);
-                    System.Diagnostics.Trace.WriteLine("DBXL VERSION: " + DbxlVersion);
-                            
-                    int Id = properties.ItemEventProperties.ListItemId;
-                    int DbxlId;
-                    string RefId;
-                    Web Web = clientContext.Web;
-                    List List = Web.Lists.GetById(properties.ItemEventProperties.ListId);
-                    ListItem ListItem = List.GetItemById(Id);
-                    System.Diagnostics.Trace.WriteLine(properties.ItemEventProperties.BeforeUrl);
-                    Microsoft.SharePoint.Client.File File = Web.GetFileByServerRelativeUrl(properties.ItemEventProperties.BeforeUrl);
-                    ClientResult<Stream> Stream = File.OpenBinaryStream();
-                            
-                    XPathDocument Doc = new XPathDocument(Stream.Value);
-                    StatusInfo SubmitResult = client.DbxlDocumentService.SubmitDocument("DbxlTestAlpha", Doc.ToString(), Id.ToString(), "Author", "Alpha", out DbxlId, out RefId);
-
-                    if (SubmitResult.Success)
+                    try
                     {
-                        result.ChangedItemProperties.Add("Dbxl Id", DbxlId);
-                        result.Status = SPRemoteEventServiceStatus.Continue;
-                    }
-                            
-                    //System.Diagnostics.Trace.WriteLine(SubmitResult.ToString());
+                        Diagnostics.WriteLog(clientContext.Web, "RER fired", "Item adding");
 
-                    /*
-                    //we use the ChangedItemProperties to adjust a field value whilst item is adding
-                    result.ChangedItemProperties.Add("Dbxl Id", "RER: " + System.DateTime.Now.ToString());
-                    result.Status = SPRemoteEventServiceStatus.Continue;
+                        System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT");
+
+                        DbxlClient client = new DbxlClient("http://db001az.cloudapp.net/qdabrawebservice/");
+                        string DbxlRootUrl = client.DbxlDocumentService.DbxlRootUrl;
+                        string DbxlVersion = client.DbxlAdmin.GetDbxlVersion();
+                        //Diagnostics.WriteLog(clientContext.Web, "DBXL event", DbxlVersion);
+                        System.Diagnostics.Trace.WriteLine("DBXL ROOT URL: " + DbxlRootUrl);
+                        System.Diagnostics.Trace.WriteLine("DBXL VERSION: " + DbxlVersion);
                             
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine(ex.Message);
-                    //Diagnostics.WriteLog(clientContext.Web, "RER item adding error", ex.Message);
-                    //clientContext.ExecuteQuery();
-                }
-            }*/
+                        int Id = properties.ItemEventProperties.ListItemId;
+                        int DbxlId;
+                        string RefId;
+                        Web Web = clientContext.Web;
+                        List List = Web.Lists.GetById(properties.ItemEventProperties.ListId);
+                        ListItem ListItem = List.GetItemById(Id);
+                        System.Diagnostics.Trace.WriteLine(properties.ItemEventProperties.BeforeUrl);
+                        Microsoft.SharePoint.Client.File File = Web.GetFileByServerRelativeUrl(properties.ItemEventProperties.BeforeUrl);
+                        ClientResult<Stream> Stream = File.OpenBinaryStream();
+                            
+                        XPathDocument Doc = new XPathDocument(Stream.Value);
+                        StatusInfo SubmitResult = client.DbxlDocumentService.SubmitDocument("DbxlTestAlpha", Doc.ToString(), Id.ToString(), "Author", "Alpha", out DbxlId, out RefId);
+
+                        if (SubmitResult.Success)
+                        {
+                            result.ChangedItemProperties.Add("Dbxl Id", DbxlId);
+                            result.Status = SPRemoteEventServiceStatus.Continue;
+                        }
+                            
+                        //System.Diagnostics.Trace.WriteLine(SubmitResult.ToString());
+
+                        /*
+                        //we use the ChangedItemProperties to adjust a field value whilst item is adding
+                        result.ChangedItemProperties.Add("Dbxl Id", "RER: " + System.DateTime.Now.ToString());
+                        result.Status = SPRemoteEventServiceStatus.Continue;
+                            
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine(ex.Message);
+                        //Diagnostics.WriteLog(clientContext.Web, "RER item adding error", ex.Message);
+                        //clientContext.ExecuteQuery();
+                    }
+                }*/
+            }
         }
 
         private IDbxlDocumentService CredentialDocumentService()
@@ -201,8 +289,8 @@ namespace DBXLEventReceiverWeb.Services
             ClientResult<System.IO.Stream> Stream = File.OpenBinaryStream();
             clientContext.ExecuteQuery();
 
-            XmlTextReader text_reader = new XmlTextReader(Stream.Value);
-            XmlDocument Doc = new XmlDocument();
+            var text_reader = new XmlTextReader(Stream.Value);
+            var Doc = new XmlDocument();
             Doc.Load(text_reader);
 
             return Doc;
