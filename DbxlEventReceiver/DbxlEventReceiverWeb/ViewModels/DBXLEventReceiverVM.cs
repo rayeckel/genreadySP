@@ -32,12 +32,18 @@ namespace DBXLEventReceiverWeb.ViewModels
         #endregion
 
         #region Methods
-        public void setDBXLProperties(string DbxlPropertyRerEnabled, string DbxlPropertyDocType, string docTypeText, string REREnabled)
+        public void setDBXLProperties(Dictionary<string, string> formVariables)
         {
+            //Encrypt the password.
+            string passwordVar = formVariables[Constants.DBXL_PASSWORD];
+            formVariables[Constants.DBXL_PASSWORD] = GRSPClassLibrary.Web.Crypt.Encrypt(passwordVar);
+
             using (clientContext)
             {
-                GRSPClassLibrary.Web.Dbxl.Properties.SetDbxlProperty(DbxlPropertyDocType, docTypeText, clientContext);
-                GRSPClassLibrary.Web.Dbxl.Properties.SetDbxlProperty(DbxlPropertyRerEnabled, REREnabled, clientContext);
+                foreach (KeyValuePair<string, string> variable in formVariables)
+                {
+                    GRSPClassLibrary.Web.Dbxl.Properties.SetDbxlProperty(variable.Key, variable.Value, clientContext);
+                }
             }
         }
 

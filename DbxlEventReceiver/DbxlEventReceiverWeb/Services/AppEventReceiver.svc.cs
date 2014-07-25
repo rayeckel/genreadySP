@@ -18,9 +18,9 @@ namespace DBXLEventReceiverWeb.Services
         /// <returns>Holds information returned from the app event.</returns>
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
-            SPRemoteEventResult result = new SPRemoteEventResult();
+            var result = new SPRemoteEventResult();
 
-            using (ClientContext clientContext = TokenHelper.CreateAppEventClientContext(properties, useAppWeb: false))
+            using (ClientContext clientContext = TokenHelper.CreateAppEventClientContext(properties, false))
             {
                 if (clientContext != null)
                 {
@@ -45,53 +45,24 @@ namespace DBXLEventReceiverWeb.Services
 
         private void ProcessEventType(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            if (properties.EventType == SPRemoteEventType.AppInstalled)
-                    { 
-                        System.Diagnostics.Trace.WriteLine(OperationContext.Current.Channel.LocalAddress.Uri.ToString());
-                        //LogWriter.WriteLog("RER installing", System.DateTime.Now.ToString());
+            clientContext.Load(clientContext.Web);
+            clientContext.ExecuteQuery();
 
-                        //clientContext.Load(clientContext.Web, web => web.Title);
-                        clientContext.ExecuteQuery();
-                        //Response.Write(clientContext.Web.Title);
+            ListCollection webLists = clientContext.Web.Lists;
+
+            switch (properties.EventType)
+            {
+                case SPRemoteEventType.AppInstalled:
+                    {
+                        //System.Diagnostics.Trace.WriteLine(OperationContext.Current.Channel.LocalAddress.Uri.ToString());
+                        //LogWriter.WriteLog("RER installing", System.DateTime.Now.ToString());
                         try
                         {
-                            ListCollection Lists = clientContext.Web.Lists;
-                            foreach (List List in Lists)
+                            foreach (List webList in webLists)
                             {
-                                if (List.BaseTemplate.Equals(115))
+                                if (webList.BaseTemplate.Equals(115))
                                 {
-                                    //List RERList = clientContext.Web.Lists.GetByTitle("Dbxl Library");
-                                    // dubgging local url                    
-                                    string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
-                                    string remoteUrl = string.Format("{0}/DbxlRER.svc", opContext);
-
-                                    //deployment url
-                                    //string remoteUrl = string.Format("https://{0}/DbxlRER.svc", OperationContext.Current.Channel.LocalAddress.Uri.DnsSafeHost + "/services");
-                                    EventReceiverDefinitionCreationInformation newEventReceiver = new EventReceiverDefinitionCreationInformation()
-                                    {
-                                        EventType = EventReceiverType.ItemAdded,
-                                        ReceiverName = "DbxlRER",
-                                        ReceiverUrl = remoteUrl,
-                                        SequenceNumber = 1000
-                                    };
-                                    List.EventReceivers.Add(newEventReceiver);
-                                    newEventReceiver = new EventReceiverDefinitionCreationInformation()
-                                    {
-                                        EventType = EventReceiverType.ItemUpdated,
-                                        ReceiverName = "DbxlRER",
-                                        ReceiverUrl = remoteUrl,
-                                        SequenceNumber = 1000
-                                    };
-                                    List.EventReceivers.Add(newEventReceiver);
-                                    newEventReceiver = new EventReceiverDefinitionCreationInformation()
-                                    {
-                                        EventType = EventReceiverType.ItemDeleting,
-                                        ReceiverName = "DbxlRER",
-                                        ReceiverUrl = remoteUrl,
-                                        SequenceNumber = 1000
-                                    };
-                                    List.EventReceivers.Add(newEventReceiver);
-                                    clientContext.ExecuteQuery();
+                                    AddEventRecieversToList(webList);
                                 }
                             }
 
@@ -99,38 +70,29 @@ namespace DBXLEventReceiverWeb.Services
                         catch (Exception ex)
                         {
                             //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER installing error", ex.Message);
-                            clientContext.ExecuteQuery();
                         }
+                        break;
                     }
-                    else if (properties.EventType == SPRemoteEventType.AppUninstalling)
+                case SPRemoteEventType.AppUninstalling:
                     {
                         //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER un-installing", System.DateTime.Now.ToString());
-                        //clientContext.Load(clientContext.Web, web => web.Title);
-                        clientContext.ExecuteQuery();
-                        //Response.Write(clientContext.Web.Title);
                         try
                         {
-                            ListCollection Lists = clientContext.Web.Lists;
-                            foreach (List List in Lists)
+                            foreach (List webList in webLists)
                             {
-                                if (List.BaseTemplate.Equals(115))
+                                if (webList.BaseTemplate.Equals(115))
                                 {
                                     //List RERList = clientContext.Web.Lists.GetByTitle("Dbxl Library");
-                                    EventReceiverDefinitionCollection erdc = List.EventReceivers;
-                                    clientContext.Load(erdc);
+                                    EventReceiverDefinitionCollection erdCollection = webList.EventReceivers;
+                                    clientContext.Load(erdCollection);
                                     clientContext.ExecuteQuery();
-                                    List<EventReceiverDefinition> toDelete = new List<EventReceiverDefinition>();
-                                    foreach (EventReceiverDefinition erd in erdc)
+
+                                    foreach (EventReceiverDefinition erd in erdCollection)
                                     {
                                         if (erd.ReceiverName == "DbxlRER")
                                         {
-                                            toDelete.Add(erd);
+                                            erd.DeleteObject();
                                         }
-                                    }
-                                    foreach (EventReceiverDefinition item in toDelete)
-                                    {
-                                        item.DeleteObject();
-                                        clientContext.ExecuteQuery();
                                     }
                                 }
                             }
@@ -138,9 +100,46 @@ namespace DBXLEventReceiverWeb.Services
                         catch (Exception ex)
                         {
                             //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER un-installing error", ex.Message);
-                            clientContext.ExecuteQuery();
                         }
+                        break;
                     }
+            }
+
+            clientContext.ExecuteQuery();
+        }
+
+        private void AddEventRecieversToList(List list)
+        {
+            //List RERList = clientContext.Web.Lists.GetByTitle("Dbxl Library");
+            //dubgging local url                    
+            string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
+            string remoteUrl = string.Format("{0}/DbxlRER.svc", opContext);
+
+            //deployment url
+            //string remoteUrl = string.Format("https://{0}/DbxlRER.svc", OperationContext.Current.Channel.LocalAddress.Uri.DnsSafeHost + "/services");
+            list.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
+            {
+                EventType = EventReceiverType.ItemAdded,
+                ReceiverName = "DbxlRER",
+                ReceiverUrl = remoteUrl,
+                SequenceNumber = 1000
+            });
+
+            list.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
+            {
+                EventType = EventReceiverType.ItemUpdated,
+                ReceiverName = "DbxlRER",
+                ReceiverUrl = remoteUrl,
+                SequenceNumber = 1000
+            });
+
+            list.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
+            {
+                EventType = EventReceiverType.ItemDeleting,
+                ReceiverName = "DbxlRER",
+                ReceiverUrl = remoteUrl,
+                SequenceNumber = 1000
+            });
         }
     }
 }

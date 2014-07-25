@@ -5,11 +5,13 @@ using System.Text;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
 using GRSPClassLibrary;
+using DBXLClassLibrary;
 using DBXLClassLibrary.DbxlDocumentService;
 using System.Xml;
 using System.Xml.XPath;
 using System.IO;
 using System.Net;
+using System.Resources;
 
 namespace DBXLEventReceiverWeb.Services
 {
@@ -23,10 +25,11 @@ namespace DBXLEventReceiverWeb.Services
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
             SPRemoteEventResult result = new SPRemoteEventResult();
+            ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties);
 
-            using (ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties))
+            if (clientContext != null)
             {
-                if (clientContext != null)
+                using (clientContext)
                 {
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
@@ -48,9 +51,10 @@ namespace DBXLEventReceiverWeb.Services
         /// <param name="properties">Holds information about the remote event.</param>
         public void ProcessOneWayEvent(SPRemoteEventProperties properties)
         {
-            using (ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties))
+            ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties);
+            if (clientContext != null)
             {
-                if (clientContext != null)
+                using (clientContext)
                 {
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
@@ -82,108 +86,112 @@ namespace DBXLEventReceiverWeb.Services
             int Id = properties.ItemEventProperties.ListItemId;
             ListItem listItem = ClientContextListItem(clientContext, listId, Id);
             XmlDocument Doc = LoadClientFile(clientContext, listItem);
-            IDbxlDocumentService DocService = CredentialDocumentService();
+            IDbxlDocumentService DocService = CredentialDocumentService(clientContext);
 
             switch (properties.EventType)
             {
                 case SPRemoteEventType.ItemAdded:
-                    try
                     {
-                        //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item added");
-                        //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM ADDED");
-
-                        //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
-                        int DbxlId;
-                        string RefId;
-                        StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
-
-                        //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
-                        if (SubmitResult.Success)
+                        try
                         {
-                            //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
-                            listItem["DbxlId"] = DbxlId.ToString();
-                            listItem.Update();
-                            clientContext.ExecuteQuery();
-                        }
-                        else if (!SubmitResult.Success)
-                        {
-                            //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + SubmitResult.Errors[0].Code);
-                            //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
-                        //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);listId
-                        //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
-                        //Diagnostics.WriteLog(clientContext.Web, "RER item adding error", ex.Message);
-                        //clientContext.ExecuteQuery();
-                    }
-                    break;
+                            //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item added");
+                            //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM ADDED");
 
+                            //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+                            int DbxlId;
+                            string RefId;
+                            StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+
+                            //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
+                            if (SubmitResult.Success)
+                            {
+                                //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
+                                listItem[Constants.DBXL_ID_LABEL] = DbxlId.ToString();
+                                listItem.Update();
+                                clientContext.ExecuteQuery();
+                            }
+                            else if (!SubmitResult.Success)
+                            {
+                                //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + SubmitResult.Errors[0].Code);
+                                //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
+                            //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);listId
+                            //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
+                            //Diagnostics.WriteLog(clientContext.Web, "RER item adding error", ex.Message);
+                            //clientContext.ExecuteQuery();
+                        }
+                        break;
+                    }
                 case SPRemoteEventType.ItemUpdated:
-                    try
                     {
-                        //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item updated");
-                        //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM UDPATED");
-
-                        //add qdabra processing instruction
-                        int DbxlId = Convert.ToInt32(listItem["DbxlId"].ToString());
-                        DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
-
-                        //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
-                        string RefId;
-                        StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
-
-                        //System.Diagnostics.Trace.WriteLine("REFID: " + RefId.ToString());
-                        //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
-
-                        if (SubmitResult.Success)
+                        try
                         {
-                            //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
+                            //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item updated");
+                            //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM UDPATED");
+
+                            //add qdabra processing instruction
+                            int DbxlId = Convert.ToInt32(listItem[Constants.DBXL_ID_LABEL].ToString());
+                            DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
+
+                            //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+                            string RefId;
+                            StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+
+                            //System.Diagnostics.Trace.WriteLine("REFID: " + RefId.ToString());
+                            //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
+
+                            if (SubmitResult.Success)
+                            {
+                                //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
+                            }
+                            else if (!SubmitResult.Success)
+                            {
+                                //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + SubmitResult.Errors[0].Code);
+                                //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                            }
+
                         }
-                        else if (!SubmitResult.Success)
+                        catch (Exception ex)
                         {
-                            //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + SubmitResult.Errors[0].Code);
-                            //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                            //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
+                            //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);
+                            //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
                         }
-
+                        break;
                     }
-                    catch (Exception ex)
-                    {
-                        //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
-                        //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);
-                        //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
-                    }
-                    break;
-
                 case SPRemoteEventType.ItemDeleting:
-                    try
                     {
-                        //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item deleting");
-                        //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM DELETING");
-
-                        int DbxlId = Convert.ToInt32(listItem["DbxlId"].ToString());
-                        StatusInfo info = DocService.RemoveDocument(DbxlId);
-
-                        if (info.Success)
+                        try
                         {
-                            //System.Diagnostics.Trace.WriteLine("RESULT: " + info.Success.ToString());
+                            //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item deleting");
+                            //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM DELETING");
+
+                            int DbxlId = Convert.ToInt32(listItem[Constants.DBXL_ID_LABEL].ToString());
+                            StatusInfo info = DocService.RemoveDocument(DbxlId);
+
+                            if (info.Success)
+                            {
+                                //System.Diagnostics.Trace.WriteLine("RESULT: " + info.Success.ToString());
+                            }
+                            else if (!info.Success)
+                            {
+                                //System.Diagnostics.Trace.WriteLine("RESULT: " + info.Success.ToString());
+                                //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + info.Errors[0].Code);
+                                //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                            }
                         }
-                        else if (!info.Success)
+                        catch (Exception ex)
                         {
-                            //System.Diagnostics.Trace.WriteLine("RESULT: " + info.Success.ToString());
-                            //System.Diagnostics.Trace.WriteLine("ERROR CODE: " + info.Errors[0].Code);
-                            //System.Diagnostics.Trace.WriteLine("ERROR DESCRIPTION: " + SubmitResult.Errors[0].Description);
+                            //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
+                            //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);
+                            //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
                         }
+                        break;
                     }
-                    catch (Exception ex)
-                    {
-                        //System.Diagnostics.Trace.WriteLine("MESSAGE: " + ex.Message);
-                        //System.Diagnostics.Trace.WriteLine("SOURCE: " + ex.Source);
-                        //System.Diagnostics.Trace.WriteLine("INNER EXCEPTION: " + ex.InnerException);
-                    }
-                    break;
                 /*
                 if (properties.EventType == SPRemoteEventType.ItemAdding)
                 {
@@ -237,27 +245,49 @@ namespace DBXLEventReceiverWeb.Services
             }
         }
 
-        private IDbxlDocumentService CredentialDocumentService()
+        private IDbxlDocumentService CredentialDocumentService(ClientContext clientContext)
         {
-            string ServiceUrl = "http://db001az.cloudapp.net/qdabrawebservice";
-            var credentials = new NetworkCredential("johnnie.margerison", "sdW&*fnIdf32");
-            var DocService = new IDbxlDocumentService();
+            string serviceUrl = BuildServiceUrl();
+            NetworkCredential credentials = BuildServiceCredentials(clientContext);
 
-            if (!ServiceUrl.EndsWith("/"))
+            var DocService = new IDbxlDocumentService()
             {
-                ServiceUrl = ServiceUrl + "/";
-            }
+                Url = BuildServiceUrl(),
+                UseDefaultCredentials = false,
+                Credentials = credentials,
+                Timeout = 60000
+            };
 
-            ServiceUrl = ServiceUrl + "DbxlDocumentService.asmx";
-            DocService.Url = ServiceUrl;
-            DocService.UseDefaultCredentials = false;
-            DocService.Credentials = credentials;
-            DocService.Timeout = 60000;
-
-            string DbxlRootUrl = DocService.Url;
+            //string DbxlRootUrl = DocService.Url;
             //System.Diagnostics.Trace.WriteLine("DBXL ROOT URL: " + DbxlRootUrl);
 
             return DocService;
+        }
+
+        private string BuildServiceUrl()
+        {
+            string serviceUrl = DBXLClassLibrary.Properties.Settings.Default.GRSP_DBXL_ServiceUrl;
+
+            if (!serviceUrl.EndsWith("/"))
+            {
+                serviceUrl = serviceUrl + "/";
+            }
+
+            serviceUrl = serviceUrl + Constants.DBXL_DOC_SERVICE_PAGE;
+
+            return serviceUrl;
+        }
+
+        private NetworkCredential BuildServiceCredentials(ClientContext clientContext)
+        {
+            string username = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_USERNAME, clientContext);
+            string encryptedPassword = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_PASSWORD, clientContext);
+            string decryptedPassword = GRSPClassLibrary.Web.Crypt.Decrypt(encryptedPassword);
+
+            var credentials = new NetworkCredential(username, decryptedPassword);
+            //var credentials = new NetworkCredential("johnnie.margerison", "sdW&*fnIdf32");
+
+            return credentials;
         }
 
         private ListItem ClientContextListItem(ClientContext clientContext, Guid ListId, int Id)
@@ -299,7 +329,7 @@ namespace DBXLEventReceiverWeb.Services
         private void DbxlPiXmlProcessingInstruction(XmlDocument Doc, int DbxlId, string DbxlDocType)
         {
             String PiText = String.Format("docid=\"{0}\" doctype=\"{1}\"", DbxlId, DbxlDocType);
-            XmlProcessingInstruction DbxlPi = Doc.CreateProcessingInstruction("QdabraDBXL", PiText);
+            XmlProcessingInstruction DbxlPi = Doc.CreateProcessingInstruction(Constants.DBXL_PROCESSING_INSTRUCTION_NAME, PiText);
             Doc.AppendChild(DbxlPi);
 
             //System.Diagnostics.Trace.WriteLine(String.Format("PROCESSING INSTRUCTION: {0}, {1}", DbxlPi.Target, DbxlPi.Data));

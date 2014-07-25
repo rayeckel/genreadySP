@@ -25,14 +25,36 @@
             Library Title: <asp:Label ID="LblListTitle" runat="server"></asp:Label>
         </p>
         <p>            
-            Enable DBXL Remote Event Receivers: <asp:CheckBox ID="CbxRerEnabled" runat="server" />
+            Enable DBXL Remote Event Receivers: 
+            <asp:CheckBox ID="CbxRerEnabled" runat="server" />
             <br />
-            DBXL Document Type: <asp:TextBox ID="TxtDocType" runat="server"></asp:TextBox>
+            DBXL Document Type: 
+            <asp:TextBox ID="TxtDocType" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            DBXL User Name: <asp:TextBox ID="TxtUsername" runat="server"></asp:TextBox>
+            <br />
+            DBXL Password: <asp:TextBox ID="TxtPassword" runat="server"></asp:TextBox>
         </p>
         <p>
             <asp:Button ID="btn_SaveSettings" runat="server" Text="Save Settings" />
         </p>
     </div>
     </form>
+    <asp:RequiredFieldValidator id="RequiredFieldValidator1" runat="server"
+        ControlToValidate="TxtDocType"
+        ErrorMessage="DBXL Document Type is a required field."
+        ForeColor="Red">
+    </asp:RequiredFieldValidator>
+    <asp:RequiredFieldValidator id="RequiredFieldValidator2" runat="server"
+        ControlToValidate="TxtUsername"
+        ErrorMessage="DBXL User Name is a required field."
+        ForeColor="Red">
+    </asp:RequiredFieldValidator>
+    <asp:RequiredFieldValidator id="RequiredFieldValidator3" runat="server"
+        ControlToValidate="TxtPassword"
+        ErrorMessage="DBXL Password is a required field."
+        ForeColor="Red">
+    </asp:RequiredFieldValidator>
 </body>
 </html>

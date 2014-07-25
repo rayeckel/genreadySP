@@ -13,7 +13,7 @@ namespace DBXLClassLibrary.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
@@ -30,6 +30,16 @@ namespace DBXLClassLibrary.Properties {
         public string DBXLClassLibrary_DbxlNet_DbxlDocumentService {
             get {
                 return ((string)(this["DBXLClassLibrary_DbxlNet_DbxlDocumentService"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://db001az.cloudapp.net/qdabrawebservice")]
+        public string GRSP_DBXL_ServiceUrl {
+            get {
+                return ((string)(this["GRSP_DBXL_ServiceUrl"]));
             }
         }
     }

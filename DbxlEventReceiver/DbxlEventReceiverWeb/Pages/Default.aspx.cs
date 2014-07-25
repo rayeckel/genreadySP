@@ -44,15 +44,21 @@ namespace DBXLEventReceiverWeb.Pages
 
         protected void btn_SaveSettings_Click(object sender, EventArgs e)
         {
-            string DbxlPropertyRerEnabled = LblListGuid.Text.ToString() + "_DbxlRerEnabled";
-            string DbxlPropertyDocType = LblListGuid.Text.ToString() + "_DbxlDocType";
-            string docTypeText = TxtDocType.Text;
-            string REREnabled = CbxRerEnabled.Checked.ToString();
+            string enabledKey = LblListGuid.Text.ToString() + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
+            string docTypeKey = LblListGuid.Text.ToString() + Constants.KEY_DBXL_PROPERTY_DOCTYPE;
+
+            Dictionary<string, string> formVariables = new Dictionary<string, string>() 
+            {
+                { enabledKey, CbxRerEnabled.Checked.ToString() },
+                { docTypeKey, TxtDocType.Text },
+                { Constants.DBXL_USERNAME, TxtUsername.Text },
+                { Constants.DBXL_PASSWORD, TxtPassword.Text }
+            };
 
             string accessToken = this.btn_SaveSettings.CommandArgument;
 
             var dBXLEventReceiverVM= new DBXLEventReceiverVM(accessToken);
-            dBXLEventReceiverVM.setDBXLProperties(DbxlPropertyRerEnabled, DbxlPropertyDocType, docTypeText, REREnabled);
+            dBXLEventReceiverVM.setDBXLProperties(formVariables);
         }
 
         private void SetAccessToken()
