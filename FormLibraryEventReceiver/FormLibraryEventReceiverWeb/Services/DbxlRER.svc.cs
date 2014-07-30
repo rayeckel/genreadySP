@@ -2,10 +2,6 @@
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
 using System.Xml;
-using System.IO;
-using System.Net;
-using GRSPClassLibrary.Dbxl;
-using GRSPClassLibrary.Web;
 using DBXLClassLibrary.DbxlDocumentService;
 using FormLibraryEventReceiverWeb.Base;
 
