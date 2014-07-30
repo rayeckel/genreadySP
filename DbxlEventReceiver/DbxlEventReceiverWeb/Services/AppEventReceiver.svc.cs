@@ -19,14 +19,12 @@ namespace DBXLEventReceiverWeb.Services
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
             var result = new SPRemoteEventResult();
+            ClientContext clientContext = getClientContext(properties);
 
-            using (ClientContext clientContext = TokenHelper.CreateAppEventClientContext(properties, false))
+            using (clientContext)
             {
                 if (clientContext != null)
                 {
-                    clientContext.Load(clientContext.Web);
-                    clientContext.ExecuteQuery();
-
                     ProcessEventType(properties, clientContext);
                 }
             }
@@ -45,10 +43,13 @@ namespace DBXLEventReceiverWeb.Services
 
         private void ProcessEventType(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            clientContext.Load(clientContext.Web);
+            clientContext.Load(clientContext.Web.Lists);
             clientContext.ExecuteQuery();
 
             ListCollection webLists = clientContext.Web.Lists;
+
+            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
+            logWriter.WriteLog("RER APP installed", "App Installed: Position 1");
 
             switch (properties.EventType)
             {
@@ -106,6 +107,17 @@ namespace DBXLEventReceiverWeb.Services
             }
 
             clientContext.ExecuteQuery();
+        }
+
+        private ClientContext getClientContext(SPRemoteEventProperties properties)
+        {
+            string webUrl = properties.AppEventProperties.HostWebFullUrl.ToString();
+            var webUri = new Uri(webUrl);
+
+            string realm = TokenHelper.GetRealmFromTargetUrl(webUri);
+            string accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, webUri.Authority, realm).AccessToken;
+            ClientContext clientContext = TokenHelper.GetClientContextWithAccessToken(webUrl, accessToken);
+            return clientContext;
         }
 
         private void AddEventRecieversToList(List list)

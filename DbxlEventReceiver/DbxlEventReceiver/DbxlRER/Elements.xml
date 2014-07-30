@@ -5,7 +5,7 @@
       <Name>DbxlRERItemAdding</Name>
       <Type>ItemAdding</Type>
       <SequenceNumber>10000</SequenceNumber>
-      <Url>http://genreadytestapp1.azurewebsites.net/Services/DbxlRER.svc</Url>
+      <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
     </Receiver>
     <Receiver>
       <Name>DbxlRERItemAdded</Name>

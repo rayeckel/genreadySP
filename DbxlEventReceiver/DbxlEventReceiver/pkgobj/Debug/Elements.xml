@@ -25,7 +25,7 @@
       </CommandUIDefinitions>
       <CommandUIHandlers>
         <CommandUIHandler Command="Invoke_DbxlRibbonActionButtonRequest"
-                          CommandAction="http://genreadytestapp1.azurewebsites.net/Pages/Default.aspx?{StandardTokens}&amp;SPListId={SelectedListId}"/>
+                          CommandAction="http://localhost:12687/Pages/Default.aspx?{StandardTokens}&amp;SPListId={SelectedListId}"/>
       </CommandUIHandlers>
     </CommandUIExtension >
   </CustomAction>

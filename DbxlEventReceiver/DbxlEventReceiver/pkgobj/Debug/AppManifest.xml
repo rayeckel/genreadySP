@@ -3,15 +3,17 @@
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest" Name="DBXLEventReceiver" ProductID="{77d81f1a-3acf-4320-b5b5-c32b8a1c6251}" Version="1.0.0.0" SharePointMinVersion="16.0.0.0">
   <Properties>
     <Title>DBXLEventReceiver</Title>
-    <StartPage>http://genreadytestapp1.azurewebsites.net/Pages/?{StandardTokens}</StartPage>
-    <InstalledEventEndpoint>http://genreadytestapp1.azurewebsites.net/Services/AppEventReceiver.svc</InstalledEventEndpoint>
-    <UninstallingEventEndpoint>http://genreadytestapp1.azurewebsites.net/Services/AppEventReceiver.svc</UninstallingEventEndpoint>
+    <StartPage>http://localhost:12687/Pages/Default.aspx?{StandardTokens}</StartPage>
+    <InstalledEventEndpoint>https://genready-debugging.servicebus.windows.net/2698067369/973564320/obj/c17d3b2e-d251-4a7c-9740-0905ff0bd8e7/Services/AppEventReceiver.svc</InstalledEventEndpoint>
   </Properties>
-
   <AppPrincipal>
-    <RemoteWebApplication ClientId="972d6c20-9724-4ec1-a7dd-f5fd9244b270" />
+    <!--<RemoteWebApplication ClientId="093b64bb-50c0-45ef-bd80-a7f79caac2a7" />-->
+    <AutoDeployedWebApplication>
+      <DebugInfo ClientSecret="20mZXZaGwT58DVOZZcptFDurYbTmRxmFBLPB2HOkjUU=" AppUrl="http://localhost:12687/;https://genready-debugging.servicebus.windows.net/2698067369/973564320/obj/c17d3b2e-d251-4a7c-9740-0905ff0bd8e7/" />
+    </AutoDeployedWebApplication>
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true">
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />
+    <AppPermissionRequest Scope="http://sharepoint/content/sitecollection" Right="FullControl" />
   </AppPermissionRequests>
 </App>

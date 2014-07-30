@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
+using Microsoft.SharePoint.Client.UserProfiles;
 using System.Xml;
 using System.Xml.XPath;
 using System.IO;
@@ -18,6 +21,9 @@ namespace DBXLEventReceiverWeb.Services
 {
     public class DbxlRER : IRemoteEventService
     {
+        private LogWriter syslogWriter;
+        private LogWriter errorlogWriter;
+
         /// <summary>
         /// Handles events that occur before an action occurs, such as when a user adds or deletes a list item.
         /// </summary>
@@ -25,17 +31,17 @@ namespace DBXLEventReceiverWeb.Services
         /// <returns>Holds information returned from the remote event.</returns>
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
-            SPRemoteEventResult result = new SPRemoteEventResult();
-            //ClientContext clientContext = TokenHelper.CreateRemoteEventReceiverClientContext(properties);
             ClientContext clientContext = getClientContext(properties);
-
-            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
-            logWriter.WriteLog("RER fired", "Process Event : Position 1");
 
             if (clientContext != null)
             {
+                syslogWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
+                errorlogWriter = new GRSPClassLibrary.Web.Log.LogWriter("Error Log", clientContext);
+
                 using (clientContext)
                 {
+                    //logWriter.WriteLog("RER fired", "Process Event : Position 1");
+
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
 
@@ -47,6 +53,7 @@ namespace DBXLEventReceiverWeb.Services
                 }
             }
 
+            SPRemoteEventResult result = new SPRemoteEventResult();
             return result;
         }
 
@@ -58,13 +65,15 @@ namespace DBXLEventReceiverWeb.Services
         {
             ClientContext clientContext = getClientContext(properties);
 
-            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
-            logWriter.WriteLog("RER fired", "ProcessOneWayEvent : Position 1");
-
             if (clientContext != null)
             {
+                syslogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.SYSTEM_LOG_LABEL, clientContext);
+                errorlogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.ERROR_LOG_LABEL, clientContext);
+
                 using (clientContext)
                 {
+                    //logWriter.WriteLog("RER fired", "Process Event : Position 1");
+
                     clientContext.Load(clientContext.Web);
                     clientContext.ExecuteQuery();
 
@@ -79,12 +88,13 @@ namespace DBXLEventReceiverWeb.Services
 
         private ClientContext getClientContext(SPRemoteEventProperties properties)
         {
-            string webUrl = properties.ItemEventProperties.WebUrl;
+            string webUrl = properties.ItemEventProperties.WebUrl.ToString();
             var webUri = new Uri(webUrl);
 
             string realm = TokenHelper.GetRealmFromTargetUrl(webUri);
             string accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, webUri.Authority, realm).AccessToken;
             ClientContext clientContext = TokenHelper.GetClientContextWithAccessToken(webUrl, accessToken);
+
             return clientContext;
         }
 
@@ -98,12 +108,12 @@ namespace DBXLEventReceiverWeb.Services
 
         private void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            var logWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
-            logWriter.WriteLog("RER fired", "Item adding");
+            //logWriter.WriteLog("RER fired", "EXECUTING");
 
             //get Dbxl document type for list
             string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_DOCTYPE;
             string DbxlDocType = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
+            string DbxlDescriptionText = "Updated: " + DateTime.Now;
 
             Guid listId = properties.ItemEventProperties.ListId;
             int Id = properties.ItemEventProperties.ListItemId;
@@ -111,25 +121,28 @@ namespace DBXLEventReceiverWeb.Services
             XmlDocument Doc = LoadClientFile(clientContext, listItem);
             IDbxlDocumentService DocService = CredentialDocumentService(clientContext);
 
+            var itemEditorLookupValue = (FieldUserValue)listItem[Constants.LIST_ITEM_EDITOR];
+            string itemEditor = itemEditorLookupValue.LookupValue;
+
             switch (properties.EventType)
             {
                 case SPRemoteEventType.ItemAdded:
                     {
                         try
                         {
-                            //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item added");
-                            //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM ADDED");
+                            //syslogWriter.WriteLog("RER fired", "Item added");
 
-                            //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
                             int DbxlId;
                             string RefId;
-                            StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
+                            StatusInfo SubmitResult =
+                                DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
 
                             //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
                             if (SubmitResult.Success)
                             {
                                 //System.Diagnostics.Trace.WriteLine("DBXL ID: " + DbxlId.ToString());
                                 listItem[Constants.DBXL_ID_LABEL] = DbxlId.ToString();
+                                listItem[Constants.LIST_ITEM_EDITOR] = itemEditor;
                                 listItem.Update();
                                 clientContext.ExecuteQuery();
                             }
@@ -153,19 +166,16 @@ namespace DBXLEventReceiverWeb.Services
                     {
                         try
                         {
-                            //GenerationReady.Diagnostics.Log.WriteLog(clientContext.Web, "RER fired", "Item updated");
+                            //syslogWriter.WriteLog("RER fired", "Item updated");
                             //System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT: ITEM UDPATED");
 
                             //add qdabra processing instruction
                             int DbxlId = Convert.ToInt32(listItem[Constants.DBXL_ID_LABEL].ToString());
                             DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
 
-                            //StatusInfo SubmitResult = DocService.SubmitDocument("DbxlTestAlpha", Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
                             string RefId;
-                            StatusInfo SubmitResult = DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), "Author", "Alpha", "True", out DbxlId, out RefId);
-
-                            //System.Diagnostics.Trace.WriteLine("REFID: " + RefId.ToString());
-                            //System.Diagnostics.Trace.WriteLine("SUCCESS: " + SubmitResult.Success.ToString());
+                            StatusInfo SubmitResult =
+                                DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
 
                             if (SubmitResult.Success)
                             {
@@ -215,56 +225,11 @@ namespace DBXLEventReceiverWeb.Services
                         }
                         break;
                     }
-                /*
-                if (properties.EventType == SPRemoteEventType.ItemAdding)
-                {
-                    try
+                default:
                     {
-                        Diagnostics.WriteLog(clientContext.Web, "RER fired", "Item adding");
-
-                        System.Diagnostics.Trace.WriteLine("CALLING DBXL CLIENT");
-
-                        DbxlClient client = new DbxlClient("http://db001az.cloudapp.net/qdabrawebservice/");
-                        string DbxlRootUrl = client.DbxlDocumentService.DbxlRootUrl;
-                        string DbxlVersion = client.DbxlAdmin.GetDbxlVersion();
-                        //Diagnostics.WriteLog(clientContext.Web, "DBXL event", DbxlVersion);
-                        System.Diagnostics.Trace.WriteLine("DBXL ROOT URL: " + DbxlRootUrl);
-                        System.Diagnostics.Trace.WriteLine("DBXL VERSION: " + DbxlVersion);
-                            
-                        int Id = properties.ItemEventProperties.ListItemId;
-                        int DbxlId;
-                        string RefId;
-                        Web Web = clientContext.Web;
-                        List List = Web.Lists.GetById(properties.ItemEventProperties.ListId);
-                        ListItem ListItem = List.GetItemById(Id);
-                        System.Diagnostics.Trace.WriteLine(properties.ItemEventProperties.BeforeUrl);
-                        Microsoft.SharePoint.Client.File File = Web.GetFileByServerRelativeUrl(properties.ItemEventProperties.BeforeUrl);
-                        ClientResult<Stream> Stream = File.OpenBinaryStream();
-                            
-                        XPathDocument Doc = new XPathDocument(Stream.Value);
-                        StatusInfo SubmitResult = client.DbxlDocumentService.SubmitDocument("DbxlTestAlpha", Doc.ToString(), Id.ToString(), "Author", "Alpha", out DbxlId, out RefId);
-
-                        if (SubmitResult.Success)
-                        {
-                            result.ChangedItemProperties.Add("Dbxl Id", DbxlId);
-                            result.Status = SPRemoteEventServiceStatus.Continue;
-                        }
-                            
-                        //System.Diagnostics.Trace.WriteLine(SubmitResult.ToString());
-
-                        /*
-                        //we use the ChangedItemProperties to adjust a field value whilst item is adding
-                        result.ChangedItemProperties.Add("Dbxl Id", "RER: " + System.DateTime.Now.ToString());
-                        result.Status = SPRemoteEventServiceStatus.Continue;
-                            
+                        errorlogWriter.WriteLog("DBXL Remote Event Receiver ERROR", "No Remote Event Type Provided.");
+                        break;
                     }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Trace.WriteLine(ex.Message);
-                        //Diagnostics.WriteLog(clientContext.Web, "RER item adding error", ex.Message);
-                        //clientContext.ExecuteQuery();
-                    }
-                }*/
             }
         }
 
@@ -308,7 +273,7 @@ namespace DBXLEventReceiverWeb.Services
             //string decryptedPassword = GRSPClassLibrary.Web.Crypt.Decrypt(encryptedPassword);
 
             var credentials = new NetworkCredential(username, encryptedPassword);
-            //var credentials = new NetworkCredential("johnnie.margerison", "sdW&*fnIdf32");
+            //var credentials = new NetworkCredential("db001az\johnnie.margerison", "sdW&*fnIdf32");
 
             return credentials;
         }

@@ -47,7 +47,9 @@
     <Content Include="AppIcon.png">
       <OpcRelationship>manifest-icon</OpcRelationship>
     </Content>
-    <Content Include="DbxlRER\Elements.xml" />
+    <Content Include="DbxlRER\Elements.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="DbxlRibbonAction\Elements.xml">
       <OpcRelationship>feature-elementmanifest</OpcRelationship>
     </Content>
@@ -75,6 +77,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="DbxlRER\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{79ee074f-46d9-4250-8ce9-aac9a6c8428a}</SharePointProjectItemId>
     </None>
@@ -84,9 +87,21 @@
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{7c24451c-040b-44ad-9641-5f94dae73335}</FeatureId>
     </None>
+    <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{1215358c-edc8-41c3-a135-75bf9c431d4d}</PackageId>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ServiceBus">
+      <HintPath>..\packages\WindowsAzure.ServiceBus.2.4.2.0\lib\net40-full\Microsoft.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

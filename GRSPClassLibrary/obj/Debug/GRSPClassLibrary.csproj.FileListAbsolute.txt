@@ -6,4 +6,9 @@ C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\GRSPClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\GRSPClassLibrary.pdb
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\GRSPClassLibrary.dll.config
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.ServiceBus.dll
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.ServiceBus.xml
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.xml
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.csprojResolveAssemblyReference.cache
