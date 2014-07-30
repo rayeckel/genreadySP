@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="FormLibraryEventReceiverWeb.Services.DbxlRER" CodeBehind="DbxlRER.svc.cs" %>

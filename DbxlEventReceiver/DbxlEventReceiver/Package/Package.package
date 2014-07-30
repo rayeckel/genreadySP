@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="fb85e36c-aa9e-469a-a8fe-14cab0680401" solutionId="fb85e36c-aa9e-469a-a8fe-14cab0680401" resetWebServer="false" sharePointProductVersion="16.0" name="DBXLEventReceiver" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
-  <features>
-    <featureReference itemId="7c24451c-040b-44ad-9641-5f94dae73335" />
-  </features>
-</package>

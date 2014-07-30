@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Solution xmlns="http://schemas.microsoft.com/sharepoint/" SolutionId="fb85e36c-aa9e-469a-a8fe-14cab0680401" SharePointProductVersion="16.0">
-  <FeatureManifests>
-    <FeatureManifest Location="FormLibraryEventReceiver_Feature1\Feature.xml" />
-  </FeatureManifests>
-</Solution>
