@@ -36,8 +36,7 @@ namespace DBXLEventReceiverWeb.Services
 
             if (clientContext != null)
             {
-                syslogWriter = new GRSPClassLibrary.Web.Log.LogWriter("System Log", clientContext);
-                errorlogWriter = new GRSPClassLibrary.Web.Log.LogWriter("Error Log", clientContext);
+                BuildLoggingContext(properties);
 
                 using (clientContext)
                 {
@@ -63,8 +62,7 @@ namespace DBXLEventReceiverWeb.Services
 
             if (clientContext != null)
             {
-                syslogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.SYSTEM_LOG_LABEL, clientContext);
-                errorlogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.ERROR_LOG_LABEL, clientContext);
+                BuildLoggingContext(properties);
 
                 using (clientContext)
                 {
@@ -88,6 +86,14 @@ namespace DBXLEventReceiverWeb.Services
             return clientContext;
         }
 
+        private void BuildLoggingContext(SPRemoteEventProperties properties)
+        {
+            ClientContext loggingContext = GetClientContext(properties);
+
+            syslogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.SYSTEM_LOG_LABEL, loggingContext);
+            errorlogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.ERROR_LOG_LABEL, loggingContext);
+        }
+
         private Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             //check and execute if RER is enabled on list
@@ -104,7 +110,6 @@ namespace DBXLEventReceiverWeb.Services
             //get Dbxl document type for list
             string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_DOCTYPE;
             string DbxlDocType = GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
-            string DbxlDescriptionText = "Updated: " + DateTime.Now;
 
             Guid listId = properties.ItemEventProperties.ListId;
             int Id = properties.ItemEventProperties.ListItemId;
@@ -123,15 +128,15 @@ namespace DBXLEventReceiverWeb.Services
                         {
                             int DbxlId;
                             string RefId;
+                            string DbxlDescriptionText = "Item Added: " + DateTime.Now;
                             StatusInfo SubmitResult =
                                 DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
 
                             if (SubmitResult.Success)
                             {
-                                //syslogWriter.WriteLog("RER fired", "Item added");
+                                syslogWriter.WriteLog("DBXL RER Triggered", "Item added");
 
                                 listItem[Constants.DBXL_ID_LABEL] = DbxlId.ToString();
-                                listItem[Constants.LIST_ITEM_EDITED_BY] = itemEditor;
                                 listItem.Update();
                                 clientContext.ExecuteQuery();
                             }
@@ -155,12 +160,18 @@ namespace DBXLEventReceiverWeb.Services
                             DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
 
                             string RefId;
+                            string DbxlDescriptionText = "Item Updated: " + DateTime.Now;
                             StatusInfo SubmitResult =
                                 DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
 
                             if (SubmitResult.Success)
                             {
-                                //syslogWriter.WriteLog("RER fired", "Item updated");
+                                syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
+
+                                listItem[Constants.DBXL_ID_LABEL] = DbxlId.ToString();
+                                listItem[Constants.LIST_ITEM_EDITED_BY] = 13;
+                                listItem.Update();
+                                clientContext.ExecuteQuery();
                             }
                             else if (!SubmitResult.Success)
                             {
@@ -184,7 +195,7 @@ namespace DBXLEventReceiverWeb.Services
 
                             if (SubmitResult.Success)
                             {
-                                //syslogWriter.WriteLog("RER fired", "Item deleted");
+                                syslogWriter.WriteLog("DBXL RER Triggered", "Item deleted");
                             }
                             else if (!SubmitResult.Success)
                             {
@@ -203,6 +214,8 @@ namespace DBXLEventReceiverWeb.Services
                         break;
                     }
             }
+
+            clientContext.ExecuteQuery();
         }
 
         private IDbxlDocumentService CredentialDocumentService(ClientContext clientContext)
