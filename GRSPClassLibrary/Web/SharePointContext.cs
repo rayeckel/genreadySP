@@ -218,30 +218,9 @@ namespace GRSPClassLibrary.Web
         /// <returns>The database connection string. Returns <c>null</c> if the app is not autohosted or there is no database.</returns>
         public string GetDatabaseConnectionString()
         {
-            string dbConnectionString = null;
+            //OVERRIDE ME
 
-            using (ClientContext clientContext = CreateAppOnlyClientContextForSPHost())
-            {
-                if (clientContext != null)
-                {
-                    var result = AppInstance.RetrieveAppDatabaseConnectionString(clientContext);
-
-                    clientContext.ExecuteQuery();
-
-                    dbConnectionString = result.Value;
-                }
-            }
-
-            if (dbConnectionString == null)
-            {
-                const string LocalDBInstanceForDebuggingKey = "LocalDBInstanceForDebugging";
-
-                var dbConnectionStringSettings = WebConfigurationManager.ConnectionStrings[LocalDBInstanceForDebuggingKey];
-
-                dbConnectionString = dbConnectionStringSettings != null ? dbConnectionStringSettings.ConnectionString : null;
-            }
-
-            return dbConnectionString;
+            return null;
         }
 
         /// <summary>
@@ -304,14 +283,14 @@ namespace GRSPClassLibrary.Web
         /// </summary>
         static SharePointContextProvider()
         {
-            if (!TokenHelper.IsHighTrustApp())
-            {
+            //if (!TokenHelper.IsHighTrustApp())
+            //{
                 SharePointContextProvider.current = new SharePointAcsContextProvider();
-            }
-            else
-            {
-                SharePointContextProvider.current = new SharePointHighTrustContextProvider();
-            }
+            //}
+            //else
+            //{
+            //    SharePointContextProvider.current = new SharePointHighTrustContextProvider();
+            //}
         }
 
         /// <summary>
@@ -868,21 +847,23 @@ namespace GRSPClassLibrary.Web
         /// <param name="tokenRenewalHandler">The token renewal handler.</param>
         private static void RenewAccessTokenIfNeeded(ref Tuple<string, DateTime> accessToken, Func<string> tokenRenewalHandler)
         {
-            if (IsAccessTokenValid(accessToken))
-            {
-                return;
-            }
+            //if (IsAccessTokenValid(accessToken))
+            //{
+            //    return;
+            //}
 
-            DateTime expiresOn = DateTime.UtcNow.Add(TokenHelper.HighTrustAccessTokenLifetime);
+            //DateTime expiresOn = DateTime.UtcNow.Add(TokenHelper.HighTrustAccessTokenLifetime);
 
-            if (TokenHelper.HighTrustAccessTokenLifetime > AccessTokenLifetimeTolerance)
-            {
-                // Make the access token get renewed a bit earlier than the time when it expires
-                // so that the calls to SharePoint with it will have enough time to complete successfully.
-                expiresOn -= AccessTokenLifetimeTolerance;
-            }
+            //if (TokenHelper.HighTrustAccessTokenLifetime > AccessTokenLifetimeTolerance)
+            //{
+            //    // Make the access token get renewed a bit earlier than the time when it expires
+            //    // so that the calls to SharePoint with it will have enough time to complete successfully.
+            //    expiresOn -= AccessTokenLifetimeTolerance;
+            //}
 
-            accessToken = Tuple.Create(tokenRenewalHandler(), expiresOn);
+            //accessToken = Tuple.Create(tokenRenewalHandler(), expiresOn);
+
+            return;
         }
     }
 

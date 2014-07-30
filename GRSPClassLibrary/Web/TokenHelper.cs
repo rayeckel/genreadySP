@@ -25,7 +25,7 @@ using AudienceUriValidationFailedException = Microsoft.IdentityModel.Tokens.Audi
 using SecurityTokenHandlerConfiguration = Microsoft.IdentityModel.Tokens.SecurityTokenHandlerConfiguration;
 using X509SigningCredentials = Microsoft.IdentityModel.SecurityTokenService.X509SigningCredentials;
 
-namespace GRSPClassLibrary
+namespace GRSPClassLibrary.Web
 {
 
     public static class TokenHelper
@@ -60,6 +60,22 @@ namespace GRSPClassLibrary
                 if (!string.IsNullOrEmpty(request.QueryString[paramName])) return request.QueryString[paramName];
             }
             return null;
+        }
+
+        /// <summary>
+        //Function GetAccessTokenFromAppOnlyRequest
+        //Created by Ray Eckel - 07/30/2014
+        //Gets access token from an app that has been allowed to make 'App-only' calls
+        //to SharePoint. (a permission setting in the apps AppManifest 'Permissions' tab.
+        /// </summary>
+        /// <param name="request">HttpRequest in which to look for the SharePoint site URL</param>
+        /// <returns>The access token string</returns>
+        public static string GetAccessTokenFromAppOnlyRequest(Uri webUri)
+        {
+            string realm = GetRealmFromTargetUrl(webUri);
+            string accessToken = GetAppOnlyAccessToken(SharePointPrincipal, webUri.Authority, realm).AccessToken;
+
+            return accessToken;
         }
 
         /// <summary>
@@ -605,7 +621,7 @@ namespace GRSPClassLibrary
         // Configuration Constants
         //
 
-        private const string SharePointPrincipal = "00000003-0000-0ff1-ce00-000000000000";
+        public const string SharePointPrincipal = "00000003-0000-0ff1-ce00-000000000000";
 
         private const string AuthorizationPage = "_layouts/15/OAuthAuthorize.aspx";
         private const string RedirectPage = "_layouts/15/AppRedirect.aspx";
@@ -810,7 +826,7 @@ namespace GRSPClassLibrary
             return accessToken;
         }
 
-        private static string EnsureTrailingSlash(string url)
+        public static string EnsureTrailingSlash(string url)
         {
             if (!String.IsNullOrEmpty(url) && url[url.Length - 1] != '/')
             {

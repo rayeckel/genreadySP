@@ -2,6 +2,7 @@
 using Microsoft.SharePoint.Client;
 using System.Web;
 using System.Web.UI;
+using GRSPClassLibrary.Web;
 
 namespace GRSPClassLibrary.Pages
 {
@@ -18,17 +19,28 @@ namespace GRSPClassLibrary.Pages
 
         private void getSessionAccessToken()
         {
+            var sharepointUrl = new Uri(Request.QueryString[GRSPClassLibrary.Web.SharePointContext.SPHostUrlKey]);
             string contextTokenString = TokenHelper.GetContextTokenFromRequest(Page.Request);
 
             if (contextTokenString != null)
             {
                 SharePointContextToken contextToken = TokenHelper.ReadAndValidateContextToken(contextTokenString, Request.Url.Authority);
-                var sharepointUrl = new Uri(Request.QueryString["SPHostUrl"]);
-                this.accessToken = TokenHelper.GetAccessToken(contextToken, sharepointUrl.Authority).AccessToken;              
+                this.accessToken = TokenHelper.GetAccessToken(contextToken, sharepointUrl.Authority).AccessToken;
+                return;
             }
-            else if (!IsPostBack)
+            else
             {
-                Response.Write("Could not find a context token.");
+                string appOnlyAccessToken = TokenHelper.GetAccessTokenFromAppOnlyRequest(sharepointUrl);
+                if (appOnlyAccessToken != null)
+                {
+                    this.accessToken = appOnlyAccessToken;
+                    return;
+                }
+            }
+
+            if (!IsPostBack)
+            {
+                Response.Write("Could not find an access token.");
             }
         }
     }

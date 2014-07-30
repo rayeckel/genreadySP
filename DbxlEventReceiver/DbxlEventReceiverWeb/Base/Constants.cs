@@ -17,6 +17,7 @@ namespace DBXLEventReceiverWeb.Base
         public const string KEY_DBXL_PROPERTY_DOCTYPE = "_DbxlDocType";
         public const string KEY_DBXL_PROPERTY_RER_ENABLED = "_DbxlRerEnabled";
         public const string LIST_ITEM_EDITOR = "Editor";
+        public const string LIST_ITEM_EDITED_BY = "Edited By";
         public const string SYSTEM_LOG_LABEL = "System Log";
         public const string TRUE = "True";
     }

@@ -134,8 +134,6 @@
     <Compile Include="Services\DbxlRER.svc.cs">
       <DependentUpon>DbxlRER.svc</DependentUpon>
     </Compile>
-    <Compile Include="Base\SharePointContext.cs" />
-    <Compile Include="Base\TokenHelper.cs" />
     <Compile Include="ViewModels\DBXLEventReceiverVM.cs" />
   </ItemGroup>
   <ItemGroup>

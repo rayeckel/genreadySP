@@ -6,6 +6,7 @@ using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
 using System.ServiceModel;
 using GRSPClassLibrary.Web.Log;
+using GRSPClassLibrary.Web;
 
 namespace DBXLEventReceiverWeb.Services
 {
@@ -19,7 +20,7 @@ namespace DBXLEventReceiverWeb.Services
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
             var result = new SPRemoteEventResult();
-            ClientContext clientContext = getClientContext(properties);
+            ClientContext clientContext = GetClientContext(properties);
 
             using (clientContext)
             {
@@ -109,14 +110,14 @@ namespace DBXLEventReceiverWeb.Services
             clientContext.ExecuteQuery();
         }
 
-        private ClientContext getClientContext(SPRemoteEventProperties properties)
+        private ClientContext GetClientContext(SPRemoteEventProperties properties)
         {
             string webUrl = properties.AppEventProperties.HostWebFullUrl.ToString();
-            var webUri = new Uri(webUrl);
+            var sharepointUrl = new Uri(webUrl);
 
-            string realm = TokenHelper.GetRealmFromTargetUrl(webUri);
-            string accessToken = TokenHelper.GetAppOnlyAccessToken(TokenHelper.SharePointPrincipal, webUri.Authority, realm).AccessToken;
-            ClientContext clientContext = TokenHelper.GetClientContextWithAccessToken(webUrl, accessToken);
+            string appOnlyAccessToken = TokenHelper.GetAccessTokenFromAppOnlyRequest(sharepointUrl);
+            ClientContext clientContext = TokenHelper.GetClientContextWithAccessToken(webUrl, appOnlyAccessToken);
+
             return clientContext;
         }
 

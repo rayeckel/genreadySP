@@ -70,6 +70,7 @@
     <Compile Include="Web\Crypt.cs" />
     <Compile Include="Web\Dbxl.cs" />
     <Compile Include="Web\LogWriter.cs" />
+    <Compile Include="Web\SharePointContext.cs" />
     <Compile Include="Web\TokenHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -57,8 +57,6 @@ namespace DBXLEventReceiverWeb.Pages
             };
 
             string accessToken = this.btn_SaveSettings.CommandArgument;
-            
-            Debug.Write("inside click event password: " + formVariables[Constants.DBXL_PASSWORD]);
 
             var dBXLEventReceiverVM = new DBXLEventReceiverVM(accessToken);
             dBXLEventReceiverVM.setDBXLProperties(formVariables);
