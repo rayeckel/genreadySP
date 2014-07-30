@@ -2,10 +2,10 @@
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
 using System.ServiceModel;
-using DBXLEventReceiverWeb.Base;
+using FormLibraryEventReceiverWeb.Base;
 using GRSPClassLibrary.Web;
 
-namespace DBXLEventReceiverWeb.Services
+namespace FormLibraryEventReceiverWeb.Services
 {
     public class AppEventReceiver : GRSPEventReciever
     {
@@ -45,7 +45,7 @@ namespace DBXLEventReceiverWeb.Services
                                         webList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                         {
                                             EventType = receiverType,
-                                            ReceiverName = Constants.DBXL_RECEIVER_NAME,
+                                            ReceiverName = GRSPClassLibrary.Base.Constants.DBXL_RECEIVER_NAME,
                                             ReceiverUrl = remoteUrl,
                                             SequenceNumber = 1000
                                         });
@@ -74,7 +74,7 @@ namespace DBXLEventReceiverWeb.Services
 
                                     foreach (EventReceiverDefinition erd in erdCollection)
                                     {
-                                        if (erd.ReceiverName == Constants.DBXL_RECEIVER_NAME)
+                                        if (erd.ReceiverName == GRSPClassLibrary.Base.Constants.DBXL_RECEIVER_NAME)
                                         {
                                             erd.DeleteObject();
                                         }

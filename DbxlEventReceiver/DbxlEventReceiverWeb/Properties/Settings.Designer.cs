@@ -27,9 +27,9 @@ namespace DBXLEventReceiverWeb.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("http://db001az.cloudapp.net/qdabrawebservice/DbxlDocumentService.asmx")]
-        public string DBXLEventReceiverWeb_DbxlNet_DbxlDocumentService {
+        public string FormLibraryEventReceiverWeb_DbxlNet_DbxlDocumentService {
             get {
-                return ((string)(this["DBXLEventReceiverWeb_DbxlNet_DbxlDocumentService"]));
+                return ((string)(this["FormLibraryEventReceiverWeb_DbxlNet_DbxlDocumentService"]));
             }
         }
     }

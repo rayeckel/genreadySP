@@ -70,7 +70,7 @@
     <Compile Include="Web\ClientAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Crypt.cs" />
-    <Compile Include="Web\Dbxl.cs" />
+    <Compile Include="Dbxl\Dbxl.cs" />
     <Compile Include="Web\LogWriter.cs" />
     <Compile Include="Web\SharePointContext.cs" />
     <Compile Include="Web\TokenHelper.cs" />
@@ -78,6 +78,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DbxlClassLibrary\DBXLClassLibrary.csproj">
+      <Project>{4e72e7dd-5f99-435c-98c0-28faf58ab514}</Project>
+      <Name>DBXLClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

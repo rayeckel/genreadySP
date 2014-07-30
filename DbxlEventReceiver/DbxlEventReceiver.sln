@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBXLEventReceiver", "DBXLEventReceiver\DBXLEventReceiver.csproj", "{C17D3B2E-D251-4A7C-9740-0905FF0BD8E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormLibraryEventReceiver", "DBXLEventReceiver\FormLibraryEventReceiver.csproj", "{C17D3B2E-D251-4A7C-9740-0905FF0BD8E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBXLEventReceiverWeb", "DBXLEventReceiverWeb\DBXLEventReceiverWeb.csproj", "{08F1537D-37D0-4F82-B62B-94819DB07395}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormLibraryEventReceiverWeb", "DBXLEventReceiverWeb\FormLibraryEventReceiverWeb.csproj", "{08F1537D-37D0-4F82-B62B-94819DB07395}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRSPClassLibrary", "..\GRSPClassLibrary\GRSPClassLibrary.csproj", "{CE4EC8F5-6021-4511-A352-4EDB5FCF0615}"
 EndProject

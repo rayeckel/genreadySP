@@ -12,3 +12,5 @@ C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.WindowsAzur
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.ServiceBus.xml
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.xml
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.csprojResolveAssemblyReference.cache
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\DBXLClassLibrary.pdb

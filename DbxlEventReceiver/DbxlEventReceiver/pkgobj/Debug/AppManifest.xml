@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
-<App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest" Name="DBXLEventReceiver" ProductID="{77d81f1a-3acf-4320-b5b5-c32b8a1c6251}" Version="1.0.0.0" SharePointMinVersion="16.0.0.0">
+<App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest" Name="FormLibraryEventReceiver" ProductID="{77d81f1a-3acf-4320-b5b5-c32b8a1c6251}" Version="1.0.0.0" SharePointMinVersion="16.0.0.0">
   <Properties>
-    <Title>DBXLEventReceiver</Title>
+    <Title>FormLibraryEventReceiver</Title>
     <StartPage>http://localhost:12687/Pages/Default.aspx?{StandardTokens}</StartPage>
     <InstalledEventEndpoint>https://genready-debugging.servicebus.windows.net/2698067369/973564320/obj/c17d3b2e-d251-4a7c-9740-0905ff0bd8e7/Services/AppEventReceiver.svc</InstalledEventEndpoint>
   </Properties>

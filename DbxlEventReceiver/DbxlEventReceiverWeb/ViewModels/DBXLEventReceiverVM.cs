@@ -4,13 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using Microsoft.SharePoint.Client;
+using GRSPClassLibrary.Base;
 using GRSPClassLibrary.Web;
 using GRSPClassLibrary.Web.Log;
-using DBXLEventReceiverWeb.Base;
+using FormLibraryEventReceiverWeb.Base;
 
-namespace DBXLEventReceiverWeb.ViewModels
+namespace FormLibraryEventReceiverWeb.ViewModels
 {
-    public class DBXLEventReceiverVM : ClientAccess
+    public class FormLibraryEventReceiverVM : ClientAccess
     {
         #region Properties
         public ClientContext clientContext
@@ -25,7 +26,7 @@ namespace DBXLEventReceiverWeb.ViewModels
 
         #region Constructors
 
-        public DBXLEventReceiverVM(string sessionAccessToken)
+        public FormLibraryEventReceiverVM(string sessionAccessToken)
             : base(sessionAccessToken)
         {
 
@@ -37,14 +38,14 @@ namespace DBXLEventReceiverWeb.ViewModels
         public void setDBXLProperties(Dictionary<string, string> formVariables)
         {
             //Encrypt the password.
-            string passwordVar = formVariables[Constants.DBXL_PASSWORD];
-            formVariables[Constants.DBXL_PASSWORD] = GRSPClassLibrary.Web.Crypt.Encrypt(passwordVar);
+            string passwordVar = formVariables[GRSPClassLibrary.Base.Constants.DBXL_PASSWORD];
+            formVariables[GRSPClassLibrary.Base.Constants.DBXL_PASSWORD] = GRSPClassLibrary.Web.Crypt.Encrypt(passwordVar);
 
             using (clientContext)
             {
                 foreach (KeyValuePair<string, string> variable in formVariables)
                 {
-                    GRSPClassLibrary.Web.Dbxl.Properties.SetDbxlProperty(variable.Key, variable.Value, clientContext);
+                    GRSPClassLibrary.Dbxl.Properties.SetDbxlProperty(variable.Key, variable.Value, clientContext);
                 }
             }
         }

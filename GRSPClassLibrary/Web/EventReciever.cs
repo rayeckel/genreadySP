@@ -80,5 +80,18 @@ namespace GRSPClassLibrary.Web
         {
             throw new NotImplementedException();
         }
+
+        public ListItem ClientContextListItem(ClientContext clientContext, Guid ListId, int Id)
+        {
+            Microsoft.SharePoint.Client.Web Web = clientContext.Web;
+            List List = Web.Lists.GetById(ListId);
+            ListItem listItem = List.GetItemById(Id);
+
+            //we need to load the listItem, will need to load and execute for the file also
+            clientContext.Load(listItem);
+            clientContext.ExecuteQuery();
+
+            return listItem;
+        }
     }
 }

@@ -1,7 +1,6 @@
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.dll.config
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.pdb
-C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.csprojResolveAssemblyReference.cache
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.Properties.Resources.resources
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.csproj.GenerateResource.Cache
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.dll
