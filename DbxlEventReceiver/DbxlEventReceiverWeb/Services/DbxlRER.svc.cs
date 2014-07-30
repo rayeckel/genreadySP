@@ -1,109 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.Text;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
-using Microsoft.SharePoint.Client.UserProfiles;
 using System.Xml;
-using System.Xml.XPath;
 using System.IO;
 using System.Net;
-using System.Resources;
 using GRSPClassLibrary.Web;
-using GRSPClassLibrary.Web.Log;
-using DBXLClassLibrary;
 using DBXLClassLibrary.DbxlDocumentService;
 using DBXLEventReceiverWeb.Base;
 
 namespace DBXLEventReceiverWeb.Services
 {
-    public class DbxlRER : IRemoteEventService
+    public class DbxlRER : GRSPEventReciever
     {
-        private LogWriter syslogWriter;
-        private LogWriter errorlogWriter;
-
-        /// <summary>
-        /// Handles events that occur before an action occurs, such as when a user adds or deletes a list item.
-        /// </summary>
-        /// <param name="properties">Holds information about the remote event.</param>
-        /// <returns>Holds information returned from the remote event.</returns>
-        public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
+        protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            ClientContext clientContext = GetClientContext(properties);
-
-            if (clientContext != null)
+            Boolean RerEnabled = RERIsEnabled(properties, clientContext);
+            if (!RerEnabled)
             {
-                BuildLoggingContext(properties);
-
-                using (clientContext)
-                {
-                    Boolean RerEnabled = RERIsEnabled(properties, clientContext);
-                    if (RerEnabled)
-                    {
-                        ExecuteRER(properties, clientContext);
-                    }
-                }
+                return;
             }
 
-            SPRemoteEventResult result = new SPRemoteEventResult();
-            return result;
-        }
-
-        /// <summary>
-        /// Handles events that occur after an action occurs, such as after a user adds an item to a list or deletes an item from a list.
-        /// </summary>
-        /// <param name="properties">Holds information about the remote event.</param>
-        public void ProcessOneWayEvent(SPRemoteEventProperties properties)
-        {
-            ClientContext clientContext = GetClientContext(properties);
-
-            if (clientContext != null)
-            {
-                BuildLoggingContext(properties);
-
-                using (clientContext)
-                {
-                    Boolean RerEnabled = RERIsEnabled(properties, clientContext);
-                    if (RerEnabled)
-                    {
-                        ExecuteRER(properties, clientContext);
-                    }
-                }
-            }
-        }
-
-        private ClientContext GetClientContext(SPRemoteEventProperties properties)
-        {
-            string webUrl = properties.ItemEventProperties.WebUrl.ToString();
-            var sharepointUrl = new Uri(webUrl);
-
-            string appOnlyAccessToken = TokenHelper.GetAccessTokenFromAppOnlyRequest(sharepointUrl);
-            ClientContext clientContext = TokenHelper.GetClientContextWithAccessToken(webUrl, appOnlyAccessToken);
-
-            return clientContext;
-        }
-
-        private void BuildLoggingContext(SPRemoteEventProperties properties)
-        {
-            ClientContext loggingContext = GetClientContext(properties);
-
-            syslogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.SYSTEM_LOG_LABEL, loggingContext);
-            errorlogWriter = new GRSPClassLibrary.Web.Log.LogWriter(Constants.ERROR_LOG_LABEL, loggingContext);
-        }
-
-        private Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
-        {
-            //check and execute if RER is enabled on list
-            string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
-            Boolean RerEnabled = Convert.ToBoolean(GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
-            return RerEnabled;
-        }
-
-        private void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
-        {
             clientContext.Load(clientContext.Web, web => web.Lists);
             clientContext.ExecuteQuery();
 
@@ -218,6 +134,14 @@ namespace DBXLEventReceiverWeb.Services
             }
 
             clientContext.ExecuteQuery();
+        }
+
+        private Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
+        {
+            //check and execute if RER is enabled on list
+            string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
+            Boolean RerEnabled = Convert.ToBoolean(GRSPClassLibrary.Web.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
+            return RerEnabled;
         }
 
         private IDbxlDocumentService CredentialDocumentService(ClientContext clientContext)

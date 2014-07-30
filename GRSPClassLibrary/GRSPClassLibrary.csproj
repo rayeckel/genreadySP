@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Constants.cs" />
+    <Compile Include="Web\EventReciever.cs" />
     <Compile Include="Pages\AccessTokenPage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>

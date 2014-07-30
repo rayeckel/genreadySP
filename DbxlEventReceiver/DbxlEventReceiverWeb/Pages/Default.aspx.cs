@@ -16,23 +16,6 @@ namespace DBXLEventReceiverWeb.Pages
 {
     public partial class Default : AccessTokenPage
     {
-        //protected void Page_PreInit(object sender, EventArgs e)
-        //{
-        //    Uri redirectUrl;
-        //    switch (SharePointContextProvider.CheckRedirectionStatus(Context, out redirectUrl))
-        //    {
-        //        case RedirectionStatus.Ok:
-        //            return;
-        //        case RedirectionStatus.ShouldRedirect:
-        //            Response.Redirect(redirectUrl.AbsoluteUri, endResponse: true);
-        //            break;
-        //        case RedirectionStatus.CanNotRedirect:
-        //            Response.Write("An error occurred while processing your request.");
-        //            Response.End();
-        //            break;
-        //    }
-        //}
-
         protected void Page_Load(object sender, EventArgs e)
         {
             SetAccessToken();
@@ -64,7 +47,7 @@ namespace DBXLEventReceiverWeb.Pages
 
         private void SetAccessToken()
         {
-            if (base.accessToken != "")
+            if (!String.IsNullOrEmpty(base.accessToken))
             {
                 this.btn_SaveSettings.CommandArgument = base.accessToken;
             }
@@ -73,9 +56,9 @@ namespace DBXLEventReceiverWeb.Pages
         private void SetElementProperties(ClientContext clientContext)
         {
             //if list id present, navigated from ribbon action
-            if (Request.QueryString["SPListId"] != null && !this.IsPostBack)
+            if (Request.QueryString[Constants.SP_QUERY_STRING_LIST_ID] != null && !this.IsPostBack)
             {
-                Guid ListGuid = new Guid(Request.QueryString["SPListId"]);
+                var ListGuid = new Guid(Request.QueryString[Constants.SP_QUERY_STRING_LIST_ID]);
 
                 //get list info and display
                 using (clientContext)
