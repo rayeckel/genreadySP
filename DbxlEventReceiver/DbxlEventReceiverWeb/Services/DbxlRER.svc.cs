@@ -149,6 +149,7 @@ namespace DBXLEventReceiverWeb.Services
                         {
                             errorlogWriter.WriteLog("DBXL RER Item Added ERROR", ex.Message);
                         }
+
                         break;
                     }
                 case SPRemoteEventType.ItemUpdated:
@@ -168,21 +169,21 @@ namespace DBXLEventReceiverWeb.Services
                             {
                                 syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
 
-                                listItem[Constants.DBXL_ID_LABEL] = DbxlId.ToString();
-                                listItem[Constants.LIST_ITEM_EDITED_BY] = 13;
-                                listItem.Update();
-                                clientContext.ExecuteQuery();
+                                //The code below will trigger an endless loop.
+                                //listItem[Constants.LIST_ITEM_EDITED_BY] = itemEditor;
+                                //listItem.Update();
+                                //clientContext.ExecuteQuery();
                             }
                             else if (!SubmitResult.Success)
                             {
                                 errorlogWriter.WriteLog("DBXL RER Item Updated ERROR", SubmitResult.Errors[0].Description);
                             }
-
                         }
                         catch (Exception ex)
                         {
                             errorlogWriter.WriteLog("DBXL RER Item Updated ERROR", ex.Message);
                         }
+
                         break;
                     }
                 case SPRemoteEventType.ItemDeleting:
@@ -206,6 +207,7 @@ namespace DBXLEventReceiverWeb.Services
                         {
                             errorlogWriter.WriteLog("DBXL RER Item Deleting ERROR", ex.Message);
                         }
+
                         break;
                     }
                 default:
