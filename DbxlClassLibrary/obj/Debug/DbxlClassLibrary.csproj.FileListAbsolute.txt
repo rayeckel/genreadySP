@@ -1,10 +1,6 @@
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.dll.config
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\DBXLClassLibrary.pdb
-C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\Microsoft.ServiceBus.dll
-C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
-C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\Microsoft.ServiceBus.xml
-C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.xml
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.Properties.Resources.resources
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.csproj.GenerateResource.Cache
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Debug\DBXLClassLibrary.dll
