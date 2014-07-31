@@ -81,7 +81,8 @@ namespace FormLibraryEventReceiverWeb.Services
                             {
                                 syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
 
-                                //The code below will trigger an endless loop.
+                                //This is triggering an endless loop.
+                                //listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL] = DbxlId.ToString();                                
                                 //listItem[Constants.LIST_ITEM_EDITED_BY] = itemEditor;
                                 //listItem.Update();
                                 //clientContext.ExecuteQuery();
@@ -128,8 +129,6 @@ namespace FormLibraryEventReceiverWeb.Services
                         break;
                     }
             }
-
-            clientContext.ExecuteQuery();
         }
     }
 }

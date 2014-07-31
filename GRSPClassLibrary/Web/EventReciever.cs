@@ -40,7 +40,7 @@ namespace GRSPClassLibrary.Web
         /// <param name="properties">Holds information about the remote event.</param>
         public virtual void ProcessOneWayEvent(SPRemoteEventProperties properties)
         {
-            throw new NotImplementedException();
+            ProcessEvent(properties);
         }
 
         private ClientContext GetClientContext(SPRemoteEventProperties properties)

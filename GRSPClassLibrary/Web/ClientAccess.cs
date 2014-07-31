@@ -5,7 +5,7 @@ namespace GRSPClassLibrary.Web
 {
     public class ClientAccess
     {
-        private string SITE_URL = "https://generationreadydev.sharepoint.com/sites/re_";
+        private string SITE_URL = "https://generationreadydev.sharepoint.com/sites/re";
         protected string sessionAccessToken { get; set; }
 
         public ClientAccess(string sessionAccessToken)

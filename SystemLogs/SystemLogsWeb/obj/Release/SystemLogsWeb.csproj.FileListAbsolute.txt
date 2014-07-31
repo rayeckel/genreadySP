@@ -9,3 +9,5 @@ C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\GRSPClassLibrary.dl
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\GRSPClassLibrary.pdb
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\obj\Release\SystemLogsWeb.csprojResolveAssemblyReference.cache
 C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\SystemLogsWeb.dll.config
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\DBXLClassLibrary.dll
+C:\Users\Ray.EDITUREPD\Projects\SystemLogs\SystemLogsWeb\bin\DBXLClassLibrary.pdb
