@@ -16,22 +16,46 @@ namespace FulfillmentWeb.Services
             clientContext.Load(clientContext.Web, web => web.Lists);
             clientContext.ExecuteQuery();
 
-            Guid listId = properties.ItemEventProperties.ListId;
-            int Id = properties.ItemEventProperties.ListItemId;        
+            //Guid listId = properties.ItemEventProperties.ListId;
+            //int Id = properties.ItemEventProperties.ListItemId;        
 
             ListCollection webLists = clientContext.Web.Lists;
-            List trackingList = webLists.GetById(listId);
-            List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
+            //List updateFormsLibrary = webLists.GetById(listId);
             List allocationsList = webLists.GetByTitle(Constants.ALLOCATIONS_LIBRARY_NAME);
+            List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
 
+            var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
             var articleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
+            var oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
+            var oldArticleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
+            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
+
+
+            //Put the following in a separate function and call it from within the appropriate event handler below.
+
+            var allocationQuery = new CamlQuery();
+            allocationQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ID'/>" +
+                "<Value Type='Number'>" + allocationId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
+            var query = allocationsList.GetItems(allocationQuery);
+            clientContext.Load(query);
+            clientContext.ExecuteQuery();
+
+            if (query.Count() > 0)
+            {
+                var oldUnits = Convert.ToDecimal(query.First()[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                var oldRemaining = Convert.ToDecimal(query.First()[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+
+                var newRemaining = oldRemaining - units;  
+            }
+
+
+
+
+
 
             var articleQuery = new CamlQuery();
             articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ArticleId'/>" +
                 "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
-
-            //var q = allocationsList.GetItems(articleQuery).First();
-
 
             switch (properties.EventType)
             {
