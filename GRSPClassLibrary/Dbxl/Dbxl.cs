@@ -48,7 +48,8 @@ namespace GRSPClassLibrary.Dbxl
 
     public class EventReceiver : GRSPEventReciever
     {
-        protected new EventReceiverType[] eventReceiverTypes = { EventReceiverType.ItemAdded, EventReceiverType.ItemUpdated, EventReceiverType.ItemDeleting };
+        public static new EventReceiverType[] eventReceiverTypes = { EventReceiverType.ItemAdded, EventReceiverType.ItemUpdated, 
+                                                                   EventReceiverType.ItemUpdating, EventReceiverType.ItemDeleting };
 
         protected Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
         {

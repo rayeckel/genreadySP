@@ -24,61 +24,64 @@ namespace FulfillmentWeb.Services
             List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
             List allocationsList = webLists.GetByTitle(Constants.ALLOCATIONS_LIBRARY_NAME);
 
-            //var q = allocationsList.GetItems(articleQuery).First();
+            var articleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
 
-            if (properties.EventType == SPRemoteEventType.ItemAdded || properties.EventType == SPRemoteEventType.ItemUpdated)
-            {
-                ListItem listItem = ClientContextListItem(clientContext, listId, Id);
-                var articleId = (string)listItem[Constants.LIST_ITEM_ARTICLE_ID];
-
-                var articleQuery = new CamlQuery();
-                articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ArticleId'/>" +
+            var articleQuery = new CamlQuery();
+            articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ArticleId'/>" +
                 "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
 
-                if (properties.EventType == SPRemoteEventType.ItemAdded)
-                {
-                    try
-                    {
-                        syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added");
+            //var q = allocationsList.GetItems(articleQuery).First();
 
-                        listItem[Constants.LIST_ITEM_ARTICLE_ID] = "999999";
-                        listItem.Update();
-                        clientContext.ExecuteQuery();
-                    }
-                    catch (Exception ex)
-                    {
-                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item Added ERROR", ex.Message);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Updated");
-                    }
-                    catch (Exception ex)
-                    {
-                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated triggered", ex.Message);
-                    }
-                }
-            }
-            else if (properties.EventType == SPRemoteEventType.ItemDeleting)
+
+            switch (properties.EventType)
             {
-                try
-                {
-                    syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting");
-                }
-                catch (Exception ex)
-                {
-                    errorlogWriter.WriteLog("Fulfillment Tracking RER Item Deleting ERROR", ex.Message);
-                }
-            }
-            else
-            {
-                errorlogWriter.WriteLog("Fulfillment Tracking Remote Event Receiver ERROR", "Event Type Not Handled.");
+                case SPRemoteEventType.ItemAdding:
+                    {
+                        try
+                        {
+                            syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added");
+                            result.ChangedItemProperties.Add(Constants.LIST_ITEM_ARTICLE_ID, "999999");
+                        }
+                        catch (Exception ex)
+                        {
+                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Added ERROR", ex.Message);
+                        }
+
+                        break;
+                    }
+                case SPRemoteEventType.ItemUpdating:
+                    {
+                        try
+                        {
+                            syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Updated");
+                        }
+                        catch (Exception ex)
+                        {
+                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated triggered", ex.Message);
+                        }
+
+                        break;
+                    }
+                case SPRemoteEventType.ItemDeleting:
+                    {
+                        try
+                        {
+                            syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting");
+                        }
+                        catch (Exception ex)
+                        {
+                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Deleting ERROR", ex.Message);
+                        }
+
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
             }
 
-            clientContext.ExecuteQuery();
+            //clientContext.ExecuteQuery();
         }
     }
 }

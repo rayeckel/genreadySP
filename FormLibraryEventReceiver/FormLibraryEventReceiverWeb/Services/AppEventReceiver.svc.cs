@@ -38,7 +38,7 @@ namespace FormLibraryEventReceiverWeb.Services
                             {
                                 if (webList.BaseTemplate.Equals(115))
                                 {
-                                    foreach (var receiverType in eventReceiverTypes)
+                                    foreach (var receiverType in GRSPClassLibrary.Dbxl.EventReceiver.eventReceiverTypes)
                                     {
                                         webList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                         {

@@ -2,28 +2,28 @@
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <Receivers ListTemplateId="115">
     <Receiver>
-      <Name>DbxlRERItemAdding</Name>
-      <Type>ItemAdding</Type>
-      <SequenceNumber>10000</SequenceNumber>
-      <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
-    </Receiver>
-    <Receiver>
       <Name>DbxlRERItemAdded</Name>
       <Type>ItemAdded</Type>
       <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
-      <SequenceNumber>10000</SequenceNumber>
+      <SequenceNumber>11000</SequenceNumber>
     </Receiver>
     <Receiver>
       <Name>DbxlRERItemDeleted</Name>
       <Type>ItemDeleted</Type>
       <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
-      <SequenceNumber>10000</SequenceNumber>
+      <SequenceNumber>11002</SequenceNumber>
     </Receiver>
     <Receiver>
       <Name>DbxlRERItemUpdated</Name>
       <Type>ItemUpdated</Type>
       <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
-      <SequenceNumber>10000</SequenceNumber>
+      <SequenceNumber>11001</SequenceNumber>
+    </Receiver>
+    <Receiver>
+      <Name>DbxlRERItemUpdating</Name>
+      <Type>ItemUpdated</Type>
+      <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
+      <SequenceNumber>11003</SequenceNumber>
     </Receiver>
   </Receivers>
 </Elements>

@@ -11,7 +11,7 @@ namespace FormLibraryEventReceiverWeb.Services
     {
         protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            if (!RERIsEnabled(properties, clientContext))
+            if (properties.EventType == SPRemoteEventType.ItemAdding || !RERIsEnabled(properties, clientContext))
             {
                 return;
             }
@@ -19,115 +19,118 @@ namespace FormLibraryEventReceiverWeb.Services
             clientContext.Load(clientContext.Web, web => web.Lists);
             clientContext.ExecuteQuery();
 
-            //get Dbxl document type for list
-            string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + GRSPClassLibrary.Base.Constants.KEY_DBXL_PROPERTY_DOCTYPE;
-            string DbxlDocType = GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
+            string itemEditor = (string)properties.ItemEventProperties.UserDisplayName;
 
-            Guid listId = properties.ItemEventProperties.ListId;
-            int Id = properties.ItemEventProperties.ListItemId;
-            ListItem listItem = ClientContextListItem(clientContext, listId, Id);
-            XmlDocument Doc = LoadClientFile(clientContext, listItem);
-            IDbxlDocumentService DocService = CredentialDocumentService(clientContext);
-
-            var itemEditorLookupValue = (FieldUserValue)listItem[Constants.LIST_ITEM_EDITOR];
-            string itemEditor = itemEditorLookupValue.LookupValue;
-
-            switch (properties.EventType)
+            if (properties.EventType == SPRemoteEventType.ItemUpdating)
             {
-                case SPRemoteEventType.ItemAdded:
-                    {
-                        try
+                result.ChangedItemProperties.Add(Constants.LIST_ITEM_EDITED_BY, itemEditor);
+            }
+            else
+            {
+                //get Dbxl document type for list
+                string DbxlDocTypeProperty = properties.ItemEventProperties.ListId + GRSPClassLibrary.Base.Constants.KEY_DBXL_PROPERTY_DOCTYPE;
+                string DbxlDocType = GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(DbxlDocTypeProperty, clientContext);
+
+                Guid listId = properties.ItemEventProperties.ListId;
+                int Id = properties.ItemEventProperties.ListItemId;
+                IDbxlDocumentService DocService = CredentialDocumentService(clientContext);
+                ListItem listItem = ClientContextListItem(clientContext, listId, Id);
+                XmlDocument Doc = LoadClientFile(clientContext, listItem);
+
+                switch (properties.EventType)
+                {
+                    //MUST use ItemAdded BC we need the list item ID for DBXL 
+                    case SPRemoteEventType.ItemAdded:
                         {
-                            int DbxlId;
-                            string RefId;
-                            string DbxlDescriptionText = "Item Added: " + DateTime.Now;
-                            StatusInfo SubmitResult =
-                                DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
-
-                            if (SubmitResult.Success)
+                            try
                             {
-                                syslogWriter.WriteLog("DBXL RER Triggered", "Item added");
+                                int DbxlId;
+                                string RefId;
+                                string DbxlDescriptionText = "Item Added: " + DateTime.Now;
+                                StatusInfo SubmitResult =
+                                    DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
 
-                                listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL] = DbxlId.ToString();
-                                listItem.Update();
-                                clientContext.ExecuteQuery();
+                                if (SubmitResult.Success)
+                                {
+                                    syslogWriter.WriteLog("DBXL RER Triggered", "Item added");
+
+                                    listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL] = DbxlId.ToString();
+                                    listItem[Constants.LIST_ITEM_EDITED_BY] = itemEditor;
+                                    //TODO: Disable event updates from Firing here (base.EventFiringEnabled = false;)
+                                    listItem.Update();
+
+                                    clientContext.ExecuteQuery();
+                                }
+                                else if (!SubmitResult.Success)
+                                {
+                                    errorlogWriter.WriteLog("DBXL RER Item Added - DBXL Submit ERROR", SubmitResult.Errors[0].Description);
+                                }
                             }
-                            else if (!SubmitResult.Success)
+                            catch (Exception ex)
                             {
-                                errorlogWriter.WriteLog("DBXL RER Item Added ERROR", SubmitResult.Errors[0].Description);
+                                errorlogWriter.WriteLog("DBXL RER Item Added ERROR", ex.Message);
                             }
+
+                            break;
                         }
-                        catch (Exception ex)
+                    case SPRemoteEventType.ItemUpdated:
                         {
-                            errorlogWriter.WriteLog("DBXL RER Item Added ERROR", ex.Message);
-                        }
-
-                        break;
-                    }
-                case SPRemoteEventType.ItemUpdated:
-                    {
-                        try
-                        {
-                            //Add qdabra processing instruction
-                            int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL].ToString());
-                            DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
-
-                            string RefId;
-                            string DbxlDescriptionText = "Item Updated: " + DateTime.Now;
-                            StatusInfo SubmitResult =
-                                DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
-
-                            if (SubmitResult.Success)
+                            try
                             {
-                                syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
+                                //Add qdabra processing instruction
+                                int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL].ToString());
+                                DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
 
-                                //This is triggering an endless loop.
-                                //listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL] = DbxlId.ToString();                                
-                                //listItem[Constants.LIST_ITEM_EDITED_BY] = itemEditor;
-                                //listItem.Update();
-                                //clientContext.ExecuteQuery();
+                                string RefId;
+                                string DbxlDescriptionText = "Item Updating: " + DateTime.Now;
+                                StatusInfo SubmitResult =
+                                    DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
+
+                                if (SubmitResult.Success)
+                                {
+                                    syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
+                                }
+                                else if (!SubmitResult.Success)
+                                {
+                                    errorlogWriter.WriteLog("DBXL RER Item Updating - DBXL Submit ERROR", SubmitResult.Errors[0].Description);
+                                }
                             }
-                            else if (!SubmitResult.Success)
+                            catch (Exception ex)
                             {
-                                errorlogWriter.WriteLog("DBXL RER Item Updated ERROR", SubmitResult.Errors[0].Description);
+                                errorlogWriter.WriteLog("DBXL RER Item Updating ERROR", ex.Message);
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            errorlogWriter.WriteLog("DBXL RER Item Updated ERROR", ex.Message);
-                        }
 
-                        break;
-                    }
-                case SPRemoteEventType.ItemDeleting:
-                    {
-                        try
+                            break;
+                        }
+                    case SPRemoteEventType.ItemDeleting:
                         {
-                            //Add qdabra processing instruction
-                            int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL].ToString());
-                            StatusInfo SubmitResult = DocService.RemoveDocument(DbxlId);
-
-                            if (SubmitResult.Success)
+                            try
                             {
-                                syslogWriter.WriteLog("DBXL RER Triggered", "Item deleted");
-                            }
-                            else if (!SubmitResult.Success)
-                            {
-                                errorlogWriter.WriteLog("DBXL RER Item Deleting ERROR", SubmitResult.Errors[0].Description);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            errorlogWriter.WriteLog("DBXL RER Item Deleting ERROR", ex.Message);
-                        }
+                                //Add qdabra processing instruction
+                                int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL].ToString());
+                                StatusInfo SubmitResult = DocService.RemoveDocument(DbxlId);
 
-                        break;
-                    }
-                default:
-                    {
-                        errorlogWriter.WriteLog("DBXL Remote Event Receiver ERROR", "No Remote Event Type Provided.");
-                        break;
-                    }
+                                if (SubmitResult.Success)
+                                {
+                                    syslogWriter.WriteLog("DBXL RER Triggered", "Item deleted");
+                                }
+                                else if (!SubmitResult.Success)
+                                {
+                                    errorlogWriter.WriteLog("DBXL RER Item Deleting ERROR", SubmitResult.Errors[0].Description);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                errorlogWriter.WriteLog("DBXL RER Item Deleting ERROR", ex.Message);
+                            }
+
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
             }
         }
     }

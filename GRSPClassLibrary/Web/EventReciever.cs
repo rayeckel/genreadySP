@@ -8,9 +8,10 @@ namespace GRSPClassLibrary.Web
 {
     public partial class GRSPEventReciever : IRemoteEventService
     {
+        protected SPRemoteEventResult result = new SPRemoteEventResult();
         protected LogWriter syslogWriter;
         protected LogWriter errorlogWriter;
-        protected EventReceiverType[] eventReceiverTypes =
+        public static EventReceiverType[] eventReceiverTypes =
             { EventReceiverType.ItemAdding, EventReceiverType.ItemUpdating, EventReceiverType.ItemDeleting, 
                 EventReceiverType.ItemAdded, EventReceiverType.ItemUpdated };
 
@@ -21,7 +22,6 @@ namespace GRSPClassLibrary.Web
         /// <returns>Holds information returned from the remote event.</returns>
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
-            var result = new SPRemoteEventResult();
             ClientContext clientContext = GetClientContext(properties);
 
             if (clientContext != null)

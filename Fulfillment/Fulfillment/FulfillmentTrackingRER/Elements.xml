@@ -1,22 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
-  <Receivers ListTemplateId="3100">
+  <Receivers ListTemplateId="115">
     <Receiver>
       <Name>FulfillmentTrackingRERItemAdding</Name>
       <Type>ItemAdding</Type>
-      <SequenceNumber>10000</SequenceNumber>
+      <SequenceNumber>10100</SequenceNumber>
       <Url>~remoteAppUrl/Services/FulfillmentTrackingRER.svc</Url>
     </Receiver>
     <Receiver>
       <Name>FulfillmentTrackingRERItemUpdating</Name>
       <Type>ItemUpdating</Type>
-      <SequenceNumber>10000</SequenceNumber>
+      <SequenceNumber>10101</SequenceNumber>
       <Url>~remoteAppUrl/Services/FulfillmentTrackingRER.svc</Url>
+      <Synchronization>Synchronous</Synchronization>
     </Receiver>
     <Receiver>
       <Name>FulfillmentTrackingRERItemDeleting</Name>
       <Type>ItemDeleting</Type>
-      <SequenceNumber>10000</SequenceNumber>
+      <SequenceNumber>10102</SequenceNumber>
       <Url>~remoteAppUrl/Services/FulfillmentTrackingRER.svc</Url>
     </Receiver>
   </Receivers>
