@@ -10,6 +10,9 @@ namespace GRSPClassLibrary.Web
     {
         protected LogWriter syslogWriter;
         protected LogWriter errorlogWriter;
+        protected EventReceiverType[] eventReceiverTypes =
+            { EventReceiverType.ItemAdding, EventReceiverType.ItemUpdating, EventReceiverType.ItemDeleting, 
+                EventReceiverType.ItemAdded, EventReceiverType.ItemUpdated };
 
         /// <summary>
         /// Handles events that occur before an action occurs, such as when a user adds or deletes a list item.
@@ -43,6 +46,11 @@ namespace GRSPClassLibrary.Web
             ProcessEvent(properties);
         }
 
+        protected virtual void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
+        {
+            throw new NotImplementedException();
+        }
+
         private ClientContext GetClientContext(SPRemoteEventProperties properties)
         {
             string webUrl;
@@ -74,11 +82,6 @@ namespace GRSPClassLibrary.Web
 
             syslogWriter = new LogWriter(Constants.SYSTEM_LOG_LABEL, loggingContext);
             errorlogWriter = new LogWriter(Constants.ERROR_LOG_LABEL, loggingContext);
-        }
-
-        protected virtual void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
-        {
-            throw new NotImplementedException();
         }
 
         public ListItem ClientContextListItem(ClientContext clientContext, Guid ListId, int Id)

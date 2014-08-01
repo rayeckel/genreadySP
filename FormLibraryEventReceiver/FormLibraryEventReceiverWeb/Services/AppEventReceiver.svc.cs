@@ -34,13 +34,11 @@ namespace FormLibraryEventReceiverWeb.Services
                             string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
                             string remoteUrl = string.Format("{0}/DbxlRER.svc", opContext);
 
-                            EventReceiverType[] EventReceiverTypes = { EventReceiverType.ItemAdded, EventReceiverType.ItemUpdated, EventReceiverType.ItemDeleting };
-
                             foreach (List webList in webLists)
                             {
                                 if (webList.BaseTemplate.Equals(115))
                                 {
-                                    foreach (var receiverType in EventReceiverTypes)
+                                    foreach (var receiverType in eventReceiverTypes)
                                     {
                                         webList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                         {
