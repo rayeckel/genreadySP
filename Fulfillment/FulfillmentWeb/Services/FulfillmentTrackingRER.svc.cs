@@ -42,10 +42,31 @@ namespace FulfillmentWeb.Services
 
             if (query.Count() > 0)
             {
-                var oldUnits = Convert.ToDecimal(query.First()[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var oldRemaining = Convert.ToDecimal(query.First()[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+                var allocationListItem = query.First();
+                var oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                var oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
 
-                var newRemaining = oldRemaining - units;  
+                var newRemaining = oldRemaining - units;
+                var fulfilled = oldUnits + units;
+
+                //TODO: write new values to allocations table
+            }
+
+
+            var articleQuery = new CamlQuery();
+            articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ArticleId'/>" +
+                "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
+            query = allocationsList.GetItems(articleQuery);
+            clientContext.Load(query);
+            clientContext.ExecuteQuery();
+
+            if (query.Count() > 0)
+            {
+                var articlesListItem = query.First();
+                var oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                var fulfilled = oldUnits + units;
+
+                //TODO: write new fulfilled values to articles table
             }
 
 
@@ -53,9 +74,6 @@ namespace FulfillmentWeb.Services
 
 
 
-            var articleQuery = new CamlQuery();
-            articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ArticleId'/>" +
-                "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
 
             switch (properties.EventType)
             {
