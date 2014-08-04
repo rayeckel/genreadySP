@@ -19,61 +19,8 @@ namespace FulfillmentWeb.Services
             //Guid listId = properties.ItemEventProperties.ListId;
             //int Id = properties.ItemEventProperties.ListItemId;        
 
-            ListCollection webLists = clientContext.Web.Lists;
-            //List updateFormsLibrary = webLists.GetById(listId);
-            List allocationsList = webLists.GetByTitle(Constants.ALLOCATIONS_LIBRARY_NAME);
-            List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
-
-            var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
-            var articleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
-            var oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
-            var oldArticleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
-            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
-
-
-            //Put the following in a separate function and call it from within the appropriate event handler below.
-
-            var allocationQuery = new CamlQuery();
-            allocationQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ID'/>" +
-                "<Value Type='Number'>" + allocationId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
-            var query = allocationsList.GetItems(allocationQuery);
-            clientContext.Load(query);
-            clientContext.ExecuteQuery();
-
-            if (query.Count() > 0)
-            {
-                var allocationListItem = query.First();
-                var oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
-
-                var newRemaining = oldRemaining - units;
-                var fulfilled = oldUnits + units;
-
-                //TODO: write new values to allocations table
-            }
-
-
-            var articleQuery = new CamlQuery();
-            articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ArticleId'/>" +
-                "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
-            query = allocationsList.GetItems(articleQuery);
-            clientContext.Load(query);
-            clientContext.ExecuteQuery();
-
-            if (query.Count() > 0)
-            {
-                var articlesListItem = query.First();
-                var oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var fulfilled = oldUnits + units;
-
-                //TODO: write new fulfilled values to articles table
-            }
-
-
-
-
-
-
+            updateAllocationsListITem(clientContext, properties);
+            updateArticlesListITem(clientContext, properties);
 
             switch (properties.EventType)
             {
@@ -82,7 +29,6 @@ namespace FulfillmentWeb.Services
                         try
                         {
                             syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added");
-                            result.ChangedItemProperties.Add(Constants.LIST_ITEM_ARTICLE_ID, "999999");
                         }
                         catch (Exception ex)
                         {
@@ -124,6 +70,68 @@ namespace FulfillmentWeb.Services
             }
 
             //clientContext.ExecuteQuery();
+        }
+
+        private void updateAllocationsListITem(ClientContext clientContext, SPRemoteEventProperties properties)
+        {
+            ListCollection webLists = clientContext.Web.Lists;
+            List allocationsList = webLists.GetByTitle(Constants.ALLOCATIONS_LIBRARY_NAME);
+
+            var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
+            var oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
+            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+
+            var allocationQuery = new CamlQuery();
+            allocationQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ID'/>" +
+                "<Value Type='Number'>" + allocationId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
+            var query = allocationsList.GetItems(allocationQuery);
+            clientContext.Load(query);
+            clientContext.ExecuteQuery();
+
+            if (query.Count() > 0)
+            {
+                var allocationListItem = query.First();
+                var oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                var oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+
+                var newRemaining = oldRemaining - units;
+                var fulfilled = oldUnits + units;
+
+                allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
+                allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
+
+                allocationListItem.Update();
+                clientContext.ExecuteQuery();
+            }
+        }
+
+        private void updateArticlesListITem(ClientContext clientContext, SPRemoteEventProperties properties)
+        {
+            ListCollection webLists = clientContext.Web.Lists;
+            List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
+
+            var articleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
+            var oldArticleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ARTICLE_ID]);
+            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+
+            var articleQuery = new CamlQuery();
+            articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='Article%5Fx0020%5FId'/>" +
+                "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
+            var query = articlesList.GetItems(articleQuery);
+            clientContext.Load(query);
+            clientContext.ExecuteQuery();
+
+            if (query.Count() > 0)
+            {
+                var articlesListItem = query.First();
+                var oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                var fulfilled = oldUnits + units;
+
+                articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
+
+                articlesListItem.Update();
+                clientContext.ExecuteQuery();
+            }
         }
     }
 }

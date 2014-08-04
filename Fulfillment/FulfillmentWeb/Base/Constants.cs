@@ -15,5 +15,8 @@ namespace FulfillmentWeb.Base
         public const string LIST_ITEM_ALLOCATIONS_QUANTITY = "Quantity";
         public const string LIST_ITEM_ALLOCATIONS_FULFILLED = "Fulfilled";
         public const string LIST_ITEM_ALLOCATIONS_REMAINING = "Remaining";
+        public const string INPUT_UNIT = "Unit";
+        public const string INPUT_PREVIOUS_ARTICLE_ID = "PreviousArticleId";
+        public const string INPUT_PREVIOUS_ALLOCATION_ID = "PreviousAllocationId";
     }
 }
