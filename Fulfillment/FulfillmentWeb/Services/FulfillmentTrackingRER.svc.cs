@@ -82,8 +82,8 @@ namespace FulfillmentWeb.Services
             var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
 
             var allocationQuery = new CamlQuery();
-            allocationQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='ID'/>" +
-                "<Value Type='Number'>" + allocationId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
+            allocationQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='ID'/>" +
+                "<Value Type='Number'>" + allocationId + "</Value></Eq></Where></Query></View>";
             var query = allocationsList.GetItems(allocationQuery);
             clientContext.Load(query);
             clientContext.ExecuteQuery();
@@ -115,8 +115,8 @@ namespace FulfillmentWeb.Services
             var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
 
             var articleQuery = new CamlQuery();
-            articleQuery.ViewXml = "<View><Query><Where><Geq><FieldRef Name='Article%5Fx0020%5FId'/>" +
-                "<Value Type='Number'>" + articleId + "</Value></Geq></Where></Query><RowLimit>1</RowLimit></View>";
+            articleQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='Article_x0020_Id'/>" +
+                "<Value Type='Text'>" + articleId + "</Value></Eq></Where></Query></View>";
             var query = articlesList.GetItems(articleQuery);
             clientContext.Load(query);
             clientContext.ExecuteQuery();
