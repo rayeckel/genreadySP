@@ -84,7 +84,7 @@ namespace FulfillmentWeb.Services
             //If the form was previously submitted, and is now being modified.
             if(!String.IsNullOrEmpty(previousSubmittedDate))
             {
-                decimal previousUnits = Convert.ToDecimal(properties.ItemEventProperties.BeforeProperties[Constants.INPUT_UNIT]);
+                decimal previousUnits = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_UNIT]);
 
                 //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
                 string oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
