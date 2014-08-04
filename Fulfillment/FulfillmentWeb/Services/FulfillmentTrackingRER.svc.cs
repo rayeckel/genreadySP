@@ -17,7 +17,6 @@ namespace FulfillmentWeb.Services
             clientContext.ExecuteQuery();     
 
             updateAllocationsListItem(clientContext, properties);
-            updateArticlesListItem(clientContext, properties);
 
             switch (properties.EventType)
             {
@@ -74,6 +73,12 @@ namespace FulfillmentWeb.Services
 
             var allocationListItem = getAllocationsListItem(properties, clientContext, allocationId);
             incrementAllocationsFulfilled(allocationListItem, units);
+            clientContext.ExecuteQuery();
+
+            var articleId = Convert.ToString(allocationListItem[Constants.LIST_ITEM_ARTICLE_ID]);
+            var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
+            incrementArticlesFulfilled(articlesListItem, units);
+            clientContext.ExecuteQuery();
 
             //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
             var oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
@@ -81,24 +86,13 @@ namespace FulfillmentWeb.Services
             {
                 var oldAllocationListItem = getAllocationsListItem(properties, clientContext, oldAllocationId);
                 decrementAllocationsFulfilled(oldAllocationListItem, units);
+                clientContext.ExecuteQuery();
 
                 var oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.LIST_ITEM_ARTICLE_ID]);
                 var oldAllocationArticleListItem = getArticlesListItem(properties, clientContext, oldAllocationArticleId);
                 decrementArticlesFulfilled(oldAllocationArticleListItem, units);
+                clientContext.ExecuteQuery();
             }
-
-            clientContext.ExecuteQuery();
-        }
-
-        private void updateArticlesListItem(ClientContext clientContext, SPRemoteEventProperties properties)
-        {
-            var articleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
-            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
-
-            var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
-            incrementArticlesFulfilled(articlesListItem, units);
-
-            clientContext.ExecuteQuery();
         }
 
         private ListItem getAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)
