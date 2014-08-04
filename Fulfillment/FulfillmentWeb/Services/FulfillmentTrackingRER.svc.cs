@@ -36,6 +36,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
+                            updateAllocationsListItem(clientContext, properties);
                             syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Updated");
                         }
                         catch (Exception ex)
@@ -49,6 +50,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
+                            deleteAllocationsListItem(clientContext, properties);
                             syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting");
                         }
                         catch (Exception ex)
@@ -92,6 +94,21 @@ namespace FulfillmentWeb.Services
                 decrementArticlesFulfilled(oldAllocationArticleListItem, units);
                 clientContext.ExecuteQuery();
             }
+        }
+
+        private void deleteAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
+        {
+            var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
+            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+
+            var allocationListItem = getAllocationsListItem(properties, clientContext, allocationId);
+            decrementAllocationsFulfilled(allocationListItem, units);
+            clientContext.ExecuteQuery();
+
+            var articleId = Convert.ToString(allocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
+            var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
+            decrementArticlesFulfilled(articlesListItem, units);
+            clientContext.ExecuteQuery();
         }
 
         private ListItem getAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)

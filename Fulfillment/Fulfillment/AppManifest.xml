@@ -7,13 +7,14 @@
      SharePointMinVersion="16.0.0.0"
 >
   <Properties>
-    <Title>Fulfillment</Title>
+    <Title>Fulfillment Tracking RER</Title>
     <StartPage>~remoteAppUrl/Pages/Default.aspx?{StandardTokens}</StartPage>
     <InstalledEventEndpoint>~remoteAppUrl/Services/AppEventReceiver.svc</InstalledEventEndpoint>
   </Properties>
 
   <AppPrincipal>
-    <RemoteWebApplication ClientId="*" />
+    <!--<RemoteWebApplication ClientId="*" />-->
+    <RemoteWebApplication ClientId="093b64bb-50c0-45ef-bd80-a7f79caac2a7" />
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />
