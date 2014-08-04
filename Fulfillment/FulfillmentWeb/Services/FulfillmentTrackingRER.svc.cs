@@ -22,7 +22,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
-                            updateAllocationsListItem(clientContext, properties);
+                            UpdateAllocationsListItem(clientContext, properties);
                             syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added");
                         }
                         catch (Exception ex)
@@ -36,7 +36,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
-                            updateAllocationsListItem(clientContext, properties);
+                            UpdateAllocationsListItem(clientContext, properties);
                             syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Updated");
                         }
                         catch (Exception ex)
@@ -50,7 +50,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
-                            deleteAllocationsListItem(clientContext, properties);
+                            DeleteAllocationsListItem(clientContext, properties);
                             syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting");
                         }
                         catch (Exception ex)
@@ -67,51 +67,58 @@ namespace FulfillmentWeb.Services
             }
         }
 
-        private void updateAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
+        private void UpdateAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
         {
-            var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
-            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+            string submittedDate = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_SUBMITTED]);
 
-            var allocationListItem = getAllocationsListItem(properties, clientContext, allocationId);
-            incrementAllocationsFulfilled(allocationListItem, units);
-            clientContext.ExecuteQuery();
-
-            var articleId = Convert.ToString(allocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
-            var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
-            incrementArticlesFulfilled(articlesListItem, units);
-            clientContext.ExecuteQuery();
-
-            //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
-            var oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
-            if (allocationId != oldAllocationId)
+            //If the form is not marked as submitted, skip the calculations to Articles and Allocations
+            if (String.IsNullOrEmpty(submittedDate))
             {
-                var oldAllocationListItem = getAllocationsListItem(properties, clientContext, oldAllocationId);
-                decrementAllocationsFulfilled(oldAllocationListItem, units);
-                clientContext.ExecuteQuery();
+                return;
+            }
 
-                var oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
-                var oldAllocationArticleListItem = getArticlesListItem(properties, clientContext, oldAllocationArticleId);
-                decrementArticlesFulfilled(oldAllocationArticleListItem, units);
-                clientContext.ExecuteQuery();
+            string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
+            decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+            string previousSubmittedDate = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_SUBMITTED]);
+
+            //If the form was previously submitted, and is now being modified.
+            if(!String.IsNullOrEmpty(previousSubmittedDate))
+            {
+                decimal previousUnits = Convert.ToDecimal(properties.ItemEventProperties.BeforeProperties[Constants.INPUT_UNIT]);
+
+                //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
+                string oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
+                if (allocationId != oldAllocationId)
+                {
+                    RemoveDays(properties, clientContext, oldAllocationId, previousUnits);
+                }
+
+                //If modifying the amount of units reported, adjust the calculations
+                if(units != previousUnits)
+                {
+                    decimal diff = units - previousUnits;
+                    AddDays(properties, clientContext, allocationId, diff);
+                }
+            }
+            //If the form is being submitted for the first time, do the calculations
+            else
+            {
+                AddDays(properties, clientContext, allocationId, units);
+
+                //Mark the record as having already been submitted.
+                result.ChangedItemProperties.Add(Constants.INPUT_PREVIOUS_SUBMITTED, submittedDate);
             }
         }
 
-        private void deleteAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
+        private void DeleteAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
         {
-            var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
-            var units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+            string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
+            decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
 
-            var allocationListItem = getAllocationsListItem(properties, clientContext, allocationId);
-            decrementAllocationsFulfilled(allocationListItem, units);
-            clientContext.ExecuteQuery();
-
-            var articleId = Convert.ToString(allocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
-            var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
-            decrementArticlesFulfilled(articlesListItem, units);
-            clientContext.ExecuteQuery();
+            RemoveDays(properties, clientContext, allocationId, units);
         }
 
-        private ListItem getAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)
+        private ListItem GetAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)
         {
             ListCollection webLists = clientContext.Web.Lists;
             List allocationsList = webLists.GetByTitle(Constants.ALLOCATIONS_LIBRARY_NAME);
@@ -119,7 +126,7 @@ namespace FulfillmentWeb.Services
             var allocationQuery = new CamlQuery();
             allocationQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='ID'/>" +
                 "<Value Type='Number'>" + allocationId + "</Value></Eq></Where></Query></View>";
-            var query = allocationsList.GetItems(allocationQuery);
+            ListItemCollection query = allocationsList.GetItems(allocationQuery);
 
             clientContext.Load(query);
             clientContext.ExecuteQuery();
@@ -132,7 +139,7 @@ namespace FulfillmentWeb.Services
             return null;
         }
 
-        private ListItem getArticlesListItem(SPRemoteEventProperties properties, ClientContext clientContext, string articleId)
+        private ListItem GetArticlesListItem(SPRemoteEventProperties properties, ClientContext clientContext, string articleId)
         {
             ListCollection webLists = clientContext.Web.Lists;
             List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
@@ -140,7 +147,7 @@ namespace FulfillmentWeb.Services
             var articleQuery = new CamlQuery();
             articleQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='Article_x0020_Id'/>" +
                 "<Value Type='Text'>" + articleId + "</Value></Eq></Where></Query></View>";
-            var query = articlesList.GetItems(articleQuery);
+            ListItemCollection query = articlesList.GetItems(articleQuery);
             clientContext.Load(query);
             clientContext.ExecuteQuery();
 
@@ -152,15 +159,39 @@ namespace FulfillmentWeb.Services
             return null;
         }
 
-        private void incrementAllocationsFulfilled(ListItem allocationListItem, Decimal units)
+        private void AddDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
+        {
+            ListItem allocationListItem = GetAllocationsListItem(properties, clientContext, allocationId);
+            IncrementAllocationsFulfilled(allocationListItem, units);
+            clientContext.ExecuteQuery();
+
+            string articleId = Convert.ToString(allocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
+            ListItem articlesListItem = GetArticlesListItem(properties, clientContext, articleId);
+            IncrementArticlesFulfilled(articlesListItem, units);
+            clientContext.ExecuteQuery();
+        }
+
+        private void RemoveDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
+        {
+            ListItem oldAllocationListItem = GetAllocationsListItem(properties, clientContext, allocationId);
+            DecrementAllocationsFulfilled(oldAllocationListItem, units);
+            clientContext.ExecuteQuery();
+
+            string oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
+            ListItem oldAllocationArticleListItem = GetArticlesListItem(properties, clientContext, oldAllocationArticleId);
+            DecrementArticlesFulfilled(oldAllocationArticleListItem, units);
+            clientContext.ExecuteQuery();
+        }
+
+        private void IncrementAllocationsFulfilled(ListItem allocationListItem, Decimal units)
         {
             if (allocationListItem != null)
             {
-                var oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+                decimal oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
 
-                var newRemaining = oldRemaining - units;
-                var fulfilled = oldUnits + units;
+                decimal newRemaining = oldRemaining - units;
+                decimal fulfilled = oldUnits + units;
 
                 allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
                 allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
@@ -168,15 +199,15 @@ namespace FulfillmentWeb.Services
             }
         }
 
-        private void decrementAllocationsFulfilled(ListItem allocationListItem, Decimal units)
+        private void DecrementAllocationsFulfilled(ListItem allocationListItem, Decimal units)
         {
             if (allocationListItem != null)
             {
-                var oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+                decimal oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
 
-                var newRemaining = oldRemaining + units;
-                var fulfilled = oldUnits - units;
+                decimal newRemaining = oldRemaining + units;
+                decimal fulfilled = oldUnits - units;
 
                 allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
                 allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
@@ -184,24 +215,24 @@ namespace FulfillmentWeb.Services
             }
         }
 
-        private void incrementArticlesFulfilled(ListItem articlesListItem, Decimal units)
+        private void IncrementArticlesFulfilled(ListItem articlesListItem, Decimal units)
         {
             if (articlesListItem != null)
             {
-                var oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var fulfilled = oldUnits + units;
+                decimal oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal fulfilled = oldUnits + units;
 
                 articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 articlesListItem.Update();
             }
         }
 
-        private void decrementArticlesFulfilled(ListItem articlesListItem, Decimal units)
+        private void DecrementArticlesFulfilled(ListItem articlesListItem, Decimal units)
         {
             if (articlesListItem != null)
             {
-                var oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                var fulfilled = oldUnits - units;
+                decimal oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal fulfilled = oldUnits - units;
 
                 articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 articlesListItem.Update();
