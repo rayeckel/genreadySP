@@ -75,18 +75,16 @@ namespace FulfillmentWeb.Services
             var allocationListItem = getAllocationsListItem(properties, clientContext, allocationId);
             incrementAllocationsFulfilled(allocationListItem, units);
 
-            //If the allocation ID is changing, reverse the updates to the old allocation.
+            //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
             var oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
             if (allocationId != oldAllocationId)
             {
                 var oldAllocationListItem = getAllocationsListItem(properties, clientContext, oldAllocationId);
                 decrementAllocationsFulfilled(oldAllocationListItem, units);
 
-                //Decrement the article so that when 'updateArticleListItem' is called,
-                //It does not result in too much being added.
-                var articleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ARTICLE_ID]);
-                var oldArticlesListItem = getArticlesListItem(properties, clientContext, articleId);
-                decrementArticlesFulfilled(oldArticlesListItem, units);
+                var oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.LIST_ITEM_ARTICLE_ID]);
+                var oldAllocationArticleListItem = getArticlesListItem(properties, clientContext, oldAllocationArticleId);
+                decrementArticlesFulfilled(oldAllocationArticleListItem, units);
             }
 
             clientContext.ExecuteQuery();
@@ -99,19 +97,6 @@ namespace FulfillmentWeb.Services
 
             var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
             incrementArticlesFulfilled(articlesListItem, units);
-
-            //If the article ID is changing, reverse the updates to the old article.
-            var oldArticleId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ARTICLE_ID]);
-            if (articleId != oldArticleId)
-            {
-                var oldArticlesListItem = getArticlesListItem(properties, clientContext, oldArticleId);
-                decrementArticlesFulfilled(oldArticlesListItem, units);
-
-                //Decrement the allocation to offset the previous call to 'updateAllocationListItem'
-                var allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
-                var allocationListItem = getAllocationsListItem(properties, clientContext, allocationId);
-                decrementAllocationsFulfilled(allocationListItem, units);
-            }
 
             clientContext.ExecuteQuery();
         }
