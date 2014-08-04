@@ -14,9 +14,7 @@ namespace FulfillmentWeb.Services
         protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             clientContext.Load(clientContext.Web, web => web.Lists);
-            clientContext.ExecuteQuery();     
-
-            updateAllocationsListItem(clientContext, properties);
+            clientContext.ExecuteQuery();  
 
             switch (properties.EventType)
             {
@@ -24,6 +22,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
+                            updateAllocationsListItem(clientContext, properties);
                             syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added");
                         }
                         catch (Exception ex)
@@ -75,7 +74,7 @@ namespace FulfillmentWeb.Services
             incrementAllocationsFulfilled(allocationListItem, units);
             clientContext.ExecuteQuery();
 
-            var articleId = Convert.ToString(allocationListItem[Constants.LIST_ITEM_ARTICLE_ID]);
+            var articleId = Convert.ToString(allocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
             var articlesListItem = getArticlesListItem(properties, clientContext, articleId);
             incrementArticlesFulfilled(articlesListItem, units);
             clientContext.ExecuteQuery();
@@ -88,7 +87,7 @@ namespace FulfillmentWeb.Services
                 decrementAllocationsFulfilled(oldAllocationListItem, units);
                 clientContext.ExecuteQuery();
 
-                var oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.LIST_ITEM_ARTICLE_ID]);
+                var oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
                 var oldAllocationArticleListItem = getArticlesListItem(properties, clientContext, oldAllocationArticleId);
                 decrementArticlesFulfilled(oldAllocationArticleListItem, units);
                 clientContext.ExecuteQuery();
