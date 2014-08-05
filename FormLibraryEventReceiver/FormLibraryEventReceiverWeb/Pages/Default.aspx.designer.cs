@@ -58,6 +58,15 @@ namespace FormLibraryEventReceiverWeb.Pages {
         protected global::System.Web.UI.WebControls.CheckBox CbxRerEnabled;
         
         /// <summary>
+        /// TxtServiceUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtServiceUrl;
+        
+        /// <summary>
         /// TxtDocType control.
         /// </summary>
         /// <remarks>

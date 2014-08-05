@@ -28,6 +28,10 @@
             Enable DBXL Remote Event Receivers: 
             <asp:CheckBox ID="CbxRerEnabled" runat="server" />
             <br />
+            DBXL Service URL: 
+            <asp:TextBox ID="TxtServiceUrl" runat="server"></asp:TextBox>
+            <br />
+            <br />
             DBXL Document Type: 
             <asp:TextBox ID="TxtDocType" runat="server"></asp:TextBox>
             <br />

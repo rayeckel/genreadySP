@@ -35,6 +35,7 @@ namespace FormLibraryEventReceiverWeb.Pages
             {
                 { enabledKey, CbxRerEnabled.Checked.ToString() },
                 { docTypeKey, TxtDocType.Text },
+                { GRSPClassLibrary.Base.Constants.DBXL_SERVICE_URL_NAME, TxtServiceUrl.Text },
                 { GRSPClassLibrary.Base.Constants.DBXL_USERNAME, TxtUsername.Text },
                 { GRSPClassLibrary.Base.Constants.DBXL_PASSWORD, TxtPassword.Text }
             };

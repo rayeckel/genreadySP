@@ -61,7 +61,7 @@ namespace GRSPClassLibrary.Dbxl
 
         protected IDbxlDocumentService CredentialDocumentService(ClientContext clientContext)
         {
-            string serviceUrl = BuildServiceUrl();
+            string serviceUrl = BuildServiceUrl(clientContext);
             NetworkCredential credentials = GRSPClassLibrary.Dbxl.Properties.BuildServiceCredentials(clientContext);
 
             var DocService = new IDbxlDocumentService()
@@ -77,9 +77,10 @@ namespace GRSPClassLibrary.Dbxl
             return DocService;
         }
 
-        protected string BuildServiceUrl()
+        protected string BuildServiceUrl(ClientContext clientContext)
         {
-            string serviceUrl = DBXLClassLibrary.Properties.Settings.Default.GRSP_DBXL_ServiceUrl;
+            //string serviceUrl = DBXLClassLibrary.Properties.Settings.Default.GRSP_DBXL_ServiceUrl;
+            string serviceUrl = GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_SERVICE_URL_NAME, clientContext);
 
             serviceUrl = TokenHelper.EnsureTrailingSlash(serviceUrl);
 

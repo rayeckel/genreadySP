@@ -50,7 +50,7 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
-                            DeleteAllocationsListItem(clientContext, properties);
+                            DeleteAllocationsListItem(properties, clientContext);
                             syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting");
                         }
                         catch (Exception ex)
@@ -90,7 +90,10 @@ namespace FulfillmentWeb.Services
                 string oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
                 if (allocationId != oldAllocationId)
                 {
+                    //Remove previous record
                     RemoveDays(properties, clientContext, oldAllocationId, previousUnits);
+                    //Update to new Allocation Id
+                    AddDays(properties, clientContext, allocationId, units);
                 }
 
                 //If modifying the amount of units reported, adjust the calculations
@@ -110,12 +113,36 @@ namespace FulfillmentWeb.Services
             }
         }
 
-        private void DeleteAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
+        private void DeleteAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
-            decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+            ListItem itemDeleting = GetFormsListItem(properties, clientContext);
+            string allocationId = Convert.ToString(itemDeleting[Constants.LIST_ITEM_ALLOCATION_ID]);
+            decimal units = Convert.ToDecimal(itemDeleting[Constants.INPUT_UNIT]);
 
             RemoveDays(properties, clientContext, allocationId, units);
+        }
+
+        private ListItem GetFormsListItem(SPRemoteEventProperties properties, ClientContext clientContext)
+        {
+            ListCollection webLists = clientContext.Web.Lists;
+            List formsList = webLists.GetByTitle(Constants.TRACKING_LIBRARY_NAME);
+            string itemId = Convert.ToString(properties.ItemEventProperties.ListItemId);
+
+            var formsQuery = new CamlQuery();
+            formsQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='ID'/>" +
+                "<Value Type='Number'>" + itemId + "</Value></Eq></Where></Query></View>";
+            ListItemCollection query = formsList.GetItems(formsQuery);
+
+            clientContext.Load(query);
+            clientContext.ExecuteQuery();
+
+            if (query.Count() > 0)
+            {
+                return query.First();
+            }
+
+            return null;
+
         }
 
         private ListItem GetAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)
@@ -174,12 +201,12 @@ namespace FulfillmentWeb.Services
         private void RemoveDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
         {
             ListItem oldAllocationListItem = GetAllocationsListItem(properties, clientContext, allocationId);
-            DecrementAllocationsFulfilled(oldAllocationListItem, units);
+            DecrementAllocationsFulfilled(ref oldAllocationListItem, units);
             clientContext.ExecuteQuery();
 
             string oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
             ListItem oldAllocationArticleListItem = GetArticlesListItem(properties, clientContext, oldAllocationArticleId);
-            DecrementArticlesFulfilled(oldAllocationArticleListItem, units);
+            DecrementArticlesFulfilled(ref oldAllocationArticleListItem, units);
             clientContext.ExecuteQuery();
         }
 
@@ -199,7 +226,7 @@ namespace FulfillmentWeb.Services
             }
         }
 
-        private void DecrementAllocationsFulfilled(ListItem allocationListItem, Decimal units)
+        private void DecrementAllocationsFulfilled(ref ListItem allocationListItem, Decimal units)
         {
             if (allocationListItem != null)
             {
@@ -227,7 +254,7 @@ namespace FulfillmentWeb.Services
             }
         }
 
-        private void DecrementArticlesFulfilled(ListItem articlesListItem, Decimal units)
+        private void DecrementArticlesFulfilled(ref ListItem articlesListItem, Decimal units)
         {
             if (articlesListItem != null)
             {
