@@ -79,15 +79,17 @@ namespace FulfillmentWeb.Services
 
             string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
             decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
-            string previousSubmittedDate = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_SUBMITTED]);
+
+            ListItem itemUpdating = GetFormsListItem(properties, clientContext);
+            string previousSubmittedDate = Convert.ToString(itemUpdating[Constants.INPUT_PREVIOUS_SUBMITTED]);
 
             //If the form was previously submitted, and is now being modified.
             if(!String.IsNullOrEmpty(previousSubmittedDate))
             {
-                decimal previousUnits = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_UNIT]);
+                decimal previousUnits = Convert.ToDecimal(itemUpdating[Constants.INPUT_UNIT]);
 
                 //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
-                string oldAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_PREVIOUS_ALLOCATION_ID]);
+                string oldAllocationId = Convert.ToString(itemUpdating[Constants.LIST_ITEM_ALLOCATION_ID]);
                 if (allocationId != oldAllocationId)
                 {
                     //Remove previous record
@@ -142,7 +144,6 @@ namespace FulfillmentWeb.Services
             }
 
             return null;
-
         }
 
         private ListItem GetAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)
