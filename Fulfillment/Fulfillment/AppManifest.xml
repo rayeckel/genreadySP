@@ -2,19 +2,19 @@
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
      Name="Fulfillment"
-     ProductID="{bbcfe643-3d18-4214-9745-44289495dfe5}"
+     ProductID="{bbcfe643-3d18-4214-9745-44289495dfa5}"
      Version="1.0.0.0"
      SharePointMinVersion="16.0.0.0"
 >
   <Properties>
-    <Title>Fulfillment Tracking RER</Title>
-    <StartPage>~remoteAppUrl/Pages/Default.aspx?{StandardTokens}</StartPage>
+    <Title>Fulfillment RER</Title>
+    <StartPage>https://fulfillmenttrackingrer.azurewebsites.net/Pages/Default.aspx?{StandardTokens}</StartPage>
     <InstalledEventEndpoint>~remoteAppUrl/Services/AppEventReceiver.svc</InstalledEventEndpoint>
   </Properties>
 
   <AppPrincipal>
-    <RemoteWebApplication ClientId="*" />
-    <!--<RemoteWebApplication ClientId="093b64bb-50c0-45ef-bd80-a7f79caac2a7" />-->
+    <!--<RemoteWebApplication ClientId="*" />-->
+    <RemoteWebApplication ClientId="b23ca458-7a9d-43ef-b98a-fef2efa67dff" />
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />
