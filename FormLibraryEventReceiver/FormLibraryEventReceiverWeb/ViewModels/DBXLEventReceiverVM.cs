@@ -26,8 +26,8 @@ namespace FormLibraryEventReceiverWeb.ViewModels
 
         #region Constructors
 
-        public FormLibraryEventReceiverVM(string sessionAccessToken)
-            : base(sessionAccessToken)
+        public FormLibraryEventReceiverVM(string sessionAccessToken, string sessionSPUri)
+            : base(sessionAccessToken, sessionSPUri)
         {
 
         }
@@ -52,7 +52,7 @@ namespace FormLibraryEventReceiverWeb.ViewModels
 
         private void writeToLog(string Title, string Description)
         {
-            var logWriter = new LogWriter("System Log", base.sessionAccessToken);
+            var logWriter = new LogWriter("System Log", base.sessionAccessToken, base.sessionSPUri);
             logWriter.WriteLog(Title, Description);
         }
 

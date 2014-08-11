@@ -17,9 +17,19 @@ namespace GRSPClassLibrary.Pages
             base.OnLoad(e);
         }
 
+        protected string GetSharepointUri()
+        {
+            Uri spUri = GRSPClassLibrary.Web.SharePointContext.GetSPHostUrl(Page.Request);
+            if(spUri != null)
+            {
+                return spUri.ToString();
+            }
+            return "";
+        }
+
         private void getSessionAccessToken()
         {
-            var sharepointUrl = new Uri(Request.QueryString[GRSPClassLibrary.Web.SharePointContext.SPHostUrlKey]);
+            Uri sharepointUrl = GRSPClassLibrary.Web.SharePointContext.GetSPHostUrl(Page.Request);
             string contextTokenString = TokenHelper.GetContextTokenFromRequest(Page.Request);
 
             if (contextTokenString != null)

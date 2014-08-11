@@ -50,7 +50,9 @@ namespace SystemLogs.Pages
         private void writeToLog(string Title, string Description)
         {
             string accessToken = this.Button1.CommandArgument;
-            var logWriter = new LogWriter(accessToken);
+            string spUri = base.GetSharepointUri();
+
+            var logWriter = new LogWriter(accessToken, spUri);
             logWriter.WriteLog(Title, Description);
         }
     }

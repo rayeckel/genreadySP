@@ -7,14 +7,14 @@ namespace GRSPClassLibrary.Web.Log
     {
         #region Contructors
         public LogWriter(string logTitle, ClientContext clientContext)
-            : base(null)
+            : base(null, null)
         {
             this.logTitle = logTitle;
             this.clientContext = clientContext;
         }
 
-        public LogWriter(string logTitle, string sessionAccessToken)
-            : base(sessionAccessToken)
+        public LogWriter(string logTitle, string sessionAccessToken, string sessionSPUri)
+            : base(sessionAccessToken, sessionSPUri)
         {
             this.logTitle = logTitle;
             this.clientContext = base.GetClientAccessContextWithToken();

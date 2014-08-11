@@ -19,8 +19,10 @@ namespace FormLibraryEventReceiverWeb.Pages
         protected void Page_Load(object sender, EventArgs e)
         {
             SetAccessToken();
+            string spUri = base.GetSharepointUri();
+            string accessToken = base.accessToken;
 
-            var formLibraryEventReceiverVM = new FormLibraryEventReceiverVM(base.accessToken);
+            var formLibraryEventReceiverVM = new FormLibraryEventReceiverVM(accessToken, spUri);
             ClientContext clientContext = formLibraryEventReceiverVM.clientContext;
 
             SetElementProperties(clientContext);
@@ -40,9 +42,10 @@ namespace FormLibraryEventReceiverWeb.Pages
                 { GRSPClassLibrary.Base.Constants.DBXL_PASSWORD, TxtPassword.Text }
             };
 
+            string spUri = base.GetSharepointUri();
             string accessToken = this.btn_SaveSettings.CommandArgument;
 
-            var formLibraryEventReceiverVM = new FormLibraryEventReceiverVM(accessToken);
+            var formLibraryEventReceiverVM = new FormLibraryEventReceiverVM(accessToken, spUri);
             formLibraryEventReceiverVM.setDBXLProperties(formVariables);
         }
 

@@ -8,7 +8,8 @@ namespace SystemLogs.Log
     {
         private string LOG_TITLE = "System Log";
 
-        public LogWriter(string sessionAccessToken) : base(sessionAccessToken)
+        public LogWriter(string sessionAccessToken, string sessionSPUri)
+            : base(sessionAccessToken, sessionSPUri)
         {}
 
         public void WriteLog(string Title, string Description)
