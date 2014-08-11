@@ -7,7 +7,7 @@ namespace FulfillmentWeb.Base
 {
     public static class Constants
     {
-        public const string TRACKING_LIBRARY_NAME = "Project Update Forms Library";
+        public const string TRACKING_LIBRARY_NAME = "Project Update Forms";
         public const string ALLOCATIONS_LIBRARY_NAME = "Allocations";
         public const string ALLOCATIONS_LIST_ITEM_ARTICLE_ID = "Article_x0020_Id";
         public const string ARTICLES_LIBRARY_NAME = "Articles";
