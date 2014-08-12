@@ -79,6 +79,8 @@
     <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\genreadyfulfillmenttrackingrer - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\genreadyfulfillmenttrackingrer - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -96,7 +98,9 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Services\AppEventReceiver.svc" />
     <Content Include="Services\FulfillmentTrackingRER.svc" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\Constants.cs" />

@@ -84,6 +84,8 @@
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\DbxlRER - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\DbxlRER - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\genreadydbxlrer - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\genreadydbxlrer - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\genreadytestapp1 - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -22,7 +22,7 @@
     <WorkflowPartId>{b8e2c736-81dc-4a3f-914f-8edc9e2c7bc1}</WorkflowPartId>
     <CspkgPartId>{4bef250e-c67c-4f1e-b46b-77de9fe1682d}</CspkgPartId>
     <SqlPackagePartId>{433f67a8-95ea-4778-8d43-0062e8f05c86}</SqlPackagePartId>
-    <ActivePublishProfile>DbxlRER - Web Deploy</ActivePublishProfile>
+    <ActivePublishProfile>genreadydbxlrer - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

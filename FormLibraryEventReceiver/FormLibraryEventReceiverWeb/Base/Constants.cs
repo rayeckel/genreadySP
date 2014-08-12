@@ -7,8 +7,6 @@ namespace FormLibraryEventReceiverWeb.Base
 {
     public static class Constants
     {
-
-
         public const string FALSE = "False";
         public const string LIST_ITEM_EDITOR = "Editor";
         public const string LIST_ITEM_EDITED_BY = "dbxlEditedBy";

@@ -22,7 +22,7 @@
     <WorkflowPartId>{e9a2f459-30d5-48b5-80d9-b5bff75af8d3}</WorkflowPartId>
     <CspkgPartId>{f86379d3-fc8d-4dc6-b81e-e7fbb9cde18d}</CspkgPartId>
     <SqlPackagePartId>{e914730b-e753-45a4-8f39-8f23cccf1f96}</SqlPackagePartId>
-    <ActivePublishProfile>FulfillmentTrackingRER - Web Deploy %282%29</ActivePublishProfile>
+    <ActivePublishProfile>genreadyfulfillmenttrackingrer - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
