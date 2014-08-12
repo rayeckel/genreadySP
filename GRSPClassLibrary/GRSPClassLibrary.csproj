@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\Constants.cs" />
+    <Compile Include="Web\DocumentUtils.cs" />
     <Compile Include="Web\EventReciever.cs" />
     <Compile Include="Pages\AccessTokenPage.cs">
       <SubType>ASPXCodeBehind</SubType>
