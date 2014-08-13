@@ -26,7 +26,7 @@ namespace GRSPClassLibrary.Web
 
                 string claimSiteUrl = "https://generationreadydev.sharepoint.com/sites/re";
                 string claimSiteUserName = "ray.eckel@generationreadydev.onmicrosoft.com";
-                string claimSitePassword = "Beerme2day!";
+                string claimSitePassword = "";
 
                 var claimsHelper = new MsOnlineClaimsHelper(claimSiteUrl, claimSiteUserName, claimSitePassword);
                 clientContext.ExecutingWebRequest += claimsHelper.clientContext_ExecutingWebRequest;
