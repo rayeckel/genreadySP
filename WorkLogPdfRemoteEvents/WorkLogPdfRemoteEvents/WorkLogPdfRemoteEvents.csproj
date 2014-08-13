@@ -22,7 +22,7 @@
     <WorkflowPartId>{4cd68595-8a60-4216-bb01-0afe37e8e8e0}</WorkflowPartId>
     <CspkgPartId>{945bb73c-f179-463a-84d6-afcefcfa9dbe}</CspkgPartId>
     <SqlPackagePartId>{91759182-0eb8-47c4-9269-c5a2d7816674}</SqlPackagePartId>
-    <ActivePublishProfile>FileManagerRER - Web Deploy</ActivePublishProfile>
+    <ActivePublishProfile>genreadyworklogsrer - Web Deploy</ActivePublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

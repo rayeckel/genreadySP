@@ -76,6 +76,8 @@
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\FileManagerRER - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\FileManagerRER - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\genreadyworklogsrer - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\genreadyworklogsrer - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

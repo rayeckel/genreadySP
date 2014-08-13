@@ -4,8 +4,10 @@ namespace GRSPClassLibrary.Base
 {
     public static class Constants
     {
-        public const string CONTEXT_CREDENTIAL_USER_NAME = "ray.eckel@generationreadydev.onmicrosoft.com";
-        public const string CONTEXT_CREDENTIAL_PASSWORD = "";
+        public const string CONTEXT_CREDENTIAL_USER_NAME = "readypath@generationready.onmicrosoft.com";
+        public const string CONTEXT_CREDENTIAL_PASSWORD = "rsARgn5U";
+        //public const string CONTEXT_CREDENTIAL_USER_NAME = "ray.eckel@generationreadydev.onmicrosoft.com";
+        //public const string CONTEXT_CREDENTIAL_PASSWORD = "";
         public const string DBXL_DOC_SERVICE_PAGE = "DbxlDocumentService.asmx";
         public const string DBXL_ID_LABEL = "DbxlId";
         public const string DBXL_PROCESSING_INSTRUCTION_NAME = "QdabraDBXL";

@@ -22,7 +22,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
                     {
                         try
                         {
-                            UploadPDF(clientContext);
+                            UploadPDF(properties, clientContext);
                             syslogWriter.WriteLog("Work Logs Documents RER triggered", "Item Added");
                         }
                         catch (Exception ex)
@@ -36,7 +36,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
                     {
                         try
                         {
-                            UploadPDF(clientContext);
+                            UploadPDF(properties, clientContext);
                             syslogWriter.WriteLog("Work Logs Documents RER  triggered", "Item Updated");
                         }
                         catch (Exception ex)
@@ -65,10 +65,10 @@ namespace WorkLogPdfRemoteEventsWeb.Services
                     }
             }
         }
-        private void UploadPDF(ClientContext clientContext)
+        private void UploadPDF(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            string documentName = "2-1407778213169";
-            var sourceFileUrl = String.Format("{0}/{1}.pdf", Constants.SOURCE_URL, documentName);
+            var documentName = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
+            string sourceFileUrl = String.Format("{0}/{1}.pdf", Constants.SOURCE_URL, documentName);
             string libraryFileName = String.Format("/{0}/{1}/{2}.pdf", Constants.SITE_URL, Constants.DOCUMENT_LIST_NAME, documentName);
 
             try
