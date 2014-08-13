@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f8875218-4acf-4fbd-9943-3ec0ba15f350" solutionId="f8875218-4acf-4fbd-9943-3ec0ba15f350" resetWebServer="false" sharePointProductVersion="16.0" name="WorkLogPdfRemoteEvents" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="7836cbb6-79a7-4e23-8377-b91cb82fc36e" />
+  </features>
+</package>

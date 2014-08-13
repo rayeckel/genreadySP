@@ -76,9 +76,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - FTP %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - Web Deploy %282%29.pubxml" />
-    <None Include="Properties\PublishProfiles\FulfillmentTrackingRER - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\genreadyfulfillmenttrackingrer - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\genreadyfulfillmenttrackingrer - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">

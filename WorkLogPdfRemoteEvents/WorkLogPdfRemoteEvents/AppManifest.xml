@@ -9,13 +9,20 @@
   <Properties>
     <Title>WorkLogPdfRemoteEvents</Title>
     <StartPage>~remoteAppUrl/Pages/WorkLogsApp.aspx?{StandardTokens}</StartPage>
+    <InstalledEventEndpoint>~remoteAppUrl/Services/AppEventReceiver.svc</InstalledEventEndpoint>
+    <UninstallingEventEndpoint>~remoteAppUrl/Services/AppEventReceiver.svc</UninstallingEventEndpoint>
   </Properties>
 
   <AppPrincipal>
+    <!--Production-->
+    <!--<RemoteWebApplication ClientId="" />-->
+    <!--Development-->
     <RemoteWebApplication ClientId="*" />
+    <!--<RemoteWebApplication ClientId="c72a222b-f6db-4996-afca-0e386fe9df63" />-->
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >
-    <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />
+    <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="FullControl" />
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection" Right="FullControl" />
+    <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web/list" Right="FullControl" />
   </AppPermissionRequests>
 </App>

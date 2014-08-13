@@ -21,7 +21,7 @@
     </Receiver>
     <Receiver>
       <Name>DbxlRERItemUpdating</Name>
-      <Type>ItemUpdated</Type>
+      <Type>ItemUpdating</Type>
       <Url>~remoteAppUrl/Services/DbxlRER.svc</Url>
       <SequenceNumber>11003</SequenceNumber>
     </Receiver>

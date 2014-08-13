@@ -44,7 +44,7 @@ namespace FulfillmentWeb.Services
                                     trackingList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                     {
                                         EventType = receiverType,
-                                        ReceiverName = GRSPClassLibrary.Base.Constants.FULFILLMENT_TRACKING_RECEIVER_NAME,
+                                        ReceiverName = Constants.FULFILLMENT_TRACKING_RECEIVER_NAME,
                                         ReceiverUrl = remoteUrl,
                                         SequenceNumber = 1000
                                     });
@@ -70,7 +70,7 @@ namespace FulfillmentWeb.Services
 
                                 foreach (EventReceiverDefinition erd in erdCollection)
                                 {
-                                    if (erd.ReceiverName == GRSPClassLibrary.Base.Constants.FULFILLMENT_TRACKING_RECEIVER_NAME)
+                                    if (erd.ReceiverName == Constants.FULFILLMENT_TRACKING_RECEIVER_NAME)
                                     {
                                         erd.DeleteObject();
                                     }
@@ -81,7 +81,7 @@ namespace FulfillmentWeb.Services
 
                             catch (Exception ex)
                             {
-                                errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated triggered", ex.Message);
+                                errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated ERROR", ex.Message);
                             }
 
                             break;

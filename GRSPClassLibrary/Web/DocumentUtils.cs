@@ -4,30 +4,37 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 using Microsoft.SharePoint.Client;
+using Wictor.Office365;
 
 namespace GRSPClassLibrary.Web
 {
     public class DocumentUtils
     {
-        public static byte[] GetDocumentByteSteam()
+        public static void UploadFile(ClientContext clientContext, string listTitle, string sourceFileUrl, string libraryFileName)
         {
-            byte[] documentStream = new byte[];
+            var request = (HttpWebRequest)WebRequest.Create(sourceFileUrl);
 
-            return documentStream;
-        }
-        public static void UploadFile(ClientContext clientContext, string listTitle, string filePath)
-        {
-            using (clientContext)
+            using(clientContext)
+            using(var response = (HttpWebResponse) request.GetResponse())
+            using(var receiveStream = (Stream) response.GetResponseStream())
             {
-                using (var fileStream = new FileStream(filePath, FileMode.Open))
-                {
-                    var list = clientContext.Web.Lists.GetByTitle(listTitle);
-                    clientContext.Load(list.RootFolder);
-                    clientContext.ExecuteQuery();
+                //Load a refernce to the list
+                var list = clientContext.Web.Lists.GetByTitle(listTitle);
+                clientContext.Load(list.RootFolder);
 
-                    Microsoft.SharePoint.Client.File.SaveBinaryDirect(clientContext, filePath, fileStream, true);
-                }
+                string claimSiteUrl = "https://generationreadydev.sharepoint.com/sites/re";
+                string claimSiteUserName = "ray.eckel@generationreadydev.onmicrosoft.com";
+                string claimSitePassword = "Beerme2day!";
+
+                var claimsHelper = new MsOnlineClaimsHelper(claimSiteUrl, claimSiteUserName, claimSitePassword);
+                clientContext.ExecutingWebRequest += claimsHelper.clientContext_ExecutingWebRequest;
+                clientContext.Load(clientContext.Web);
+
+                clientContext.ExecuteQuery();
+
+                Microsoft.SharePoint.Client.File.SaveBinaryDirect(clientContext, libraryFileName, receiveStream, true);
             }
         }
 
@@ -48,8 +55,7 @@ namespace GRSPClassLibrary.Web
                 //Upload URL
 
                 fileCreationInformation.Url = siteURL + documentListURL + documentName;
-                Microsoft.SharePoint.Client.File uploadFile = documentsList.RootFolder.Files.Add(
-                    fileCreationInformation);
+                Microsoft.SharePoint.Client.File uploadFile = documentsList.RootFolder.Files.Add(fileCreationInformation);
 
                 //Update the metadata for a field having name "DocType"
                 uploadFile.ListItemAllFields["DocType"] = "Favorites";

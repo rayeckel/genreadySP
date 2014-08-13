@@ -1,17 +1,9 @@
 ﻿using System;
-using WorkLogPdfRemoteEventsWeb.ViewModels;
-using GRSPClassLibrary.Pages;
+using System.Web.UI;
 
 namespace WorkLogPdfRemoteEventsWeb
 {
-    public partial class WorkLogsApp : AccessTokenPage
+    public partial class WorkLogsApp : Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            string SharepointUri = base.GetSharepointUri();
-            var viewModel = new WorkLogsAppViewModel(SharepointUri, base.accessToken);
-
-            viewModel.UploadPDF();
-        }
     }
 }

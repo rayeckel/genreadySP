@@ -3,7 +3,7 @@
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
      Name="Fulfillment"
      ProductID="{abcfe643-3d18-4214-9745-44289495df05}"
-     Version="1.0.0.0"
+     Version="1.0.0.1"
      SharePointMinVersion="16.0.0.0"
 >
   <Properties>
@@ -13,8 +13,8 @@
   </Properties>
 
   <AppPrincipal>
-    <!--<RemoteWebApplication ClientId="*" />-->
-    <RemoteWebApplication ClientId="ed48663c-0df4-4a1e-b302-398870903aa6" />
+    <RemoteWebApplication ClientId="*" />
+    <!--<RemoteWebApplication ClientId="ed48663c-0df4-4a1e-b302-398870903aa6" />-->
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />

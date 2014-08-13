@@ -53,6 +53,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -73,6 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FileManagerRER - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\FileManagerRER - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -88,6 +91,8 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Services\AppEventReceiver.svc" />
+    <Content Include="Services\WorkLogsDocumentRER.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -103,8 +108,12 @@
       <DependentUpon>WorkLogsApp.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\WorkLogsAppViewModel.cs" />
-    <Compile Include="WorkLog_Changed.cs" />
+    <Compile Include="Services\AppEventReceiver.svc.cs">
+      <DependentUpon>AppEventReceiver.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Services\WorkLogsDocumentRER.svc.cs">
+      <DependentUpon>WorkLogsDocumentRER.svc</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

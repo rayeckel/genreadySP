@@ -81,10 +81,9 @@ namespace FulfillmentWeb.Services
             decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
 
             ListItem itemUpdating = GetFormsListItem(properties, clientContext);
-            string previousSubmittedDate = Convert.ToString(itemUpdating[Constants.INPUT_PREVIOUS_SUBMITTED]);
 
             //If the form was previously submitted, and is now being modified.
-            if(!String.IsNullOrEmpty(previousSubmittedDate))
+            if (itemUpdating != null)
             {
                 decimal previousUnits = Convert.ToDecimal(itemUpdating[Constants.INPUT_UNIT]);
 
@@ -92,26 +91,50 @@ namespace FulfillmentWeb.Services
                 string oldAllocationId = Convert.ToString(itemUpdating[Constants.LIST_ITEM_ALLOCATION_ID]);
                 if (allocationId != oldAllocationId)
                 {
-                    //Remove previous record
-                    RemoveDays(properties, clientContext, oldAllocationId, previousUnits);
-                    //Update to new Allocation Id
-                    AddDays(properties, clientContext, allocationId, units);
+                    try
+                    {
+                        //Remove previous record
+                        RemoveDays(properties, clientContext, oldAllocationId, previousUnits);
+                        //Update to new Allocation Id
+                        AddDays(properties, clientContext, allocationId, units);
+                    }
+                    catch (Exception ex)
+                    {
+                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item UPDATNG ERROR", ex.Message);
+                    }
                 }
 
                 //If modifying the amount of units reported, adjust the calculations
                 if(units != previousUnits)
                 {
                     decimal diff = units - previousUnits;
-                    AddDays(properties, clientContext, allocationId, diff);
+                    try
+                    {
+                        AddDays(properties, clientContext, allocationId, diff);
+                    }
+                    catch (Exception ex)
+                    {
+                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item UPDATNG ERROR", ex.Message);
+                    }
                 }
             }
             //If the form is being submitted for the first time, do the calculations
             else
             {
-                AddDays(properties, clientContext, allocationId, units);
+                try
+                {
+                    int articleId = AddDays(properties, clientContext, allocationId, units);
 
-                //Mark the record as having already been submitted.
-                result.ChangedItemProperties.Add(Constants.INPUT_PREVIOUS_SUBMITTED, submittedDate);
+                    //Add the fieldLookupValue
+                    result.ChangedItemProperties.Add(Constants.ARTICLE_ID_LOOKUP_FIELD, articleId);
+
+                    //Mark the record as having already been submitted.
+                    result.ChangedItemProperties.Add(Constants.INPUT_PREVIOUS_SUBMITTED, submittedDate);
+                }
+                catch (Exception ex)
+                {
+                    errorlogWriter.WriteLog("Fulfillment Tracking RER Item ADDING ERROR", ex.Message);
+                }
             }
         }
 
@@ -187,7 +210,7 @@ namespace FulfillmentWeb.Services
             return null;
         }
 
-        private void AddDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
+        private int AddDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
         {
             ListItem allocationListItem = GetAllocationsListItem(properties, clientContext, allocationId);
             IncrementAllocationsFulfilled(allocationListItem, units);
@@ -197,6 +220,8 @@ namespace FulfillmentWeb.Services
             ListItem articlesListItem = GetArticlesListItem(properties, clientContext, articleId);
             IncrementArticlesFulfilled(articlesListItem, units);
             clientContext.ExecuteQuery();
+
+            return (int)articlesListItem[Constants.ARTICLES_LIST_ITEM_ID];
         }
 
         private void RemoveDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
@@ -225,6 +250,10 @@ namespace FulfillmentWeb.Services
                 allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 allocationListItem.Update();
             }
+            else
+            {
+                errorlogWriter.WriteLog("WARNING: Fulfillment Tracking RER Item ADDING", "Allocations list item not found. Not INCREMENTED");
+            }
         }
 
         private void DecrementAllocationsFulfilled(ref ListItem allocationListItem, Decimal units)
@@ -241,6 +270,10 @@ namespace FulfillmentWeb.Services
                 allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 allocationListItem.Update();
             }
+            else
+            {
+                errorlogWriter.WriteLog("WARNING: Fulfillment Tracking RER Item ADDING", "Allocations list item not found. Not DECREMENTED");
+            }
         }
 
         private void IncrementArticlesFulfilled(ListItem articlesListItem, Decimal units)
@@ -253,6 +286,10 @@ namespace FulfillmentWeb.Services
                 articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 articlesListItem.Update();
             }
+            else
+            {
+                errorlogWriter.WriteLog("WARNING: Fulfillment Tracking RER Item ADDING", "Articles list item not found. Not INCREMENTED");
+            }
         }
 
         private void DecrementArticlesFulfilled(ref ListItem articlesListItem, Decimal units)
@@ -264,6 +301,10 @@ namespace FulfillmentWeb.Services
 
                 articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 articlesListItem.Update();
+            }
+            else
+            {
+                errorlogWriter.WriteLog("WARNING: Fulfillment Tracking RER Item ADDING", "Articles list item not found. Not DECREMENTED");
             }
         }
     }
