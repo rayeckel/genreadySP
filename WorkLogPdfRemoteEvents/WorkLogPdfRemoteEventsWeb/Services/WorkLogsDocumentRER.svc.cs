@@ -77,7 +77,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
             }
             catch (Exception ex)
             {
-                ex.GetType();
+                errorlogWriter.WriteLog("Work Logs Documents RER ERROR", ex.Message);
             }
         }
     }

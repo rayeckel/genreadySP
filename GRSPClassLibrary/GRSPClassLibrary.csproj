@@ -69,11 +69,6 @@
     <Compile Include="Web\LogWriter.cs" />
     <Compile Include="Web\SharePointContext.cs" />
     <Compile Include="Web\TokenHelper.cs" />
-    <Compile Include="Wictor.Office365\ClaimsWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Wictor.Office365\MsOnlineClaimsHelper.cs" />
-    <Compile Include="Wictor.Office365\WcfClientContracts.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

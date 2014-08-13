@@ -38,7 +38,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
                             try
                             {
                                 string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
-                                string remoteUrl = string.Format("{0}/{1}.svc", opContext, Constants.WORKLOGS_LIBRARY_NAME);
+                                string remoteUrl = string.Format("{0}/{1}.svc", opContext, Constants.WORKLOGS_RECEIVER_NAME);
 
                                 foreach (var receiverType in eventReceiverTypes)
                                 {
