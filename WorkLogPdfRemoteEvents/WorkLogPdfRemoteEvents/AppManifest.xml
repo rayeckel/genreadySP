@@ -15,9 +15,9 @@
 
   <AppPrincipal>
     <!--Production-->
-    <RemoteWebApplication ClientId="7a044048-16c3-49ea-b356-b1e09b20ffd6" />
+    <!--<RemoteWebApplication ClientId="7a044048-16c3-49ea-b356-b1e09b20ffd6" />-->
     <!--Development-->
-    <!--<RemoteWebApplication ClientId="*" />-->
+    <RemoteWebApplication ClientId="*" />
     <!--<RemoteWebApplication ClientId="c72a222b-f6db-4996-afca-0e386fe9df63" />-->
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >

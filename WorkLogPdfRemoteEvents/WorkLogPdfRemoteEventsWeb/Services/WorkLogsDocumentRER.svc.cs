@@ -36,7 +36,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
                     {
                         try
                         {
-                            UploadPDF(properties, clientContext);
+                            UpdateItem(properties, clientContext);
                             syslogWriter.WriteLog("Work Logs Documents RER  triggered", "Item Updated");
                         }
                         catch (Exception ex)
@@ -68,17 +68,68 @@ namespace WorkLogPdfRemoteEventsWeb.Services
         private void UploadPDF(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             var documentName = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
-            string sourceFileUrl = String.Format("{0}/{1}.pdf", Constants.SOURCE_URL, documentName);
+            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", Constants.READY_PATH_SOURCE_URL, Constants.READY_PATH_PDF_PATH, documentName);
             string libraryFileName = String.Format("/{0}/{1}/{2}.pdf", Constants.SITE_URL, Constants.DOCUMENT_LIST_NAME, documentName);
 
             try
             {
-                GRSPClassLibrary.Web.DocumentUtils.UploadFile(clientContext, Constants.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName);
+                GRSPClassLibrary.Web.WebUtils.UploadFile(clientContext, Constants.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName);
             }
             catch (Exception ex)
             {
                 errorlogWriter.WriteLog("Work Logs Documents RER ERROR", ex.Message);
             }
+        }
+
+        private void UpdateItem(SPRemoteEventProperties properties, ClientContext clientContext)
+        {
+            var workLogId = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
+            string readyPathUpdateUrl = String.Format("{0}{1}/{2}", Constants.READY_PATH_UNSECURED_SOURCE_URL, Constants.READY_PATH_EDIT_PATH, workLogId);
+
+            ListItem itemUpdating = GetFormsListItem(properties, clientContext);
+
+            if (itemUpdating != null)
+            {
+                var newWorkLogStatus = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_STATUS_LABEL];
+                var oldWorkLogStatus = (string)itemUpdating[Constants.WORK_LOG_STATUS_LABEL];
+                var updatingStatus = newWorkLogStatus != oldWorkLogStatus;
+
+                var newWorkLogEditable = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_EDITABLE_LABEL];
+                var oldWorkLogEditable = (string)itemUpdating[Constants.WORK_LOG_EDITABLE_LABEL];
+                var updatingEditable = newWorkLogEditable != oldWorkLogEditable;
+
+                if (updatingStatus || updatingEditable)
+                {
+                    var updateParams = new Dictionary<string, string>() { { "status", newWorkLogStatus }, { "editable", newWorkLogEditable } };
+                    GRSPClassLibrary.Web.WebUtils.PutData(readyPathUpdateUrl, updateParams);
+                }
+                else
+                {
+                    UploadPDF(properties, clientContext);
+                }
+            }
+        }
+
+        private ListItem GetFormsListItem(SPRemoteEventProperties properties, ClientContext clientContext)
+        {
+            ListCollection webLists = clientContext.Web.Lists;
+            List formsList = webLists.GetByTitle(Constants.WORKLOGS_LIBRARY_NAME);
+            string itemId = Convert.ToString(properties.ItemEventProperties.ListItemId);
+
+            var formsQuery = new CamlQuery();
+            formsQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='ID'/>" +
+                "<Value Type='Number'>" + itemId + "</Value></Eq></Where></Query></View>";
+            ListItemCollection query = formsList.GetItems(formsQuery);
+
+            clientContext.Load(query);
+            clientContext.ExecuteQuery();
+
+            if (query.Count() > 0)
+            {
+                return query.First();
+            }
+
+            return null;
         }
     }
 }

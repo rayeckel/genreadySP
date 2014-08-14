@@ -36,6 +36,9 @@
     <Reference Include="Microsoft.IdentityModel.WindowsTokenService, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SharePoint.Client, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.SharePoint.Client.Runtime, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\JSON.Net\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IdentityModel" />
@@ -57,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\Constants.cs" />
-    <Compile Include="Web\DocumentUtils.cs" />
+    <Compile Include="Web\WebUtils.cs" />
     <Compile Include="Web\EventReciever.cs" />
     <Compile Include="Pages\AccessTokenPage.cs">
       <SubType>ASPXCodeBehind</SubType>

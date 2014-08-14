@@ -10,3 +10,6 @@ C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Release\GRSPClassLibrary.cs
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\GRSPClassLibrary.dll.config
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\DBXLClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\DBXLClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\Newtonsoft.Json.dll
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\Newtonsoft.Json.pdb
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Release\Newtonsoft.Json.xml

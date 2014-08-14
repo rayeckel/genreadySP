@@ -11,11 +11,10 @@ namespace GRSPClassLibrary.Web
     /// </summary>
     public class Crypt
     {
+        public static string Password = "secrete123";
         public static string Decrypt(string TextToBeDecrypted)
         {
             var RijndaelCipher = new RijndaelManaged();
-
-            string Password = "GRSP";
             string DecryptedData;
 
             try
@@ -52,8 +51,6 @@ namespace GRSPClassLibrary.Web
         public static string Encrypt(string TextToBeEncrypted)
         {
             var RijndaelCipher = new RijndaelManaged();
-
-            string Password = "GRSP";
             byte[] PlainText = System.Text.Encoding.Unicode.GetBytes(TextToBeEncrypted);
             byte[] Salt = Encoding.ASCII.GetBytes(Password.Length.ToString());
             var SecretKey = new PasswordDeriveBytes(Password, Salt);
