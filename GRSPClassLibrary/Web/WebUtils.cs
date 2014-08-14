@@ -12,10 +12,19 @@ namespace GRSPClassLibrary.Web
 {
     public class WebUtils
     {
+        private const string PUT = "PUT";
+        private const string GET = "GET";
 
-        public static void UploadFile(ClientContext clientContext, string listTitle, string sourceFileUrl, string libraryFileName)
+        public static void UploadFile(ClientContext clientContext, string listTitle, string sourceFileUrl, string libraryFileName, Dictionary<string, string> requestParams = null)
         {
-            var request = CreateRequest("GET", new Uri(sourceFileUrl));
+            string securedUrl = sourceFileUrl;
+            if (requestParams != null)
+            {
+                string requestHash = BuildPutRequestHash(requestParams);
+                securedUrl = String.Format("{0}?{1}={2}", sourceFileUrl, Constants.UNSECURED_READY_PATH_URL_HASH_LABEL,  requestHash);
+            }
+
+            var request = CreateRequest(WebUtils.GET, new Uri(securedUrl));
 
             using(clientContext)
             using(var response = (HttpWebResponse)request.GetResponse())
@@ -36,22 +45,25 @@ namespace GRSPClassLibrary.Web
             }
         }
 
-        public static void PutData(string sourceFileUrl, Dictionary<string, string> requestParams)
+        public static void PutData(string sourceFileUrl, Dictionary<string, string> requestParams = null)
         {
-            var hash = BuildPutRequestHash(requestParams);
-            requestParams.Add("hash", hash);
-
-            var request = CreateRequest("PUT", new Uri(sourceFileUrl));
-            var json = JsonConvert.SerializeObject(requestParams);
-
-            using (var writer = new StreamWriter(request.GetRequestStream()))
+            if (requestParams != null)
             {
-                writer.Write(json);
-            }
+                var hash = BuildPutRequestHash(requestParams);
+                requestParams.Add(Constants.UNSECURED_READY_PATH_URL_HASH_LABEL, hash);
 
-            using (var response = (HttpWebResponse)request.GetResponse())
-            {
-                response.GetType();
+                var request = CreateRequest(WebUtils.PUT, new Uri(sourceFileUrl));
+                var json = JsonConvert.SerializeObject(requestParams);
+
+                using (var writer = new StreamWriter(request.GetRequestStream()))
+                {
+                    writer.Write(json);
+                }
+
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    response.GetType();
+                }
             }
         }
         private static HttpWebRequest CreateRequest(string methodString, Uri addr, string contentType = "application/json")

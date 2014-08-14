@@ -18,6 +18,7 @@ namespace GRSPClassLibrary.Base
         public const string ERROR_LOG_LABEL = "Error Log";
         public const string KEY_DBXL_PROPERTY_DOCTYPE = "_DbxlDocType";
         public const string KEY_DBXL_PROPERTY_RER_ENABLED = "_DbxlRerEnabled";
+        public const string UNSECURED_READY_PATH_URL_HASH_LABEL = "hash";
         public const string SYSTEM_LOG_LABEL = "System Log";
 
         public static SecureString CONTEXT_CREDENTIAL_PASSWORD_SECURE

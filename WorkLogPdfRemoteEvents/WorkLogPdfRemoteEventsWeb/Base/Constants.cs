@@ -8,7 +8,7 @@ namespace WorkLogPdfRemoteEventsWeb.Base
     public static class Constants
     {
         public const string READY_PATH_SOURCE_URL = "http://readypath.generationready.com/api/v1/worklogs";
-        public const string READY_PATH_UNSECURED_SOURCE_URL = "http://readypath.generationready.com/worklogs";
+        public const string READY_PATH_UNSECURED_SOURCE_URL = "http://readypath.generationready.com/sauth/worklogs";
         //public const string SOURCE_URL = "http://localstash:8888/worklogs/pdf";
         public const string SITE_URL = "sites/re";
         public const string DOCUMENT_LIST_NAME = "Work Logs";

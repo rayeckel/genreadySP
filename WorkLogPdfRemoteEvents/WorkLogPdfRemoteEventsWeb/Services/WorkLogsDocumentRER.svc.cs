@@ -68,12 +68,13 @@ namespace WorkLogPdfRemoteEventsWeb.Services
         private void UploadPDF(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             var documentName = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
-            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", Constants.READY_PATH_SOURCE_URL, Constants.READY_PATH_PDF_PATH, documentName);
+            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", Constants.READY_PATH_UNSECURED_SOURCE_URL, Constants.READY_PATH_PDF_PATH, documentName);
             string libraryFileName = String.Format("/{0}/{1}/{2}.pdf", Constants.SITE_URL, Constants.DOCUMENT_LIST_NAME, documentName);
+            var uploadUrlHashParams = new Dictionary<string, string>() { { "docName", documentName }, { "param2", "pdf" } };
 
             try
             {
-                GRSPClassLibrary.Web.WebUtils.UploadFile(clientContext, Constants.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName);
+                GRSPClassLibrary.Web.WebUtils.UploadFile(clientContext, Constants.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName, uploadUrlHashParams);
             }
             catch (Exception ex)
             {
@@ -100,8 +101,16 @@ namespace WorkLogPdfRemoteEventsWeb.Services
 
                 if (updatingStatus || updatingEditable)
                 {
-                    var updateParams = new Dictionary<string, string>() { { "status", newWorkLogStatus }, { "editable", newWorkLogEditable } };
-                    GRSPClassLibrary.Web.WebUtils.PutData(readyPathUpdateUrl, updateParams);
+                    var updateParams = 
+                        new Dictionary<string, string>() { { Constants.WORK_LOG_STATUS_LABEL, newWorkLogStatus }, { Constants.WORK_LOG_EDITABLE_LABEL, newWorkLogEditable } };
+                    try
+                    {
+                        GRSPClassLibrary.Web.WebUtils.PutData(readyPathUpdateUrl, updateParams);
+                    }
+                    catch (Exception ex)
+                    {
+                        errorlogWriter.WriteLog("Work Logs Documents RER ERROR", ex.Message);
+                    }
                 }
                 else
                 {
