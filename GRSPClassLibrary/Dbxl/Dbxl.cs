@@ -13,6 +13,9 @@ namespace GRSPClassLibrary.Dbxl
 {
     public class Properties
     {
+        private const string DBXL_PASSWORD = "DBXLPassword";
+        private const string DBXL_USERNAME = "DBXLUserName";
+
         public static string GetDbxlProperty(string DbxlPropertyName, ClientContext clientContext)
         {
             clientContext.Load(clientContext.Web, web => web.AllProperties);
@@ -35,8 +38,8 @@ namespace GRSPClassLibrary.Dbxl
 
         public static NetworkCredential BuildServiceCredentials(ClientContext clientContext)
         {
-            string username = GetDbxlProperty(Constants.DBXL_USERNAME, clientContext);
-            string encryptedPassword = GetDbxlProperty(Constants.DBXL_PASSWORD, clientContext);
+            string username = GetDbxlProperty(Properties.DBXL_USERNAME, clientContext);
+            string encryptedPassword = GetDbxlProperty(Properties.DBXL_PASSWORD, clientContext);
             string decryptedPassword = Crypt.Decrypt(encryptedPassword);
 
             var credentials = new NetworkCredential(username, decryptedPassword);
@@ -48,13 +51,19 @@ namespace GRSPClassLibrary.Dbxl
 
     public class EventReceiver : GRSPEventReciever
     {
+        private const string DBXL_DOC_SERVICE_PAGE = "DbxlDocumentService.asmx";
+        private const string DBXL_ID_LABEL = "DbxlId";
+        private const string DBXL_PROCESSING_INSTRUCTION_NAME = "QdabraDBXL";
+        private const string DBXL_RECEIVER_NAME = "DbxlRER";
+        private const string DBXL_SERVICE_URL_NAME = "DbxlRerServiceUrl";
+        private const string KEY_DBXL_PROPERTY_RER_ENABLED = "_DbxlRerEnabled";
         public static new EventReceiverType[] eventReceiverTypes = { EventReceiverType.ItemAdded, EventReceiverType.ItemUpdated, 
                                                                    EventReceiverType.ItemUpdating, EventReceiverType.ItemDeleting };
 
         protected Boolean RERIsEnabled(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             //check and execute if RER is enabled on list
-            string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
+            string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + EventReceiver.KEY_DBXL_PROPERTY_RER_ENABLED;
             Boolean RerEnabled = Convert.ToBoolean(GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
             return RerEnabled;
         }
@@ -80,11 +89,11 @@ namespace GRSPClassLibrary.Dbxl
         protected string BuildServiceUrl(ClientContext clientContext)
         {
             //string serviceUrl = DBXLClassLibrary.Properties.Settings.Default.GRSP_DBXL_ServiceUrl;
-            string serviceUrl = GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_SERVICE_URL_NAME, clientContext);
+            string serviceUrl = GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(EventReceiver.DBXL_SERVICE_URL_NAME, clientContext);
 
             serviceUrl = TokenHelper.EnsureTrailingSlash(serviceUrl);
 
-            serviceUrl = serviceUrl + Constants.DBXL_DOC_SERVICE_PAGE;
+            serviceUrl = serviceUrl + EventReceiver.DBXL_DOC_SERVICE_PAGE;
 
             return serviceUrl;
         }
@@ -108,7 +117,7 @@ namespace GRSPClassLibrary.Dbxl
         protected void DbxlPiXmlProcessingInstruction(XmlDocument Doc, int DbxlId, string DbxlDocType)
         {
             String PiText = String.Format("docid=\"{0}\" doctype=\"{1}\"", DbxlId, DbxlDocType);
-            XmlProcessingInstruction DbxlPi = Doc.CreateProcessingInstruction(Constants.DBXL_PROCESSING_INSTRUCTION_NAME, PiText);
+            XmlProcessingInstruction DbxlPi = Doc.CreateProcessingInstruction(EventReceiver.DBXL_PROCESSING_INSTRUCTION_NAME, PiText);
             Doc.AppendChild(DbxlPi);
         }
     }

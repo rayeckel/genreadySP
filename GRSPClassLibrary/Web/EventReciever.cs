@@ -8,6 +8,8 @@ namespace GRSPClassLibrary.Web
 {
     public partial class GRSPEventReciever : IRemoteEventService
     {
+        private const string SYSTEM_LOG_LABEL = "System Log";
+        private const string ERROR_LOG_LABEL = "Error Log";
         protected SPRemoteEventResult result = new SPRemoteEventResult();
         protected LogWriter syslogWriter;
         protected LogWriter errorlogWriter;
@@ -80,8 +82,8 @@ namespace GRSPClassLibrary.Web
         {
             ClientContext loggingContext = GetClientContext(properties);
 
-            syslogWriter = new LogWriter(Constants.SYSTEM_LOG_LABEL, loggingContext);
-            errorlogWriter = new LogWriter(Constants.ERROR_LOG_LABEL, loggingContext);
+            syslogWriter = new LogWriter(GRSPEventReciever.SYSTEM_LOG_LABEL, loggingContext);
+            errorlogWriter = new LogWriter(GRSPEventReciever.ERROR_LOG_LABEL, loggingContext);
         }
 
         public ListItem ClientContextListItem(ClientContext clientContext, Guid ListId, int Id)
