@@ -13,8 +13,8 @@
   </Properties>
 
   <AppPrincipal>
-    <RemoteWebApplication ClientId="*" />
-    <!--<RemoteWebApplication ClientId="ed48663c-0df4-4a1e-b302-398870903aa6" />-->
+    <!--<RemoteWebApplication ClientId="*" />-->
+    <RemoteWebApplication ClientId="ed48663c-0df4-4a1e-b302-398870903aa6" />
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection/web" Right="Manage" />

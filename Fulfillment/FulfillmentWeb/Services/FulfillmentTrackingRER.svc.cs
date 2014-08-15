@@ -82,12 +82,22 @@ namespace FulfillmentWeb.Services
 
         private void UpdateAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
         {
-            string submittedDate = Convert.ToString(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_SUBMITTED]);
-
-            //If the form is not marked as submitted, skip the calculations to Articles and Allocations
-            if (String.IsNullOrEmpty(submittedDate))
+            //If the DbxlId value was previously null, but AfterProperties now has a value, return.
+            if (!properties.ItemEventProperties.BeforeProperties.ContainsKey(GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL) &&
+                properties.ItemEventProperties.AfterProperties.ContainsKey(GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL))
             {
                 return;
+            }
+
+            //If the form is not marked as submitted, skip the calculations to Articles and Allocations
+            var submittedDate = String.Empty;
+            if (!properties.ItemEventProperties.AfterProperties.ContainsKey(FulfillmentTrackingRER.INPUT_SUBMITTED))
+            {
+                return;
+            }
+            else 
+            {
+                submittedDate = (string)properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_SUBMITTED];
             }
 
             string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.LIST_ITEM_ALLOCATION_ID]);

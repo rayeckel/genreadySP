@@ -9,6 +9,9 @@ namespace FormLibraryEventReceiverWeb.Services
 {
     public class DbxlRER : GRSPClassLibrary.Dbxl.EventReceiver
     {
+        private const string ALLOCATION_ID_LABEL = "AllocationId";
+        private const string UNIT_LABEL = "Unit";
+
         protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             if (properties.EventType == SPRemoteEventType.ItemAdding || !RERIsEnabled(properties, clientContext))
@@ -77,22 +80,31 @@ namespace FormLibraryEventReceiverWeb.Services
                         {
                             try
                             {
-                                //Add qdabra processing instruction
-                                int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL].ToString());
-                                DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
+                                string previousAllocationId = Convert.ToString(properties.ItemEventProperties.BeforeProperties[DbxlRER.ALLOCATION_ID_LABEL]);
+                                string newAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[DbxlRER.ALLOCATION_ID_LABEL]);
+                                string previousUnit = Convert.ToString(properties.ItemEventProperties.BeforeProperties[DbxlRER.UNIT_LABEL]);
+                                string newUnit = Convert.ToString(properties.ItemEventProperties.AfterProperties[DbxlRER.UNIT_LABEL]);
 
-                                string RefId;
-                                string DbxlDescriptionText = "Item Updating: " + DateTime.Now;
-                                StatusInfo SubmitResult =
-                                    DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
+                                //Update is triggered when this RER adds the DbxlId (above). So if that is why we are here, ignore.
+                                if (previousAllocationId != newAllocationId || previousUnit != newUnit)
+                                {
+                                    //Add qdabra processing instruction
+                                    int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL]);
+                                    DbxlPiXmlProcessingInstruction(Doc, DbxlId, DbxlDocType);
 
-                                if (SubmitResult.Success)
-                                {
-                                    syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
-                                }
-                                else if (!SubmitResult.Success)
-                                {
-                                    errorlogWriter.WriteLog("DBXL RER Item Updating - DBXL Submit ERROR", SubmitResult.Errors[0].Description);
+                                    string RefId;
+                                    string DbxlDescriptionText = "Item Updating: " + DateTime.Now;
+                                    StatusInfo SubmitResult =
+                                        DocService.SubmitDocument(DbxlDocType, Doc.OuterXml, Id.ToString(), itemEditor, DbxlDescriptionText, Constants.TRUE, out DbxlId, out RefId);
+
+                                    if (SubmitResult.Success)
+                                    {
+                                        syslogWriter.WriteLog("DBXL RER Triggered", "Item updated");
+                                    }
+                                    else if (!SubmitResult.Success)
+                                    {
+                                        errorlogWriter.WriteLog("DBXL RER Item Updating - DBXL Submit ERROR", SubmitResult.Errors[0].Description);
+                                    }
                                 }
                             }
                             catch (Exception ex)
@@ -133,5 +145,9 @@ namespace FormLibraryEventReceiverWeb.Services
                 }
             }
         }
+
+        private void processItemUpdated()
+        { 
+}
     }
 }
