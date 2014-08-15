@@ -7,20 +7,6 @@ namespace FulfillmentWeb.Base
 {
     public static class Constants
     {
-        public const string ALLOCATIONS_LIBRARY_NAME = "Allocations";
-        public const string ALLOCATIONS_LIST_ITEM_ARTICLE_ID = "Article_x0020_Id";
-        public const string ARTICLES_LIST_ITEM_ID = "ID";
-        public const string ARTICLE_ID_LOOKUP_FIELD = "Article Id Lookup";
-        public const string ARTICLES_LIBRARY_NAME = "Articles";
-        public const string FULFILLMENT_TRACKING_RECEIVER_NAME = "FulfillmentTrackingRER";
-        public const string INPUT_UNIT = "Unit";
-        public const string INPUT_SUBMITTED = "Submitted";
-        public const string INPUT_PREVIOUS_SUBMITTED = "PreviousSubmitted";
-        public const string LIST_ITEM_ALLOCATION_ID = "AllocationId";
-        public const string LIST_ITEM_ARTICLE_ID = "ArticleId";
-        public const string LIST_ITEM_ALLOCATIONS_QUANTITY = "Quantity";
-        public const string LIST_ITEM_ALLOCATIONS_FULFILLED = "Fulfilled";
-        public const string LIST_ITEM_ALLOCATIONS_REMAINING = "Remaining";
         public const string TRACKING_LIBRARY_NAME = "Project Update Forms";
     }
 }

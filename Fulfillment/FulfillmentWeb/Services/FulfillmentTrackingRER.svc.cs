@@ -11,6 +11,19 @@ namespace FulfillmentWeb.Services
 {
     public class FulfillmentTrackingRER : GRSPEventReciever
     {
+        private const string ALLOCATIONS_LIBRARY_NAME = "Allocations";
+        private const string ALLOCATIONS_LIST_ITEM_ARTICLE_ID = "Article_x0020_Id";
+        private const string ARTICLES_LIST_ITEM_ID = "ID";
+        private const string ARTICLE_ID_LOOKUP_FIELD = "Article Id Lookup";
+        private const string ARTICLES_LIBRARY_NAME = "Articles";
+        private const string INPUT_UNIT = "Unit";
+        private const string INPUT_SUBMITTED = "Submitted";
+        private const string INPUT_PREVIOUS_SUBMITTED = "PreviousSubmitted";
+        private const string LIST_ITEM_ALLOCATION_ID = "AllocationId";
+        private const string LIST_ITEM_ARTICLE_ID = "ArticleId";
+        private const string LIST_ITEM_ALLOCATIONS_QUANTITY = "Quantity";
+        private const string LIST_ITEM_ALLOCATIONS_FULFILLED = "Fulfilled";
+        private const string LIST_ITEM_ALLOCATIONS_REMAINING = "Remaining";
         protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             clientContext.Load(clientContext.Web, web => web.Lists);
@@ -69,7 +82,7 @@ namespace FulfillmentWeb.Services
 
         private void UpdateAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
         {
-            string submittedDate = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.INPUT_SUBMITTED]);
+            string submittedDate = Convert.ToString(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_SUBMITTED]);
 
             //If the form is not marked as submitted, skip the calculations to Articles and Allocations
             if (String.IsNullOrEmpty(submittedDate))
@@ -77,18 +90,18 @@ namespace FulfillmentWeb.Services
                 return;
             }
 
-            string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[Constants.LIST_ITEM_ALLOCATION_ID]);
-            decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[Constants.INPUT_UNIT]);
+            string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.LIST_ITEM_ALLOCATION_ID]);
+            decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_UNIT]);
 
             ListItem itemUpdating = GetFormsListItem(properties, clientContext);
 
             //If the form was previously submitted, and is now being modified.
             if (itemUpdating != null)
             {
-                decimal previousUnits = Convert.ToDecimal(itemUpdating[Constants.INPUT_UNIT]);
+                decimal previousUnits = Convert.ToDecimal(itemUpdating[FulfillmentTrackingRER.INPUT_UNIT]);
 
                 //If the allocation ID is changing, reverse the updates to the old allocation and its related article.
-                string oldAllocationId = Convert.ToString(itemUpdating[Constants.LIST_ITEM_ALLOCATION_ID]);
+                string oldAllocationId = Convert.ToString(itemUpdating[FulfillmentTrackingRER.LIST_ITEM_ALLOCATION_ID]);
                 if (allocationId != oldAllocationId)
                 {
                     try
@@ -126,10 +139,10 @@ namespace FulfillmentWeb.Services
                     int articleId = AddDays(properties, clientContext, allocationId, units);
 
                     //Add the fieldLookupValue
-                    result.ChangedItemProperties.Add(Constants.ARTICLE_ID_LOOKUP_FIELD, articleId);
+                    result.ChangedItemProperties.Add(FulfillmentTrackingRER.ARTICLE_ID_LOOKUP_FIELD, articleId);
 
                     //Mark the record as having already been submitted.
-                    result.ChangedItemProperties.Add(Constants.INPUT_PREVIOUS_SUBMITTED, submittedDate);
+                    result.ChangedItemProperties.Add(FulfillmentTrackingRER.INPUT_PREVIOUS_SUBMITTED, submittedDate);
                 }
                 catch (Exception ex)
                 {
@@ -141,8 +154,8 @@ namespace FulfillmentWeb.Services
         private void DeleteAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             ListItem itemDeleting = GetFormsListItem(properties, clientContext);
-            string allocationId = Convert.ToString(itemDeleting[Constants.LIST_ITEM_ALLOCATION_ID]);
-            decimal units = Convert.ToDecimal(itemDeleting[Constants.INPUT_UNIT]);
+            string allocationId = Convert.ToString(itemDeleting[FulfillmentTrackingRER.LIST_ITEM_ALLOCATION_ID]);
+            decimal units = Convert.ToDecimal(itemDeleting[FulfillmentTrackingRER.INPUT_UNIT]);
 
             RemoveDays(properties, clientContext, allocationId, units);
         }
@@ -172,7 +185,7 @@ namespace FulfillmentWeb.Services
         private ListItem GetAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId)
         {
             ListCollection webLists = clientContext.Web.Lists;
-            List allocationsList = webLists.GetByTitle(Constants.ALLOCATIONS_LIBRARY_NAME);
+            List allocationsList = webLists.GetByTitle(FulfillmentTrackingRER.ALLOCATIONS_LIBRARY_NAME);
 
             var allocationQuery = new CamlQuery();
             allocationQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='ID'/>" +
@@ -193,7 +206,7 @@ namespace FulfillmentWeb.Services
         private ListItem GetArticlesListItem(SPRemoteEventProperties properties, ClientContext clientContext, string articleId)
         {
             ListCollection webLists = clientContext.Web.Lists;
-            List articlesList = webLists.GetByTitle(Constants.ARTICLES_LIBRARY_NAME);
+            List articlesList = webLists.GetByTitle(FulfillmentTrackingRER.ARTICLES_LIBRARY_NAME);
 
             var articleQuery = new CamlQuery();
             articleQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='Article_x0020_Id'/>" +
@@ -216,12 +229,12 @@ namespace FulfillmentWeb.Services
             IncrementAllocationsFulfilled(allocationListItem, units);
             clientContext.ExecuteQuery();
 
-            string articleId = Convert.ToString(allocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
+            string articleId = Convert.ToString(allocationListItem[FulfillmentTrackingRER.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
             ListItem articlesListItem = GetArticlesListItem(properties, clientContext, articleId);
             IncrementArticlesFulfilled(articlesListItem, units);
             clientContext.ExecuteQuery();
 
-            return (int)articlesListItem[Constants.ARTICLES_LIST_ITEM_ID];
+            return (int)articlesListItem[FulfillmentTrackingRER.ARTICLES_LIST_ITEM_ID];
         }
 
         private void RemoveDays(SPRemoteEventProperties properties, ClientContext clientContext, string allocationId, decimal units)
@@ -230,7 +243,7 @@ namespace FulfillmentWeb.Services
             DecrementAllocationsFulfilled(ref oldAllocationListItem, units);
             clientContext.ExecuteQuery();
 
-            string oldAllocationArticleId = Convert.ToString(oldAllocationListItem[Constants.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
+            string oldAllocationArticleId = Convert.ToString(oldAllocationListItem[FulfillmentTrackingRER.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
             ListItem oldAllocationArticleListItem = GetArticlesListItem(properties, clientContext, oldAllocationArticleId);
             DecrementArticlesFulfilled(ref oldAllocationArticleListItem, units);
             clientContext.ExecuteQuery();
@@ -240,14 +253,14 @@ namespace FulfillmentWeb.Services
         {
             if (allocationListItem != null)
             {
-                decimal oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                decimal oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+                decimal oldUnits = Convert.ToDecimal(allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal oldRemaining = Convert.ToDecimal(allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_REMAINING]);
 
                 decimal newRemaining = oldRemaining - units;
                 decimal fulfilled = oldUnits + units;
 
-                allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
-                allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
+                allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
+                allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 allocationListItem.Update();
             }
             else
@@ -260,14 +273,14 @@ namespace FulfillmentWeb.Services
         {
             if (allocationListItem != null)
             {
-                decimal oldUnits = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
-                decimal oldRemaining = Convert.ToDecimal(allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING]);
+                decimal oldUnits = Convert.ToDecimal(allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal oldRemaining = Convert.ToDecimal(allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_REMAINING]);
 
                 decimal newRemaining = oldRemaining + units;
                 decimal fulfilled = oldUnits - units;
 
-                allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
-                allocationListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
+                allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_REMAINING] = newRemaining;
+                allocationListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 allocationListItem.Update();
             }
             else
@@ -280,10 +293,10 @@ namespace FulfillmentWeb.Services
         {
             if (articlesListItem != null)
             {
-                decimal oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal oldUnits = Convert.ToDecimal(articlesListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED]);
                 decimal fulfilled = oldUnits + units;
 
-                articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
+                articlesListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 articlesListItem.Update();
             }
             else
@@ -296,10 +309,10 @@ namespace FulfillmentWeb.Services
         {
             if (articlesListItem != null)
             {
-                decimal oldUnits = Convert.ToDecimal(articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED]);
+                decimal oldUnits = Convert.ToDecimal(articlesListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED]);
                 decimal fulfilled = oldUnits - units;
 
-                articlesListItem[Constants.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
+                articlesListItem[FulfillmentTrackingRER.LIST_ITEM_ALLOCATIONS_FULFILLED] = fulfilled;
                 articlesListItem.Update();
             }
             else

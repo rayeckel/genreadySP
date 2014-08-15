@@ -11,6 +11,8 @@ namespace FulfillmentWeb.Services
 {
     public class AppEventReceiver : GRSPEventReciever
     {
+        private const string FULFILLMENT_TRACKING_RECEIVER_NAME = "FulfillmentTrackingRER";
+
         /// <summary>
         /// This method is a required placeholder, but is not used by app events.
         /// </summary>
@@ -44,7 +46,7 @@ namespace FulfillmentWeb.Services
                                     trackingList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                     {
                                         EventType = receiverType,
-                                        ReceiverName = Constants.FULFILLMENT_TRACKING_RECEIVER_NAME,
+                                        ReceiverName = AppEventReceiver.FULFILLMENT_TRACKING_RECEIVER_NAME,
                                         ReceiverUrl = remoteUrl,
                                         SequenceNumber = 1000
                                     });
@@ -70,7 +72,7 @@ namespace FulfillmentWeb.Services
 
                                 foreach (EventReceiverDefinition erd in erdCollection)
                                 {
-                                    if (erd.ReceiverName == Constants.FULFILLMENT_TRACKING_RECEIVER_NAME)
+                                    if (erd.ReceiverName == AppEventReceiver.FULFILLMENT_TRACKING_RECEIVER_NAME)
                                     {
                                         erd.DeleteObject();
                                     }
