@@ -9,6 +9,8 @@ namespace FormLibraryEventReceiverWeb.Services
 {
     public class AppEventReceiver : GRSPEventReciever
     {
+        private const string DBXL_RECEIVER_NAME = "DbxlRER";
+
         /// <summary>
         /// This method is a required placeholder, but is not used by app events.
         /// </summary>
@@ -43,7 +45,7 @@ namespace FormLibraryEventReceiverWeb.Services
                                         webList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                         {
                                             EventType = receiverType,
-                                            ReceiverName = GRSPClassLibrary.Base.Constants.DBXL_RECEIVER_NAME,
+                                            ReceiverName = AppEventReceiver.DBXL_RECEIVER_NAME,
                                             ReceiverUrl = remoteUrl,
                                             SequenceNumber = 1000
                                         });
@@ -72,7 +74,7 @@ namespace FormLibraryEventReceiverWeb.Services
 
                                     foreach (EventReceiverDefinition erd in erdCollection)
                                     {
-                                        if (erd.ReceiverName == GRSPClassLibrary.Base.Constants.DBXL_RECEIVER_NAME)
+                                        if (erd.ReceiverName == AppEventReceiver.DBXL_RECEIVER_NAME)
                                         {
                                             erd.DeleteObject();
                                         }
