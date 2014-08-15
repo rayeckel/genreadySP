@@ -8,16 +8,16 @@
 >
   <Properties>
     <Title>Form Library Event Receiver</Title>
-    <StartPage>~remoteAppUrl/Pages/Default.aspx?{StandardTokens}</StartPage>
+    <StartPage>https://genreadydbxlrer.azurewebsites.net/Pages/Default.aspx?{StandardTokens}</StartPage>
   <InstalledEventEndpoint>~remoteAppUrl/Services/AppEventReceiver.svc</InstalledEventEndpoint>
   </Properties>
 
   <AppPrincipal>
     <!--DEVELOPMENT CONFIG-->
-    <RemoteWebApplication ClientId="*" />
+    <!--<RemoteWebApplication ClientId="*" />-->
     <!--<RemoteWebApplication ClientId="dbb5d029-ffe9-448d-8e35-5b5a4ceed331" />-->
     <!--PRODUCTION CONFIG-->
-   <!--<RemoteWebApplication ClientId="dbb5d029-ffe9-448d-8e35-5b5a4ceed331" />-->
+   <RemoteWebApplication ClientId="dbb5d029-ffe9-448d-8e35-5b5a4ceed331" />
     
   </AppPrincipal>
   <AppPermissionRequests AllowAppOnlyPolicy="true" >
