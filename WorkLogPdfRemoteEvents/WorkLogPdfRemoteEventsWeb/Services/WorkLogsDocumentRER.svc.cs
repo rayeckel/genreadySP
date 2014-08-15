@@ -11,6 +11,19 @@ namespace WorkLogPdfRemoteEventsWeb.Services
 {
     public class WorkLogsDocumentRER : GRSPEventReciever
     {
+        //private const string READY_PATH_SOURCE_URL = "http://readypath.generationready.com/api/v1/worklogs";
+        private const string READY_PATH_UNSECURED_SOURCE_URL = "http://readypath.generationready.com/sauth/worklogs";
+        private const string READY_PATH_SOURCE_URL = "http://localstash:8888/worklogs";
+        private const string SITE_URL = "sites/re";
+        private const string DOCUMENT_LIST_NAME = "Work Logs";
+        private const string DOCUMENT_LIST_URL = "/Work Logs";
+        private const string READY_PATH_PDF_PATH = "/pdf";
+        private const string READY_PATH_EDIT_PATH = "/edit";
+        private const string WORK_LOG_FILE_NAME = "WorkLogId";
+        private const string WORK_LOG_STATUS_LABEL = "Status";
+        private const string WORK_LOG_EDITABLE_LABEL = "Editable";
+        private const string DOC_LIB_WORKLOG_ID_LABEL = "RPWorkLogId";
+
         protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             clientContext.Load(clientContext.Web, web => web.Lists);
@@ -67,21 +80,21 @@ namespace WorkLogPdfRemoteEventsWeb.Services
         }
         private void UploadPDF(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            var documentName = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
-            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", Constants.READY_PATH_SOURCE_URL, Constants.READY_PATH_PDF_PATH, documentName);
-            string libraryFileName = String.Format("/{0}/{1}/{2}.pdf", Constants.SITE_URL, Constants.DOCUMENT_LIST_NAME, documentName);
+            var documentName = (string)properties.ItemEventProperties.AfterProperties[WorkLogsDocumentRER.WORK_LOG_FILE_NAME];
+            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", WorkLogsDocumentRER.READY_PATH_SOURCE_URL, WorkLogsDocumentRER.READY_PATH_PDF_PATH, documentName);
+            string libraryFileName = String.Format("/{0}/{1}/{2}.pdf", WorkLogsDocumentRER.SITE_URL, WorkLogsDocumentRER.DOCUMENT_LIST_NAME, documentName);
             var uploadUrlHashParams = new Dictionary<string, string>() { { "docName", documentName }, { "param2", "pdf" } };
 
             try
             {
-                GRSPClassLibrary.Web.WebUtils.UploadFile(clientContext, Constants.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName, uploadUrlHashParams);
+                GRSPClassLibrary.Web.WebUtils.UploadFile(clientContext, WorkLogsDocumentRER.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName, uploadUrlHashParams);
 
                 //Add some metadata
                 Microsoft.SharePoint.Client.File newFile = clientContext.Web.GetFileByServerRelativeUrl(libraryFileName);
                 clientContext.Load(newFile);
                 clientContext.ExecuteQuery();
 
-                newFile.ListItemAllFields[Constants.DOC_LIB_WORKLOG_ID_LABEL] = documentName;
+                newFile.ListItemAllFields[WorkLogsDocumentRER.DOC_LIB_WORKLOG_ID_LABEL] = documentName;
                 newFile.ListItemAllFields.Update();
                 clientContext.Load(newFile);
                 clientContext.ExecuteQuery();
@@ -94,23 +107,23 @@ namespace WorkLogPdfRemoteEventsWeb.Services
 
         private void UpdateItem(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            var workLogId = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
-            string readyPathUpdateUrl = String.Format("{0}{1}/{2}", Constants.READY_PATH_UNSECURED_SOURCE_URL, Constants.READY_PATH_EDIT_PATH, workLogId);
+            var workLogId = (string)properties.ItemEventProperties.AfterProperties[WorkLogsDocumentRER.WORK_LOG_FILE_NAME];
+            string readyPathUpdateUrl = String.Format("{0}{1}/{2}", WorkLogsDocumentRER.READY_PATH_UNSECURED_SOURCE_URL, WorkLogsDocumentRER.READY_PATH_EDIT_PATH, workLogId);
 
             ListItem itemUpdating = GetFormsListItem(properties, clientContext);
 
             if (itemUpdating != null)
             {
-                var newWorkLogStatus = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_STATUS_LABEL];
-                var oldWorkLogStatus = (string)itemUpdating[Constants.WORK_LOG_STATUS_LABEL];
+                var newWorkLogStatus = (string)properties.ItemEventProperties.AfterProperties[WorkLogsDocumentRER.WORK_LOG_STATUS_LABEL];
+                var oldWorkLogStatus = (string)itemUpdating[WorkLogsDocumentRER.WORK_LOG_STATUS_LABEL];
                 if(oldWorkLogStatus == null)
                 {
                     oldWorkLogStatus = "";
                 }
                 var updatingStatus = newWorkLogStatus != oldWorkLogStatus;
 
-                var newWorkLogEditable = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_EDITABLE_LABEL];
-                var oldWorkLogEditable = (string)itemUpdating[Constants.WORK_LOG_EDITABLE_LABEL];
+                var newWorkLogEditable = (string)properties.ItemEventProperties.AfterProperties[WorkLogsDocumentRER.WORK_LOG_EDITABLE_LABEL];
+                var oldWorkLogEditable = (string)itemUpdating[WorkLogsDocumentRER.WORK_LOG_EDITABLE_LABEL];
                 if (oldWorkLogEditable == null)
                 {
                     oldWorkLogEditable = "";
@@ -119,8 +132,8 @@ namespace WorkLogPdfRemoteEventsWeb.Services
 
                 if (updatingStatus || updatingEditable)
                 {
-                    var updateParams = 
-                        new Dictionary<string, string>() { { Constants.WORK_LOG_STATUS_LABEL, newWorkLogStatus }, { Constants.WORK_LOG_EDITABLE_LABEL, newWorkLogEditable } };
+                    var updateParams =
+                        new Dictionary<string, string>() { { WorkLogsDocumentRER.WORK_LOG_STATUS_LABEL, newWorkLogStatus }, { WorkLogsDocumentRER.WORK_LOG_EDITABLE_LABEL, newWorkLogEditable } };
                     try
                     {
                         GRSPClassLibrary.Web.WebUtils.PutData(readyPathUpdateUrl, updateParams);

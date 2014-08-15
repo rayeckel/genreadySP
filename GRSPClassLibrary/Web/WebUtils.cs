@@ -15,6 +15,25 @@ namespace GRSPClassLibrary.Web
     {
         private const string PUT = "PUT";
         private const string GET = "GET";
+        private const string UNSECURED_READY_PATH_URL_HASH_LABEL = "hash";
+        private const string UNSECURED_READY_PATH_URL_NONCE_LABEL = "nonce";
+        private const string CONTEXT_CREDENTIAL_USER_NAME = "readypath.account@generationready.com";
+        private const string CONTEXT_CREDENTIAL_PASSWORD = "rsARgn5U";
+        //private const string CONTEXT_CREDENTIAL_USER_NAME = "ray.eckel@generationreadydev.onmicrosoft.com";
+        //private const string CONTEXT_CREDENTIAL_PASSWORD = "";
+
+        private static SecureString CONTEXT_CREDENTIAL_PASSWORD_SECURE
+        {
+            get
+            {
+                var passWord = new SecureString();
+                foreach (char c in CONTEXT_CREDENTIAL_PASSWORD.ToCharArray())
+                {
+                    passWord.AppendChar(c);
+                }
+                return passWord;
+            }
+        }
 
         public static void UploadFile(ClientContext clientContext, string listTitle, string sourceFileUrl, string libraryFileName, Dictionary<string, string> requestParams = null)
         {
@@ -23,7 +42,7 @@ namespace GRSPClassLibrary.Web
             {
                 //Pass params Dictionary by reference since BuildPutRequestHash() adds hash and nonce
                 BuildPutRequestHash(ref requestParams);
-                securedUrl = String.Format("{0}?{1}={2}", sourceFileUrl, Constants.UNSECURED_READY_PATH_URL_HASH_LABEL, requestParams[Constants.UNSECURED_READY_PATH_URL_HASH_LABEL]);
+                securedUrl = String.Format("{0}?{1}={2}", sourceFileUrl, WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL, requestParams[WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL]);
             }
 
             var request = CreateRequest(WebUtils.GET, new Uri(securedUrl));
@@ -33,8 +52,8 @@ namespace GRSPClassLibrary.Web
             using(var receiveStream = (Stream)response.GetResponseStream())
             {
                 //Establish permission to upload to the list.
-                clientContext.Credentials = 
-                    new SharePointOnlineCredentials(Constants.CONTEXT_CREDENTIAL_USER_NAME, Constants.CONTEXT_CREDENTIAL_PASSWORD_SECURE);
+                clientContext.Credentials =
+                    new SharePointOnlineCredentials(WebUtils.CONTEXT_CREDENTIAL_USER_NAME, WebUtils.CONTEXT_CREDENTIAL_PASSWORD_SECURE);
                 clientContext.Load(clientContext.Web);
 
                 //Load a reference to the list
@@ -89,7 +108,7 @@ namespace GRSPClassLibrary.Web
             string randomNumber = rnd.Next(10000, 99999).ToString();
             string now = DateTime.Now.ToString();
             string nonce = String.Format("{0}{1}", now, randomNumber);
-            requestParams.Add(Constants.UNSECURED_READY_PATH_URL_NONCE_LABEL, nonce);
+            requestParams.Add(WebUtils.UNSECURED_READY_PATH_URL_NONCE_LABEL, nonce);
 
             //Acquire dictionary keys and sort them.
             var paramsList = requestParams.Keys.ToList();
@@ -103,7 +122,7 @@ namespace GRSPClassLibrary.Web
 
             string hash = Crypt.Encrypt(sb.ToString());
 
-            requestParams.Add(Constants.UNSECURED_READY_PATH_URL_HASH_LABEL, hash);
+            requestParams.Add(WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL, hash);
         }
     }
 }

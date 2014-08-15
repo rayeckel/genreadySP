@@ -12,6 +12,8 @@ namespace WorkLogPdfRemoteEventsWeb.Services
 {
     public class AppEventReceiver : GRSPEventReciever
     {
+        private const string WORKLOGS_RECEIVER_NAME = "WorkLogsDocumentRER";
+
         /// <summary>
         /// This method is a required placeholder, but is not used by app events.
         /// </summary>
@@ -38,14 +40,14 @@ namespace WorkLogPdfRemoteEventsWeb.Services
                             try
                             {
                                 string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
-                                string remoteUrl = string.Format("{0}/{1}.svc", opContext, Constants.WORKLOGS_RECEIVER_NAME);
+                                string remoteUrl = string.Format("{0}/{1}.svc", opContext, AppEventReceiver.WORKLOGS_RECEIVER_NAME);
 
                                 foreach (var receiverType in eventReceiverTypes)
                                 {
                                     trackingList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
                                     {
                                         EventType = receiverType,
-                                        ReceiverName = Constants.WORKLOGS_RECEIVER_NAME,
+                                        ReceiverName = AppEventReceiver.WORKLOGS_RECEIVER_NAME,
                                         ReceiverUrl = remoteUrl,
                                     });
                                 }
@@ -70,7 +72,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
 
                                 foreach (EventReceiverDefinition erd in erdCollection)
                                 {
-                                    if (erd.ReceiverName == Constants.WORKLOGS_RECEIVER_NAME)
+                                    if (erd.ReceiverName == AppEventReceiver.WORKLOGS_RECEIVER_NAME)
                                     {
                                         erd.DeleteObject();
                                     }
