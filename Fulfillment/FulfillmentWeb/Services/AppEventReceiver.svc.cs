@@ -39,7 +39,7 @@ namespace FulfillmentWeb.Services
                             try
                             {
                                 string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
-                                string remoteUrl = string.Format("{0}/FulfillmentTrackingRER.svc", opContext);
+                                string remoteUrl = string.Format("{0}/{1}.svc", opContext, AppEventReceiver.FULFILLMENT_TRACKING_RECEIVER_NAME);
 
                                 foreach (var receiverType in eventReceiverTypes)
                                 {
