@@ -68,13 +68,23 @@ namespace WorkLogPdfRemoteEventsWeb.Services
         private void UploadPDF(SPRemoteEventProperties properties, ClientContext clientContext)
         {
             var documentName = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_FILE_NAME];
-            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", Constants.READY_PATH_UNSECURED_SOURCE_URL, Constants.READY_PATH_PDF_PATH, documentName);
+            string sourceFileUrl = String.Format("{0}{1}/{2}.pdf", Constants.READY_PATH_SOURCE_URL, Constants.READY_PATH_PDF_PATH, documentName);
             string libraryFileName = String.Format("/{0}/{1}/{2}.pdf", Constants.SITE_URL, Constants.DOCUMENT_LIST_NAME, documentName);
             var uploadUrlHashParams = new Dictionary<string, string>() { { "docName", documentName }, { "param2", "pdf" } };
 
             try
             {
                 GRSPClassLibrary.Web.WebUtils.UploadFile(clientContext, Constants.DOCUMENT_LIST_NAME, sourceFileUrl, libraryFileName, uploadUrlHashParams);
+
+                //Add some metadata
+                Microsoft.SharePoint.Client.File newFile = clientContext.Web.GetFileByServerRelativeUrl(libraryFileName);
+                clientContext.Load(newFile);
+                clientContext.ExecuteQuery();
+
+                newFile.ListItemAllFields[Constants.DOC_LIB_WORKLOG_ID_LABEL] = documentName;
+                newFile.ListItemAllFields.Update();
+                clientContext.Load(newFile);
+                clientContext.ExecuteQuery();
             }
             catch (Exception ex)
             {
@@ -93,10 +103,18 @@ namespace WorkLogPdfRemoteEventsWeb.Services
             {
                 var newWorkLogStatus = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_STATUS_LABEL];
                 var oldWorkLogStatus = (string)itemUpdating[Constants.WORK_LOG_STATUS_LABEL];
+                if(oldWorkLogStatus == null)
+                {
+                    oldWorkLogStatus = "";
+                }
                 var updatingStatus = newWorkLogStatus != oldWorkLogStatus;
 
                 var newWorkLogEditable = (string)properties.ItemEventProperties.AfterProperties[Constants.WORK_LOG_EDITABLE_LABEL];
                 var oldWorkLogEditable = (string)itemUpdating[Constants.WORK_LOG_EDITABLE_LABEL];
+                if (oldWorkLogEditable == null)
+                {
+                    oldWorkLogEditable = "";
+                }
                 var updatingEditable = newWorkLogEditable != oldWorkLogEditable;
 
                 if (updatingStatus || updatingEditable)

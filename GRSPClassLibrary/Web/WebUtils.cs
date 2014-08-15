@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Security;
@@ -20,8 +21,9 @@ namespace GRSPClassLibrary.Web
             string securedUrl = sourceFileUrl;
             if (requestParams != null)
             {
-                string requestHash = BuildPutRequestHash(requestParams);
-                securedUrl = String.Format("{0}?{1}={2}", sourceFileUrl, Constants.UNSECURED_READY_PATH_URL_HASH_LABEL,  requestHash);
+                //Pass params Dictionary by reference since BuildPutRequestHash() adds hash and nonce
+                BuildPutRequestHash(ref requestParams);
+                securedUrl = String.Format("{0}?{1}={2}", sourceFileUrl, Constants.UNSECURED_READY_PATH_URL_HASH_LABEL, requestParams[Constants.UNSECURED_READY_PATH_URL_HASH_LABEL]);
             }
 
             var request = CreateRequest(WebUtils.GET, new Uri(securedUrl));
@@ -41,6 +43,7 @@ namespace GRSPClassLibrary.Web
 
                 clientContext.ExecuteQuery();
 
+                //Upload the file to the Document Library
                 Microsoft.SharePoint.Client.File.SaveBinaryDirect(clientContext, libraryFileName, receiveStream, true);
             }
         }
@@ -49,9 +52,8 @@ namespace GRSPClassLibrary.Web
         {
             if (requestParams != null)
             {
-                var hash = BuildPutRequestHash(requestParams);
-                requestParams.Add(Constants.UNSECURED_READY_PATH_URL_HASH_LABEL, hash);
-
+                //Pass params Dictionary by reference since BuildPutRequestHash() adds hash and nonce
+                BuildPutRequestHash(ref requestParams);
                 var request = CreateRequest(WebUtils.PUT, new Uri(sourceFileUrl));
                 var json = JsonConvert.SerializeObject(requestParams);
 
@@ -68,24 +70,40 @@ namespace GRSPClassLibrary.Web
         }
         private static HttpWebRequest CreateRequest(string methodString, Uri addr, string contentType = "application/json")
         {
-            var container = new CookieContainer();
-            //container.Add(addr, new Cookie("session", Settings.AuthCookieValue));
             var request = (HttpWebRequest)WebRequest.Create(addr);
+            //var container = new CookieContainer();
+            //container.Add(addr, new Cookie("session", Settings.AuthCookieValue));
+
+            //request.CookieContainer = container;
             request.Headers = new WebHeaderCollection();
             request.Accept = contentType;
             request.Method = methodString;
-            request.CookieContainer = container;
+
             return request;
         }
 
-        private static string BuildPutRequestHash(Dictionary<string, string> requestParams)
+        private static void BuildPutRequestHash(ref Dictionary<string, string> requestParams)
         {
+            //Genrate a nonce by appending a random number to the string representation of now().
+            var rnd = new Random();
+            string randomNumber = rnd.Next(10000, 99999).ToString();
+            string now = DateTime.Now.ToString();
+            string nonce = String.Format("{0}{1}", now, randomNumber);
+            requestParams.Add(Constants.UNSECURED_READY_PATH_URL_NONCE_LABEL, nonce);
+
+            //Acquire dictionary keys and sort them.
+            var paramsList = requestParams.Keys.ToList();
+            paramsList.Sort();
+
             var sb = new StringBuilder(Crypt.Password);
-            foreach (KeyValuePair<string, string> requestParam in requestParams)
+            foreach (var key in paramsList)
             {
-                sb.Append(requestParam.Value);
+                sb.Append(requestParams[key]);
             }
-            return Crypt.Encrypt(sb.ToString());
+
+            string hash = Crypt.Encrypt(sb.ToString());
+
+            requestParams.Add(Constants.UNSECURED_READY_PATH_URL_HASH_LABEL, hash);
         }
     }
 }

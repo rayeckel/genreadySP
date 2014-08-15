@@ -4,7 +4,7 @@ namespace GRSPClassLibrary.Base
 {
     public static class Constants
     {
-        public const string CONTEXT_CREDENTIAL_USER_NAME = "readypath@generationready.onmicrosoft.com";
+        public const string CONTEXT_CREDENTIAL_USER_NAME = "readypath.account@generationready.com";
         public const string CONTEXT_CREDENTIAL_PASSWORD = "rsARgn5U";
         //public const string CONTEXT_CREDENTIAL_USER_NAME = "ray.eckel@generationreadydev.onmicrosoft.com";
         //public const string CONTEXT_CREDENTIAL_PASSWORD = "";
@@ -19,6 +19,7 @@ namespace GRSPClassLibrary.Base
         public const string KEY_DBXL_PROPERTY_DOCTYPE = "_DbxlDocType";
         public const string KEY_DBXL_PROPERTY_RER_ENABLED = "_DbxlRerEnabled";
         public const string UNSECURED_READY_PATH_URL_HASH_LABEL = "hash";
+        public const string UNSECURED_READY_PATH_URL_NONCE_LABEL = "nonce";
         public const string SYSTEM_LOG_LABEL = "System Log";
 
         public static SecureString CONTEXT_CREDENTIAL_PASSWORD_SECURE
