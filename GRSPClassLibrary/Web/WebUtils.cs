@@ -15,7 +15,7 @@ namespace GRSPClassLibrary.Web
     {
         private const string PUT = "PUT";
         private const string GET = "GET";
-        private const string UNSECURED_READY_PATH_URL_HASH_LABEL = "hash";
+        private const string UNSECURED_READY_PATH_URL_HASH_LABEL = "h";
         private const string UNSECURED_READY_PATH_URL_NONCE_LABEL = "nonce";
         private const string CONTEXT_CREDENTIAL_USER_NAME = "readypath.account@generationready.com";
         private const string CONTEXT_CREDENTIAL_PASSWORD = "rsARgn5U";
@@ -35,17 +35,19 @@ namespace GRSPClassLibrary.Web
             }
         }
 
-        public static void UploadFile(ClientContext clientContext, string listTitle, string sourceFileUrl, string libraryFileName, Dictionary<string, string> requestParams = null)
+        public static void UploadFile(ClientContext clientContext, string listTitle, string sourceFileUrl, string libraryFileName, Dictionary<string, string> requestParams = null, Log.LogWriter syslogWriter = null)
         {
-            string securedUrl = sourceFileUrl;
+            string securedUrl = "";
             if (requestParams != null)
             {
                 //Pass params Dictionary by reference since BuildPutRequestHash() adds hash and nonce
                 BuildPutRequestHash(ref requestParams);
-                securedUrl = String.Format("{0}?{1}={2}", sourceFileUrl, WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL, requestParams[WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL]);
+
+                securedUrl = GenerateSecureParamUrl(sourceFileUrl, requestParams);
             }
 
-            var request = CreateRequest(WebUtils.GET, new Uri(securedUrl));
+            var requestUri = new Uri(securedUrl.ToString());
+            var request = CreateRequest(WebUtils.GET, requestUri);
 
             using(clientContext)
             using(var response = (HttpWebResponse)request.GetResponse())
@@ -87,6 +89,21 @@ namespace GRSPClassLibrary.Web
                 }
             }
         }
+
+        public static string GenerateSecureParamUrl(string sourceFileUrl, Dictionary<string, string> requestParams)
+        {
+            var securedUrl = new StringBuilder(sourceFileUrl);
+
+            securedUrl.Append("?");
+            foreach (KeyValuePair<string, string> urlParams in requestParams)
+            {
+                securedUrl.AppendFormat("&{0}={1}", urlParams.Key, urlParams.Value);
+            }
+
+            return securedUrl.ToString();
+        }
+
+
         private static HttpWebRequest CreateRequest(string methodString, Uri addr, string contentType = "application/json")
         {
             var request = (HttpWebRequest)WebRequest.Create(addr);
@@ -106,8 +123,8 @@ namespace GRSPClassLibrary.Web
             //Genrate a nonce by appending a random number to the string representation of now().
             var rnd = new Random();
             string randomNumber = rnd.Next(10000, 99999).ToString();
-            string now = DateTime.Now.ToString();
-            string nonce = String.Format("{0}{1}", now, randomNumber);
+            var unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            string nonce = String.Format("{0}{1}", unixTimestamp, randomNumber);
             requestParams.Add(WebUtils.UNSECURED_READY_PATH_URL_NONCE_LABEL, nonce);
 
             //Acquire dictionary keys and sort them.
@@ -121,8 +138,7 @@ namespace GRSPClassLibrary.Web
             }
 
             string hash = Crypt.Encrypt(sb.ToString());
-
-            requestParams.Add(WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL, hash);
+            requestParams[WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL] = hash;
         }
     }
 }

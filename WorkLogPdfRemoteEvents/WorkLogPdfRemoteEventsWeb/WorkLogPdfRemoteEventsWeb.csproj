@@ -116,6 +116,7 @@
     <Compile Include="Services\WorkLogsDocumentRER.svc.cs">
       <DependentUpon>WorkLogsDocumentRER.svc</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\WorkLogsAppViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
