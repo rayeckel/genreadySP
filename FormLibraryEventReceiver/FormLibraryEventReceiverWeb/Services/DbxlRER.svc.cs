@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
 using System.Xml;
 using DBXLClassLibrary.DbxlDocumentService;
 using FormLibraryEventReceiverWeb.Base;
+using System.Collections.Generic;
 
 namespace FormLibraryEventReceiverWeb.Services
 {
@@ -40,6 +42,13 @@ namespace FormLibraryEventReceiverWeb.Services
                 ListItem listItem = ClientContextListItem(clientContext, listId, Id);
                 XmlDocument Doc = LoadClientFile(clientContext, listItem);
 
+                ListCollection webLists = clientContext.Web.Lists;
+                List activeFormLibrary = webLists.GetById(listId);
+                clientContext.Load(activeFormLibrary);
+                EventReceiverDefinitionCollection erdCollection = activeFormLibrary.EventReceivers;
+                clientContext.Load(erdCollection);
+                clientContext.ExecuteQuery();
+
                 switch (properties.EventType)
                 {
                     //MUST use ItemAdded BC we need the list item ID for DBXL 
@@ -59,9 +68,11 @@ namespace FormLibraryEventReceiverWeb.Services
 
                                     listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL] = DbxlId.ToString();
                                     listItem[Constants.LIST_ITEM_EDITED_BY] = itemEditor;
-                                    //TODO: Disable event updates from Firing here (base.EventFiringEnabled = false;)
                                     listItem.Update();
 
+                                    //Borrow an unused event type to act as a flag to indicate "EventFiringEnabled = false"
+                                    erdCollection.Add(new EventReceiverDefinitionCreationInformation() { EventType = EventReceiverType.InvalidReceiver });
+                                    
                                     clientContext.ExecuteQuery();
                                 }
                                 else if (!SubmitResult.Success)
@@ -80,13 +91,11 @@ namespace FormLibraryEventReceiverWeb.Services
                         {
                             try
                             {
-                                string previousAllocationId = Convert.ToString(properties.ItemEventProperties.BeforeProperties[DbxlRER.ALLOCATION_ID_LABEL]);
-                                string newAllocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[DbxlRER.ALLOCATION_ID_LABEL]);
-                                string previousUnit = Convert.ToString(properties.ItemEventProperties.BeforeProperties[DbxlRER.UNIT_LABEL]);
-                                string newUnit = Convert.ToString(properties.ItemEventProperties.AfterProperties[DbxlRER.UNIT_LABEL]);
+                                //Update is triggered when this RER adds the DbxlId (above). If EventReceiverType.InvalidReceiver is registered, interpret this as a
+                                //signal to ignore update.
+                                EventReceiverDefinition eventFiringDisabled = erdCollection.FirstOrDefault(er => (er.EventType == EventReceiverType.InvalidReceiver));
 
-                                //Update is triggered when this RER adds the DbxlId (above). So if that is why we are here, ignore.
-                                if (previousAllocationId != newAllocationId || previousUnit != newUnit)
+                                if (eventFiringDisabled == null)
                                 {
                                     //Add qdabra processing instruction
                                     int DbxlId = Convert.ToInt32(listItem[GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL]);
@@ -105,6 +114,10 @@ namespace FormLibraryEventReceiverWeb.Services
                                     {
                                         errorlogWriter.WriteLog("DBXL RER Item Updating - DBXL Submit ERROR", SubmitResult.Errors[0].Description);
                                     }
+                                }
+                                else
+                                {
+                                    eventFiringDisabled.DeleteObject();
                                 }
                             }
                             catch (Exception ex)
@@ -148,6 +161,6 @@ namespace FormLibraryEventReceiverWeb.Services
 
         private void processItemUpdated()
         { 
-}
+        }
     }
 }

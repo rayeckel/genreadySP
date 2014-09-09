@@ -53,6 +53,8 @@ namespace FormLibraryEventReceiverWeb.Services
                                 }
                             }
 
+                            syslogWriter.WriteLog("App RER application installed", " : SUCCESS");
+
                         }
                         catch (Exception ex)
                         {

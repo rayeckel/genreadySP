@@ -15,7 +15,7 @@ namespace GRSPClassLibrary.Web
     {
         private const string PUT = "PUT";
         private const string GET = "GET";
-        private const string UNSECURED_READY_PATH_URL_HASH_LABEL = "h";
+        private const string UNSECURED_READY_PATH_URL_HASH_LABEL = "hash";
         private const string UNSECURED_READY_PATH_URL_NONCE_LABEL = "nonce";
         private const string CONTEXT_CREDENTIAL_USER_NAME = "readypath.account@generationready.com";
         private const string CONTEXT_CREDENTIAL_PASSWORD = "rsARgn5U";

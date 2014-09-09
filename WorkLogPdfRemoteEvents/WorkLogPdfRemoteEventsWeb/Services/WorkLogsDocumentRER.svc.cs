@@ -12,7 +12,7 @@ namespace WorkLogPdfRemoteEventsWeb.Services
     public class WorkLogsDocumentRER : GRSPEventReciever
     {
         private const string READY_PATH_SOURCE_URL = "readypath.generationready.com/api/v1/worklogs";
-        private const string READY_PATH_SECURED_SOURCE_URL = "http://readypath-qa.generationready.com/worklogs";
+        private const string READY_PATH_SECURED_SOURCE_URL = "http://readypath.generationready.com/sauth/worklogs";
         private const string SITE_URL = "sites/re";
         private const string DOCUMENT_LIST_NAME = "Work Logs";
         private const string DOCUMENT_LIST_URL = "/Work Logs";
