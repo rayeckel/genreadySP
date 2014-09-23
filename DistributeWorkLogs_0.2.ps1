@@ -409,5 +409,3 @@ function Get-Hash
 }
 
 Main
-
-
