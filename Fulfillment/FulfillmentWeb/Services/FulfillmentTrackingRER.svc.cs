@@ -119,7 +119,9 @@ namespace FulfillmentWeb.Services
                         //Remove previous record
                         RemoveDays(properties, clientContext, oldAllocationId, previousUnits);
                         //Update to new Allocation Id
-                        AddDays(properties, clientContext, allocationId, units);
+                        int articleId = AddDays(properties, clientContext, allocationId, units);
+                        //Update the ArticleId Lookup Field
+                        result.ChangedItemProperties.Add(FulfillmentTrackingRER.ARTICLE_ID_LOOKUP_FIELD, articleId);
                     }
                     catch (Exception ex)
                     {
@@ -159,6 +161,11 @@ namespace FulfillmentWeb.Services
                     errorlogWriter.WriteLog("Fulfillment Tracking RER Item ADDING ERROR", ex.Message);
                 }
             }
+        }
+
+        private void UpdateArticleIdLookup(ClientContext clientContext, string oldAllocationId, string newAllocationId)
+        {
+
         }
 
         private void DeleteAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext)
