@@ -45,7 +45,7 @@ namespace GRSPClassLibrary.Web.Log
         #endregion
 
         #region Methods
-        public void WriteLog(string Title, string Description)
+        public void WriteLog(string Title, string Description, int ItemId = 0)
         {
             using (clientContext)
             {
@@ -53,6 +53,8 @@ namespace GRSPClassLibrary.Web.Log
 
                 SystemLogListItem["Title"] = Title;
                 SystemLogListItem["Description"] = Description;
+                SystemLogListItem["Timestamp"] = DateTime.Now.Ticks.ToString();
+                SystemLogListItem["ItemId"] = ItemId;
 
                 SystemLogListItem.Update();
 
@@ -60,7 +62,7 @@ namespace GRSPClassLibrary.Web.Log
             }
         }
 
-        public void WriteLog(string Title, string Description, string Detail)
+        public void WriteLog(string Title, string Description, string Detail, int ItemId = 0)
         {
             using (clientContext)
             {
@@ -69,6 +71,8 @@ namespace GRSPClassLibrary.Web.Log
                 SystemLogListItem["Title"] = Title;
                 SystemLogListItem["Description"] = Description;
                 SystemLogListItem["Detail"] = Detail;
+                SystemLogListItem["Timestamp"] = DateTime.Now.Ticks.ToString();
+                SystemLogListItem["ItemId"] = ItemId;
 
                 SystemLogListItem.Update();
 

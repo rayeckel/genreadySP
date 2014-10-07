@@ -52,12 +52,12 @@ namespace FulfillmentWeb.Services
                                     });
                                 }
 
-                                syslogWriter.WriteLog("Fulfillment Tracking RER Item Added to: ", Constants.TRACKING_LIBRARY_NAME);
+                                syslogWriter.WriteLog("Fulfillment Tracking RER Item Added to: ", Constants.TRACKING_LIBRARY_NAME, 0);
                             }
 
                             catch (Exception ex)
                             {
-                                errorlogWriter.WriteLog("Fulfillment Tracking RER Item Added ERROR", ex.Message);
+                                errorlogWriter.WriteLog("Fulfillment Tracking RER Item Added ERROR", ex.Message, 0);
                             }
 
                             break;
@@ -78,12 +78,12 @@ namespace FulfillmentWeb.Services
                                     }
                                 }
 
-                                syslogWriter.WriteLog("Fulfillment Tracking RER Item Removed from: ", Constants.TRACKING_LIBRARY_NAME);
+                                syslogWriter.WriteLog("Fulfillment Tracking RER Item Removed from: ", Constants.TRACKING_LIBRARY_NAME, 0);
                             }
 
                             catch (Exception ex)
                             {
-                                errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated ERROR", ex.Message);
+                                errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated ERROR", ex.Message, 0);
                             }
 
                             break;

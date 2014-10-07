@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
+<App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
+     Name="ReportsAppPart"
+     ProductID="{84fbe610-3fa8-410e-8947-135ef6e6c6c5}"
+     Version="1.0.0.0"
+     SharePointMinVersion="16.0.0.0"
+>
+  <Properties>
+    <Title>ReportsAppPart</Title>
+    <StartPage>~remoteAppUrl/Pages/Reports/Default.aspx?{StandardTokens}&amp;SPHostTitle ={HostTitle}</StartPage>
+  </Properties>
+
+  <AppPrincipal>
+    <RemoteWebApplication ClientId="*" />
+  </AppPrincipal>
+</App>

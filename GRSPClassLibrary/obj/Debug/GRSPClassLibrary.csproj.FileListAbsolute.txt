@@ -10,3 +10,6 @@ C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\DBXLClassLibrary.pdb
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.csprojResolveAssemblyReference.cache
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.dll
 C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\obj\Debug\GRSPClassLibrary.pdb
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\Ray.EDITUREPD\Projects\GRSPClassLibrary\bin\Debug\Newtonsoft.Json.xml

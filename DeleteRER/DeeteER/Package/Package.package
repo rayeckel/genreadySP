@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="7ec024cf-739b-425f-a415-31219a7f7b0b" solutionId="7ec024cf-739b-425f-a415-31219a7f7b0b" resetWebServer="false" sharePointProductVersion="15.0" name="DeeteER" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="e3b339d6-b0aa-454f-95de-e55cbbaf1812" />
+  </features>
+</package>

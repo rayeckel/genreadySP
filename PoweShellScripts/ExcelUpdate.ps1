@@ -17,18 +17,17 @@ Add-Type -Path "c:\Program Files\Common Files\Microsoft Shared\Web Server Extens
 Add-Type -Path "c:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Taxonomy.dll" 
 
 # SP context info (consider using Get-Credential to enter password securely as script runs).. 
-$SPurl = "https://generationreadydev.sharepoint.com"
-$SPusername = "ray.eckel@generationreadydev.onmicrosoft.com"
-$SPpassword = "" 
-$SPRootUrl = "https://generationreadydev.sharepoint.com"
-$SPSiteUrl = "/sites/jm/workmanagement/"
+$SPurl = "https://generationready.sharepoint.com"
+$SPusername = "ray.eckel@generationready.com"
+$SPpassword = "Beerme2day!" 
+$SPRootUrl = "https://generationready.sharepoint.com"
+$SPSiteUrl = "/workmanagement/"
 
-$ExcelDocumentLibraryTitle = "Documents";
-$ExcelDocumentName = "TestBook2.xlsx"
-$ExcelDocumentTitle = "TestBook2"
+$ExcelDocumentLibraryTitle = "TestDocuments";
+$ExcelDocumentName = "TestBook3.xlsx"
+$ExcelDocumentTitle = "TestBook3"
 $ExcelDocumentId = "745396CF-3171-485F-AF27-596F2F33EF41"
-$ExcelFile = $SPurl + "/" + $ExcelDocumentLibraryTitle + "/" + $ExcelDocumentName
-
+$ExcelFile = $SPurl + $SPSiteUrl + $ExcelDocumentLibraryTitle + "/" + $ExcelDocumentName
 
 function Main()
 {
@@ -44,7 +43,14 @@ function Main()
 	$query = New-Object Microsoft.SharePoint.Client.CamlQuery
 	$query.ViewXml = '<View><Query><Where><Eq><FieldRef Name="Title"/><Value Type="Text">' + $ExcelDocumentTitle + '</Value></Eq></Where></Query></View>'
 	$excelFile = $excelDocumentLibrary.GetItems($query)
+	
 	$excelFile.RefreshLoad()
+	
+	$xl = New-Object -ComObject Excel.Application; 
+	$xl.workbooks.open($excelFile)
+	$myXl = $xl.NewWorkbook($excelFile)
+	$myXlWorkbook = $xl.WorkbookOpen($excelFile)
+	
 	$clientContext.Load($excelFile)
 	
 	$clientContext.ExecuteQuery()
@@ -57,7 +63,7 @@ function GetSharePointContext
 	$securePassword = ConvertTo-SecureString $SPpassword -AsPlainText -Force 
 	
 	# connect/authenticate to SharePoint Online and get ClientContext object.. 
-	$clientContext = New-Object Microsoft.SharePoint.Client.ClientContext($SPurl) 
+	$clientContext = New-Object Microsoft.SharePoint.Client.ClientContext($SPurl + $SPSiteUrl) 
 	$credentials = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($SPusername, $securePassword)
 	$clientContext.Credentials = $credentials
 
@@ -96,7 +102,7 @@ function UpdateExcel()
 			# $xl.workbooks.checkout($i)
 
 			# Calling the refresh
-			#$wb.RefreshAll();
+			$wb.RefreshAll();
 			#Write-EventLog -EventId "5001" -LogName "Excel Services" -Message "Refreshed: $ExcelFile" -Source "My Powershell"
 
 			# Saving and closing the workbook
@@ -106,8 +112,8 @@ function UpdateExcel()
 			#Write-EventLog -EventId "5001" -LogName "Excel Services" -Message "Slept for 5 seconds" -Source "My Powershell"
 
 			# in case you are not using checkout/checkin perform a save and close
-			#$wb.Save();
-			#$wb.Close();
+			$wb.Save();
+			$wb.Close();
 			#Write-EventLog -EventId "5001" -LogName "Excel Services" -Message "Saved and Closed: $ExcelFile" -Source "My Powershell"
 
 			#Release Workbook

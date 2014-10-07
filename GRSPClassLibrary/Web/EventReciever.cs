@@ -24,18 +24,25 @@ namespace GRSPClassLibrary.Web
         /// <returns>Holds information returned from the remote event.</returns>
         public SPRemoteEventResult ProcessEvent(SPRemoteEventProperties properties)
         {
+            BuildLoggingContext(properties);
+            syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "Begin ProcessEvent", properties.ItemEventProperties.ListItemId);
+
             ClientContext clientContext = GetClientContext(properties);
 
             if (clientContext != null)
             {
-                BuildLoggingContext(properties);
+                //BuildLoggingContext(properties);
 
                 using (clientContext)
                 {
                     ExecuteRER(properties, clientContext);
                 }
             }
+            else
+            {
+                syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "clientContext is NULL", properties.ItemEventProperties.ListItemId);
 
+            }
             return result;
         }
 
@@ -97,6 +104,19 @@ namespace GRSPClassLibrary.Web
             clientContext.ExecuteQuery();
 
             return listItem;
+        }
+
+        protected void ExecuteQuery(ClientContext clientContext, int ListId = 0)
+        {
+            try
+            {
+                syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "Executing Query", ListId);
+                clientContext.ExecuteQuery();
+            }
+            catch (Exception ex)
+            {
+                errorlogWriter.WriteLog("RER EXECUTE QUERY ERROR", ex.Message);
+            }
         }
     }
 }

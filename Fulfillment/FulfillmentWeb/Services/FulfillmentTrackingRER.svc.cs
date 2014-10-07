@@ -6,6 +6,7 @@ using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.EventReceivers;
 using FulfillmentWeb.Base;
 using GRSPClassLibrary.Web;
+using System.ServiceModel;
 
 namespace FulfillmentWeb.Services
 {
@@ -17,7 +18,7 @@ namespace FulfillmentWeb.Services
         private const string ARTICLE_ID_LOOKUP_FIELD = "Article Id Lookup";
         private const string ARTICLES_LIBRARY_NAME = "Articles";
         private const string INPUT_UNIT = "Unit";
-        private const string INPUT_SUBMITTED = "Submitted";
+        private const string INPUT_SUBMITTED = "Submitted0";
         private const string INPUT_PREVIOUS_SUBMITTED = "PreviousSubmitted";
         private const string LIST_ITEM_ALLOCATION_ID = "AllocationId";
         private const string LIST_ITEM_ARTICLE_ID = "ArticleId";
@@ -26,21 +27,65 @@ namespace FulfillmentWeb.Services
         private const string LIST_ITEM_ALLOCATIONS_REMAINING = "Remaining";
         protected override void ExecuteRER(SPRemoteEventProperties properties, ClientContext clientContext)
         {
-            clientContext.Load(clientContext.Web, web => web.Lists);
-            clientContext.ExecuteQuery();  
+            syslogWriter.WriteLog("Fulfillment Tracking RER  DEBUG", "LOAD CLIENT CONTEXT WEB", properties.ItemEventProperties.ListItemId);
 
+            clientContext.Load(clientContext.Web, web => web.Lists);
+            ExecuteQuery(clientContext, properties.ItemEventProperties.ListItemId);
+
+
+
+
+
+
+            //ListCollection webLists = clientContext.Web.Lists;
+            //List trackingList = webLists.GetByTitle("Project Update Forms");
+
+            //EventReceiverDefinitionCollection erdCollection = trackingList.EventReceivers;
+            //clientContext.Load(erdCollection);
+            //clientContext.ExecuteQuery();
+
+            //foreach (EventReceiverDefinition erd in erdCollection)
+            //{
+            //    if (erd.ReceiverName == "FulfillmentTrackingRER")
+            //    {
+            //        erd.DeleteObject();
+            //    }
+            //}
+
+
+
+            //string opContext = OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.Substring(0, OperationContext.Current.Channel.LocalAddress.Uri.AbsoluteUri.LastIndexOf("/"));
+            //string remoteUrl = string.Format("{0}/{1}.svc", opContext, "FulfillmentTrackingRER");
+            //foreach (var receiverType in eventReceiverTypes)
+            //{
+            //    trackingList.EventReceivers.Add(new EventReceiverDefinitionCreationInformation()
+            //    {
+            //        EventType = receiverType,
+            //        ReceiverName = "FulfillmentTrackingRER",
+            //        ReceiverUrl = remoteUrl,
+            //        SequenceNumber = 1000
+            //    });
+            //}
+
+            //clientContext.ExecuteQuery();
+
+
+
+
+            syslogWriter.WriteLog("Fulfillment Tracking RER  DEBUG", "PRE SWITCHCASE", properties.ItemEventProperties.ListItemId);
             switch (properties.EventType)
             {
                 case SPRemoteEventType.ItemAdding:
                     {
                         try
                         {
+                            syslogWriter.WriteLog("Fulfillment Tracking RER  DEBUG", "ITEM ADDING", properties.ItemEventProperties.ListItemId);
                             UpdateAllocationsListItem(clientContext, properties);
-                            syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added");
+                            syslogWriter.WriteLog("Fulfillment Tracking RER triggered", "Item Added", properties.ItemEventProperties.ListItemId);
                         }
                         catch (Exception ex)
                         {
-                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Added ERROR", ex.Message);
+                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Added ERROR", ex.Message, properties.ItemEventProperties.ListItemId);
                         }
 
                         break;
@@ -49,12 +94,13 @@ namespace FulfillmentWeb.Services
                     {
                         try
                         {
+                            syslogWriter.WriteLog("Fulfillment Tracking RER  DEBUG", "ITEM UPDATING", properties.ItemEventProperties.ListItemId);
                             UpdateAllocationsListItem(clientContext, properties);
-                            syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Updated");
+                            syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Updated", properties.ItemEventProperties.ListItemId);
                         }
                         catch (Exception ex)
                         {
-                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated triggered", ex.Message);
+                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Updated triggered", ex.Message, properties.ItemEventProperties.ListItemId);
                         }
 
                         break;
@@ -64,11 +110,11 @@ namespace FulfillmentWeb.Services
                         try
                         {
                             DeleteAllocationsListItem(properties, clientContext);
-                            syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting");
+                            syslogWriter.WriteLog("Fulfillment Tracking RER  triggered", "Item Deleting", properties.ItemEventProperties.ListItemId);
                         }
                         catch (Exception ex)
                         {
-                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Deleting ERROR", ex.Message);
+                            errorlogWriter.WriteLog("Fulfillment Tracking RER Item Deleting ERROR", ex.Message, properties.ItemEventProperties.ListItemId);
                         }
 
                         break;
@@ -82,6 +128,19 @@ namespace FulfillmentWeb.Services
 
         private void UpdateAllocationsListItem(ClientContext clientContext, SPRemoteEventProperties properties)
         {
+            if (properties.ItemEventProperties == null)
+            {
+                syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "ItemEvent Properties is NULL", properties.ItemEventProperties.ListItemId);
+            }
+            if (properties.ItemEventProperties.BeforeProperties == null)
+            {
+                syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "BeforeProperties is NULL", properties.ItemEventProperties.ListItemId);
+            }
+            if (properties.ItemEventProperties.AfterProperties == null)
+            {
+                syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "AfterProperties is NULL", properties.ItemEventProperties.ListItemId);
+            }
+
             //If the DbxlId value was previously null, but AfterProperties now has a value, return.
             if (!properties.ItemEventProperties.BeforeProperties.ContainsKey(GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL) &&
                 properties.ItemEventProperties.AfterProperties.ContainsKey(GRSPClassLibrary.Base.Constants.DBXL_ID_LABEL))
@@ -97,14 +156,28 @@ namespace FulfillmentWeb.Services
             }
             else 
             {
-                submittedDate = (string)properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_SUBMITTED];
+                syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "PRE-SUBMITTED0", properties.ItemEventProperties.ListItemId);
+                var submitDate = properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_SUBMITTED];
+                if (submitDate != null)
+                {
+                    submittedDate = submitDate.ToString();
+                    syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "POST-SUBMITTED0", properties.ItemEventProperties.ListItemId);
+                }
+                else
+                {
+                    syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "POST-SUBMITTED0", properties.ItemEventProperties.ListItemId);
+                    return;
+                }
             }
 
             string allocationId = Convert.ToString(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.LIST_ITEM_ALLOCATION_ID]);
             decimal units = Convert.ToDecimal(properties.ItemEventProperties.AfterProperties[FulfillmentTrackingRER.INPUT_UNIT]);
 
+            syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "PRE-GetFormsListItem", properties.ItemEventProperties.ListItemId);
+
             ListItem itemUpdating = GetFormsListItem(properties, clientContext);
 
+            syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "POST-GetFormsListItem", properties.ItemEventProperties.ListItemId);
             //If the form was previously submitted, and is now being modified.
             if (itemUpdating != null)
             {
@@ -125,7 +198,7 @@ namespace FulfillmentWeb.Services
                     }
                     catch (Exception ex)
                     {
-                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item UPDATNG ERROR", ex.Message);
+                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item UPDATNG ERROR", ex.Message, properties.ItemEventProperties.ListItemId);
                     }
                 }
 
@@ -139,7 +212,7 @@ namespace FulfillmentWeb.Services
                     }
                     catch (Exception ex)
                     {
-                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item UPDATNG ERROR", ex.Message);
+                        errorlogWriter.WriteLog("Fulfillment Tracking RER Item UPDATNG ERROR", ex.Message, properties.ItemEventProperties.ListItemId);
                     }
                 }
             }
@@ -151,21 +224,16 @@ namespace FulfillmentWeb.Services
                     int articleId = AddDays(properties, clientContext, allocationId, units);
 
                     //Add the fieldLookupValue
-                    result.ChangedItemProperties.Add(FulfillmentTrackingRER.ARTICLE_ID_LOOKUP_FIELD, articleId);
+                    //result.ChangedItemProperties.Add(FulfillmentTrackingRER.ARTICLE_ID_LOOKUP_FIELD, articleId);
 
                     //Mark the record as having already been submitted.
-                    result.ChangedItemProperties.Add(FulfillmentTrackingRER.INPUT_PREVIOUS_SUBMITTED, submittedDate);
+                    //result.ChangedItemProperties.Add(FulfillmentTrackingRER.INPUT_PREVIOUS_SUBMITTED, submittedDate);
                 }
                 catch (Exception ex)
                 {
-                    errorlogWriter.WriteLog("Fulfillment Tracking RER Item ADDING ERROR", ex.Message);
+                    errorlogWriter.WriteLog("Fulfillment Tracking RER Item ADDING ERROR", ex.Message, properties.ItemEventProperties.ListItemId);
                 }
             }
-        }
-
-        private void UpdateArticleIdLookup(ClientContext clientContext, string oldAllocationId, string newAllocationId)
-        {
-
         }
 
         private void DeleteAllocationsListItem(SPRemoteEventProperties properties, ClientContext clientContext)
@@ -183,13 +251,15 @@ namespace FulfillmentWeb.Services
             List formsList = webLists.GetByTitle(Constants.TRACKING_LIBRARY_NAME);
             string itemId = Convert.ToString(properties.ItemEventProperties.ListItemId);
 
+            syslogWriter.WriteLog("Fulfillment Tracking RER DEBUG", "INSIDE-GetFormsListItem", properties.ItemEventProperties.ListItemId);
+
             var formsQuery = new CamlQuery();
             formsQuery.ViewXml = "<View><Query><Where><Eq><FieldRef Name='ID'/>" +
                 "<Value Type='Number'>" + itemId + "</Value></Eq></Where></Query></View>";
             ListItemCollection query = formsList.GetItems(formsQuery);
 
             clientContext.Load(query);
-            clientContext.ExecuteQuery();
+            ExecuteQuery(clientContext, properties.ItemEventProperties.ListItemId);
 
             if (query.Count() > 0)
             {
@@ -210,7 +280,7 @@ namespace FulfillmentWeb.Services
             ListItemCollection query = allocationsList.GetItems(allocationQuery);
 
             clientContext.Load(query);
-            clientContext.ExecuteQuery();
+            ExecuteQuery(clientContext);
 
             if (query.Count() > 0)
             {
@@ -230,7 +300,8 @@ namespace FulfillmentWeb.Services
                 "<Value Type='Text'>" + articleId + "</Value></Eq></Where></Query></View>";
             ListItemCollection query = articlesList.GetItems(articleQuery);
             clientContext.Load(query);
-            clientContext.ExecuteQuery();
+
+            ExecuteQuery(clientContext);
 
             if (query.Count() > 0)
             {
@@ -244,12 +315,15 @@ namespace FulfillmentWeb.Services
         {
             ListItem allocationListItem = GetAllocationsListItem(properties, clientContext, allocationId);
             IncrementAllocationsFulfilled(allocationListItem, units);
-            clientContext.ExecuteQuery();
+
+            ExecuteQuery(clientContext);
 
             string articleId = Convert.ToString(allocationListItem[FulfillmentTrackingRER.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
+
             ListItem articlesListItem = GetArticlesListItem(properties, clientContext, articleId);
             IncrementArticlesFulfilled(articlesListItem, units);
-            clientContext.ExecuteQuery();
+
+            ExecuteQuery(clientContext);
 
             return (int)articlesListItem[FulfillmentTrackingRER.ARTICLES_LIST_ITEM_ID];
         }
@@ -258,12 +332,12 @@ namespace FulfillmentWeb.Services
         {
             ListItem oldAllocationListItem = GetAllocationsListItem(properties, clientContext, allocationId);
             DecrementAllocationsFulfilled(ref oldAllocationListItem, units);
-            clientContext.ExecuteQuery();
+            ExecuteQuery(clientContext);
 
             string oldAllocationArticleId = Convert.ToString(oldAllocationListItem[FulfillmentTrackingRER.ALLOCATIONS_LIST_ITEM_ARTICLE_ID]);
             ListItem oldAllocationArticleListItem = GetArticlesListItem(properties, clientContext, oldAllocationArticleId);
             DecrementArticlesFulfilled(ref oldAllocationArticleListItem, units);
-            clientContext.ExecuteQuery();
+            ExecuteQuery(clientContext);
         }
 
         private void IncrementAllocationsFulfilled(ListItem allocationListItem, Decimal units)

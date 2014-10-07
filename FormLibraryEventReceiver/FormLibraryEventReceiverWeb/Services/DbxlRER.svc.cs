@@ -71,7 +71,7 @@ namespace FormLibraryEventReceiverWeb.Services
                                     listItem.Update();
 
                                     //Borrow an unused event type to act as a flag to indicate "EventFiringEnabled = false"
-                                    erdCollection.Add(new EventReceiverDefinitionCreationInformation() { EventType = EventReceiverType.InvalidReceiver });
+                                    erdCollection.Add(new EventReceiverDefinitionCreationInformation() { EventType = EventReceiverType.InvalidReceiver, ReceiverName = "DbxlRERInvalidReceiver" });
                                     
                                     clientContext.ExecuteQuery();
                                 }
