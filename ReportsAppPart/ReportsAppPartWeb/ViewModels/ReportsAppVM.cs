@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using Microsoft.SharePoint.Client;
-using GRSPClassLibrary.Base;
+using ReportsAppPartWeb.Base;
 using GRSPClassLibrary.Web;
 using GRSPClassLibrary.Web.Log;
-using FormLibraryEventReceiverWeb.Base;
 
-namespace FormLibraryEventReceiverWeb.ViewModels
+namespace ReportsAppPartWeb.ViewModels
 {
-    public class FormLibraryEventReceiverVM : ClientAccess
+    public class ReportsAppVM : ClientAccess
     {
         #region Properties
         public ClientContext clientContext
@@ -25,21 +23,18 @@ namespace FormLibraryEventReceiverWeb.ViewModels
         #endregion
 
         #region Constructors
-
-        public FormLibraryEventReceiverVM(string sessionAccessToken, string sessionSPUri)
+        public ReportsAppVM(string sessionAccessToken, string sessionSPUri)
             : base(sessionAccessToken, sessionSPUri)
-        {
-
-        }
-
+        {}
+        
         #endregion
 
         #region Methods
-        public void setDBXLProperties(Dictionary<string, string> formVariables)
+        public void setReportProperties(Dictionary<string, string> formVariables)
         {
             //Encrypt the password.
-            string passwordVar = formVariables[GRSPClassLibrary.Base.Constants.DBXL_PASSWORD];
-            formVariables[GRSPClassLibrary.Base.Constants.DBXL_PASSWORD] = GRSPClassLibrary.Web.Crypt.Encrypt(passwordVar);
+            string passwordVar = formVariables[Constants.REPORTSERVER_PASSWORD_LABEL];
+            formVariables[Constants.REPORTSERVER_PASSWORD_LABEL] = GRSPClassLibrary.Web.Crypt.Encrypt(passwordVar);
 
             using (clientContext)
             {
@@ -57,5 +52,6 @@ namespace FormLibraryEventReceiverWeb.ViewModels
         }
 
         #endregion
+            
     }
 }

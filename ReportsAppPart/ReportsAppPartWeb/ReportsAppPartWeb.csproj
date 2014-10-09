@@ -49,6 +49,7 @@
     <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.Common\12.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Pages\Home\ReportsApp.aspx" />
     <Content Include="Pages\Reports\Default.aspx" />
     <None Include="Properties\PublishProfiles\grReporting - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\grReporting - Web Deploy.pubxml" />
@@ -102,11 +104,21 @@
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Constants.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Home\ReportsApp.aspx.cs">
+      <DependentUpon>ReportsApp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\Home\ReportsApp.aspx.designer.cs">
+      <DependentUpon>ReportsApp.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\Reports\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -116,12 +128,17 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharePointContext.cs" />
-    <Compile Include="TokenHelper.cs" />
+    <Compile Include="ViewModels\ReportsAppVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GRSPClassLibrary\GRSPClassLibrary.csproj">
+      <Project>{ce4ec8f5-6021-4511-a352-4edb5fcf0615}</Project>
+      <Name>GRSPClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

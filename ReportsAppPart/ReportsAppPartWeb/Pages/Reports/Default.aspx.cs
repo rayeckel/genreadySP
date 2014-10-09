@@ -6,10 +6,15 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Microsoft.SharePoint.Client;
+using GRSPClassLibrary.Pages;
+using GRSPClassLibrary.Web;
+using ReportsAppPartWeb.Base;
+using ReportsAppPartWeb.ViewModels;
 
 namespace ReportsAppPartWeb
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class Default : AccessTokenPage
     {
         protected void Page_PreInit(object sender, EventArgs e)
         {
@@ -36,17 +41,44 @@ namespace ReportsAppPartWeb
                 return;
             }
 
-            // Set the processing mode for the ReportViewer to Remote
+            string spUri = base.GetSharepointUri();
+            string accessToken = base.accessToken;
+
+            var reportsAppVM = new ReportsAppVM(accessToken, spUri);
+            ClientContext clientContext = reportsAppVM.clientContext;
+
+            SetupReport(clientContext);
+        }
+
+        private void SetupReport(ClientContext clientContext)
+        {
+            //// Set the processing mode for the ReportViewer to Remote
             reportViewer1.ProcessingMode = Microsoft.Reporting.WebForms.ProcessingMode.Remote;
 
             Microsoft.Reporting.WebForms.ServerReport serverReport = reportViewer1.ServerReport;
 
             //// Set the report server credentials
-            serverReport.ReportServerCredentials = new CustomReportCredentials("johnnie.margerison", "sdW&*fnIdf32");
+            var ReportServerUsername = GRSPClassLibrary.Web.WebUtils.GetAppProperty(Constants.REPORTSERVER_USERNAME_LABEL, clientContext);
+            var ReportServerPassword = GRSPClassLibrary.Web.WebUtils.GetAppProperty(Constants.REPORTSERVER_PASSWORD_LABEL, clientContext);
+            var ReportServerPasswordDecrypted = GRSPClassLibrary.Web.Crypt.Decrypt(ReportServerPassword);
+            serverReport.ReportServerCredentials = new CustomReportCredentials(ReportServerUsername, ReportServerPasswordDecrypted); 
 
-            //// Set the report server URL and report path
-            serverReport.ReportServerUrl = new Uri("http://db001az.cloudapp.net/ReportServer");
-            serverReport.ReportPath = "/EmployeeReport";
+            //// Set the report server URL and report path; 
+            var rptServerUrl = GRSPClassLibrary.Web.WebUtils.GetAppProperty(Constants.REPORTSERVER_URL_LABEL, clientContext);
+            serverReport.ReportServerUrl = new Uri(rptServerUrl);
+
+            string reportParam = string.Format("{0}{1}", "/", Request.QueryString["reportName"]);
+            serverReport.ReportPath = reportParam;
+
+            bool showTB = false;
+            string showTBParam = Request.QueryString["showToolBar"];
+
+            if (showTBParam != null && showTBParam == "true")
+            {
+                showTB = true;
+            }
+
+            reportViewer1.ShowToolBar = showTB;
         }
     }
 

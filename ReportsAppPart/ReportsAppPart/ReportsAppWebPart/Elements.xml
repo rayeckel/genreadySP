@@ -5,12 +5,27 @@
     <!-- Content element identifies the location of the page that will render inside the client web part
          Properties are referenced on the query string using the pattern _propertyName_
          Example: Src="~appWebUrl/Pages/ClientWebPart1.aspx?Property1=_property1_" -->
-    <Content Type="html" Src="~remoteAppUrl/Pages/Reports/Default.aspx?{StandardTokens}&amp;SPHostTitle={HostTitle}" />
+    <Content Type="html" Src="~remoteAppUrl/Pages/Reports/Default.aspx?{StandardTokens}&amp;showToolBar=_showToolBar_&amp;reportName=_reportName_&amp;SPHostTitle={HostTitle}" />
 
     <!-- Define properties in the Properties element.
          Remember to put Property Name on the Src attribute of the Content element above. -->
-    <Properties>
-    </Properties>
-
+  <Properties>
+    <Property
+      Name="showToolBar"
+      Type="string"
+      RequiresDesignerPermission="true"
+      DefaultValue="true"
+      WebCategory="Basic app part category"
+      WebDisplayName="A property of type string.">
+    </Property>
+    <Property
+        Name="reportName"
+        Type="string"
+        RequiresDesignerPermission="true"
+        DefaultValue="EmployeeReport"
+        WebCategory="Basic app part category"
+        WebDisplayName="A property of type string.">
+    </Property>
+  </Properties>
   </ClientWebPart>
 </Elements>

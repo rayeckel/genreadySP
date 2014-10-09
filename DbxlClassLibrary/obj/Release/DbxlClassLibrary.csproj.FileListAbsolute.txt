@@ -5,4 +5,3 @@ C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DBXLClassLibrary.dl
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DBXLClassLibrary.pdb
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DBXLClassLibrary.Properties.Resources.resources
 C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DbxlClassLibrary.csproj.GenerateResource.Cache
-C:\Users\Ray.EDITUREPD\Projects\DbxlClassLibrary\obj\Release\DBXLClassLibrary.csprojResolveAssemblyReference.cache

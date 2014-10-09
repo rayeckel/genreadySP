@@ -140,5 +140,25 @@ namespace GRSPClassLibrary.Web
             string hash = Crypt.Encrypt(sb.ToString());
             requestParams[WebUtils.UNSECURED_READY_PATH_URL_HASH_LABEL] = hash;
         }
+
+        public static string GetAppProperty(string PropertyName, ClientContext clientContext)
+        {
+            clientContext.Load(clientContext.Web, web => web.AllProperties);
+            clientContext.ExecuteQuery();
+            if (clientContext.Web.AllProperties.FieldValues.ContainsKey(PropertyName))
+            {
+                return clientContext.Web.AllProperties[PropertyName].ToString();
+            }
+            return null;
+        }
+
+        public static void SetAppProperty(string PropertyName, string Property, ClientContext clientContext)
+        {
+            clientContext.Load(clientContext.Web, web => web.AllProperties);
+            clientContext.ExecuteQuery();
+            clientContext.Web.AllProperties[PropertyName] = Property;
+            clientContext.Web.Update();
+            clientContext.ExecuteQuery();
+        }
     }
 }

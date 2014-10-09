@@ -13,30 +13,10 @@ namespace GRSPClassLibrary.Dbxl
 {
     public class Properties
     {
-        public static string GetDbxlProperty(string DbxlPropertyName, ClientContext clientContext)
-        {
-            clientContext.Load(clientContext.Web, web => web.AllProperties);
-            clientContext.ExecuteQuery();
-            if (clientContext.Web.AllProperties.FieldValues.ContainsKey(DbxlPropertyName))
-            {
-                return clientContext.Web.AllProperties[DbxlPropertyName].ToString();
-            }
-            return null;
-        }
-
-        public static void SetDbxlProperty(string DbxlPropertyName, string DbxlProperty, ClientContext clientContext)
-        {
-            clientContext.Load(clientContext.Web, web => web.AllProperties);
-            clientContext.ExecuteQuery();
-            clientContext.Web.AllProperties[DbxlPropertyName] = DbxlProperty;
-            clientContext.Web.Update();
-            clientContext.ExecuteQuery();
-        }
-
         public static NetworkCredential BuildServiceCredentials(ClientContext clientContext)
         {
-            string username = GetDbxlProperty(Constants.DBXL_USERNAME, clientContext);
-            string encryptedPassword = GetDbxlProperty(Constants.DBXL_PASSWORD, clientContext);
+            string username = WebUtils.GetAppProperty(Constants.DBXL_USERNAME, clientContext);
+            string encryptedPassword = WebUtils.GetAppProperty(Constants.DBXL_PASSWORD, clientContext);
             string decryptedPassword = Crypt.Decrypt(encryptedPassword);
 
             var credentials = new NetworkCredential(username, decryptedPassword);
@@ -57,7 +37,7 @@ namespace GRSPClassLibrary.Dbxl
         {
             //check and execute if RER is enabled on list
             string DbxlRerEnabledProperty = properties.ItemEventProperties.ListId + Constants.KEY_DBXL_PROPERTY_RER_ENABLED;
-            Boolean RerEnabled = Convert.ToBoolean(GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(DbxlRerEnabledProperty, clientContext));
+            Boolean RerEnabled = Convert.ToBoolean(WebUtils.GetAppProperty(DbxlRerEnabledProperty, clientContext));
             return RerEnabled;
         }
 
@@ -82,7 +62,7 @@ namespace GRSPClassLibrary.Dbxl
         protected string BuildServiceUrl(ClientContext clientContext)
         {
             //string serviceUrl = DBXLClassLibrary.Properties.Settings.Default.GRSP_DBXL_ServiceUrl;
-            string serviceUrl = GRSPClassLibrary.Dbxl.Properties.GetDbxlProperty(Constants.DBXL_SERVICE_URL_NAME, clientContext);
+            string serviceUrl = WebUtils.GetAppProperty(Constants.DBXL_SERVICE_URL_NAME, clientContext);
 
             serviceUrl = TokenHelper.EnsureTrailingSlash(serviceUrl);
 

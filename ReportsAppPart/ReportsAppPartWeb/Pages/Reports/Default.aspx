@@ -8,10 +8,11 @@
     <title></title>
 </head>
 <body>
+
     <form id="form1" runat="server">
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-            <rsweb:ReportViewer ID="reportViewer1" runat="server" Width="800px"></rsweb:ReportViewer>
+            <rsweb:ReportViewer ID="reportViewer1" runat="server" Width="800px" toolbar='false'></rsweb:ReportViewer>
         </div>
     </form>
 </body>
